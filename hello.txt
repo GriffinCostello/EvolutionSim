@@ -1,0 +1,20 @@
+print(Leo.name, Leo.species, Leo.age, Leo.x, Leo.y)
+
+    i=0
+    while(i<10):
+        closestFood = Leo.scanForFood(map)
+        if closestFood:
+            print(f"Nearest food at {closestFood}")
+            print(f"Leo at ({Leo.x}, {Leo.y}) moving towards food...")
+            Leo.moveTowarsds(closestFood)
+            print(f"Leo moved to ({Leo.x}, {Leo.y})")
+            if (Leo.x, Leo.y) == closestFood:
+                Leo.eatFood(map, closestFood)
+                
+        else:
+            dx, dy = random.choice([(1,0),(-1,0),(0,1),(0,-1)])
+            Leo.x = (Leo.x + dx) % worldSize
+            Leo.y = (Leo.y + dy) % worldSize
+            print("No food detected. Moving...")
+            print(f"Leo moved to ({Leo.x}, {Leo.y})")
+        i += 1
