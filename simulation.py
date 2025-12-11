@@ -174,6 +174,7 @@ def mate(org1, org2):
         print(f"{org1.name} and {org2.name} have mated at distance {distance}!")
         org1.energy = max(org1.energy - 50, 0)
         org2.energy = max(org2.energy - 50, 0)
+        reproduce(org1, org2, org1.env, org1.world)
 
 
 def reproduce(parent1, parent2, env, world):
@@ -230,7 +231,7 @@ def main():
         )
         organismList.append(org)
 
-    env.run(until=5000)
+    env.run(until=50000)
 
 
 def initMap():
