@@ -6,6 +6,8 @@ import sys
 
 worldSize = 1000
 organismList = []
+childCounter = 0
+world = None
 
 class Traits:
     def __init__(self, detectionRadius, speed, energy, slowDownAge, reproductionAge, matingCallRadius):
@@ -106,7 +108,7 @@ class Organism:
         else:
             print(f"{self.name} can't find food to eat at this position.")
 
-        self.energy = min(self.energy + 30, self.energyCapacity)  # Gain energy
+        self.energy = min(self.energy + 50, self.energyCapacity)  # Gain energy
 
     def matingCall(self):
         print(f"{self.name} is making a mating call!")
@@ -114,6 +116,8 @@ class Organism:
         for i in organismList:
             if i == self:
                 continue
+            if i.age < i.reproductionAge:
+                continue 
             distance = int(math.sqrt((self.posX-i.posX)**2 + (self.posY-i.posY)**2))
             if distance <= self.matingCallRadius:
                 print(f"{i.name} heard the mating call from {self.name}!")
@@ -129,10 +133,8 @@ class Organism:
             return "Mate"
 
         closestFood = self.scanForFood(self.world)
-
         if closestFood:
             return "LookForFood"
-
         else:
             return "Wander"
 
@@ -172,56 +174,61 @@ def mate(org1, org2):
         print(f"{org1.name} and {org2.name} have mated at distance {distance}!")
         org1.energy = max(org1.energy - 50, 0)
         org2.energy = max(org2.energy - 50, 0)
-        sys.exit()
+
+
+def reproduce(parent1, parent2, env, world):
+    global childCounter
+    childCounter += 1
+    childName = "Gen2_" + str(childCounter)
+    childTraits = Traits(
+        detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.choice([-1, 1]),
+        speed = (parent1.speed + parent2.speed) //2 + 1*random.choice([-1, 1]),
+        energy = (parent1.energy + parent2.energy) // 2 + 5*random.choice([-1, 1]),
+        slowDownAge = (parent1.slowDownAge + parent2.slowDownAge) // 2 + 3*random.choice([-1, 1]),
+        reproductionAge = (parent1.reproductionAge + parent2.reproductionAge) // 2 + 1*random.choice([-1, 1]),
+        matingCallRadius = (parent1.matingCallRadius + parent2.matingCallRadius) // 2 + 10*random.choice([-1, 1])
+    )
+
+    childName = Organism(
+        name = childName, 
+        species = "Lion", 
+        age = 0, 
+        posX = parent1.posX, 
+        posY = parent1.posY, 
+        traits = childTraits,
+        env = env, 
+        world = world
+    )
+    organismList.append(childName)
+    parent1.energy = max(parent1.energy - 30, 0)
+    parent2.energy = max(parent2.energy - 30, 0)
+    print(f"{parent1.name} and {parent2.name} have reproduced to create {childName.name}!")
+        
 
 def main():
     env = simpy.Environment()
-    map = initMap()
-    leoTraits = Traits(
+    world = initMap()
+    genOneTraits = Traits(
         detectionRadius = 20,
         speed = 5,
         energy = 50,
         slowDownAge = 30,
-        reproductionAge = 10,
+        reproductionAge = 20,
         matingCallRadius = 200
     )
 
-    Leo = Organism(
-        name = "Leo", 
-        species = "Lion", 
-        age = 5, 
-        posX = np.random.randint(0, worldSize), 
-        posY = np.random.randint(0, worldSize), 
-        traits = leoTraits,
-        env = env, 
-        world = map
-    )
-
-    Leia = Organism(
-        name = "Leia", 
-        species = "Lion", 
-        age = 5, 
-        posX = np.random.randint(0, worldSize), 
-        posY = np.random.randint(0, worldSize), 
-        traits = leoTraits,
-        env = env, 
-        world = map
-    )
-
-    Leona = Organism(
-        name = "Leona", 
-        species = "Lion", 
-        age = 5, 
-        posX = np.random.randint(0, worldSize), 
-        posY = np.random.randint(0, worldSize), 
-        traits = leoTraits,
-        env = env, 
-        world = map
-    )
-
-    organismList.append(Leo)
-    organismList.append(Leia)
-    organismList.append(Leona)
+    for i in range(50):
+        org = Organism(
+            name = "Gen1_" + str(i), 
+            species = "Lion", 
+            age = random.randint(1, 10), 
+            posX = np.random.randint(0, worldSize), 
+            posY = np.random.randint(0, worldSize), 
+            traits = genOneTraits,
+            env = env, 
+            world = world
+        )
+        organismList.append(org)
 
     env.run(until=5000)
 
