@@ -1,28 +1,61 @@
 import numpy as np
+import simpy as simpy
 import random
+import math
+import sys
 
 worldSize = 1000
+organismList = []
+
+class Traits:
+    def __init__(self, detectionRadius, speed, energy, slowDownAge, reproductionAge, matingCallRadius):
+        self.detectionRadius = detectionRadius
+        self.speed = speed
+        self.energy = energy
+        self.energyCapacity = energy*2.5
+        self.energyConsumption = speed /2
+        self.slowDownAge = slowDownAge
+        self.reproductionAge = reproductionAge
+        self.matingCallRadius = matingCallRadius
+        self.status = "Idle"
+
 
 class Organism:
-    def __init__(self, name, species, age, x , y, detectionRadius, energy, energyCapacity):
+    def __init__(self, name, species, age, posX , posY, traits: Traits, env, world):
         self.name = name
         self.species = species
         self.age = age
-        self.x = x
-        self.y = y
-        self.detectionRadius = detectionRadius
-        self.energy = energy
-        self.energyCapacity = energyCapacity
+        self.posX = posX
+        self.posY = posY
+        self.env = env
+        self.world = world
+
+        self.detectionRadius = traits.detectionRadius
+        self.speed = traits.speed
+        self.energy = traits.energy
+        self.energyCapacity = traits.energyCapacity
+        self.energyConsumption = traits.energyConsumption
+        self.slowDownAge = traits.slowDownAge
+        self.reproductionAge = traits.reproductionAge
+        self.matingCallRadius = traits.matingCallRadius
+
+        self.live = env.process(self.live())
+
 
     def tick(self):
         self.age += 1
-        self.energy = max(self.energy - 1, 0)  # Decrease energy each tick
+        if self.age == self.slowDownAge:
+            self.speed = max(self.speed - 1, 1)
+            self.slowDownAge += 10
+    
+        self.energy = max(self.energy - self.energyConsumption, 0)  # Decrease energy each tick
+
 
     def scanForFood(self, world):
-        x_min = max(self.x - self.detectionRadius, 0)
-        x_max = min(self.x + self.detectionRadius + 1, worldSize)
-        y_min = max(self.y - self.detectionRadius, 0)
-        y_max = min(self.y + self.detectionRadius + 1, worldSize)
+        x_min = max(self.posX - self.detectionRadius, 0)
+        x_max = min(self.posX + self.detectionRadius + 1, worldSize)
+        y_min = max(self.posY - self.detectionRadius, 0)
+        y_max = min(self.posY + self.detectionRadius + 1, worldSize)
 
         # Slice region around the organism
         area = world[x_min:x_max, y_min:y_max]
@@ -35,21 +68,35 @@ class Organism:
         foodGlobal = [(x_min + fx, y_min + fy) for fx, fy in foodPositions]
 
         # Compute closest food by distance
-        closest = min(foodGlobal, key=lambda pos: (pos[0]-self.x)**2 + (pos[1]-self.y)**2)
+        closest = min(foodGlobal, key=lambda pos: (pos[0]-self.posX)**2 + (pos[1]-self.posY)**2)
         return closest 
 
-    def moveTowarsds(self, target):
-        target_x, target_y = target
-        if self.x < target_x:
-            self.x += 1
-        elif self.x > target_x:
-            self.x -= 1
 
-        if self.y < target_y:
-            self.y += 1
-        elif self.y > target_y:
-            self.y -= 1
-        self.energy = max(self.energy - 1, 0)
+    def moveTowards(self, target):
+        target_x, target_y = target
+        if self.posX < target_x:
+            if(self.posX + self.speed > target_x): #if this step would overshoot
+                self.posX = target_x               #then just go to target
+            else:
+                self.posX += self.speed
+        elif self.posX > target_x:
+            if(self.posX - self.speed < target_x):
+                self.posX = target_x
+            else:
+                self.posX -= self.speed
+
+        if self.posY < target_y:
+            if(self.posY + self.speed > target_y):
+                self.posY = target_y
+            else:
+                self.posY += self.speed
+        elif self.posY > target_y:
+            if(self.posY - self.speed < target_y):
+                self.posY = target_y
+            else:
+                self.posY -= self.speed
+
+        self.energy = max(self.energy - self.energyConsumption, 0)
 
     def eatFood(self, world, foodPos):
         food_x, food_y = foodPos
@@ -57,42 +104,126 @@ class Organism:
             world[food_x, food_y] = 0  # Remove food from the world
             print(f"{self.name} ate food at ({food_x}, {food_y})")
         else:
-            print("No food to eat at this position.")
+            print(f"{self.name} can't find food to eat at this position.")
 
-        self.energy = min(self.energy + 10, self.energyCapacity)  # Gain energy
+        self.energy = min(self.energy + 30, self.energyCapacity)  # Gain energy
+
+    def matingCall(self):
+        print(f"{self.name} is making a mating call!")
+
+        for i in organismList:
+            if i == self:
+                continue
+            distance = int(math.sqrt((self.posX-i.posX)**2 + (self.posY-i.posY)**2))
+            if distance <= self.matingCallRadius:
+                print(f"{i.name} heard the mating call from {self.name}!")
+                position = (i.posX, i.posY)
+                self.moveTowards(position)
+                print(f"{i.name} moved towards {self.name} for mating.")
+                if(distance := int(math.sqrt((self.posX - i.posX)**2 + (self.posY - i.posY)**2))) <= self.speed + i.speed:
+                    mate(self, i)
+
+
+    def decideNextAction(self):
+        if self.energy > self.energyCapacity * 0.7:
+            return "Mate"
+
+        closestFood = self.scanForFood(self.world)
+
+        if closestFood:
+            return "LookForFood"
+
+        else:
+            return "Wander"
+
+
+    def live(self):
+        while True:
+            
+            self.tick()
+            if self.energy <= 0:
+                print(f"{self.name} has run out of energy and died at age {self.age}.")
+                organismList.remove(self)
+                break
+
+            nextAction = self.decideNextAction()
+            match nextAction:
+                case "Mate":
+                    self.matingCall()
+                    self.status = "Mating"
+
+                case "LookForFood":
+                    closestFood = self.scanForFood(self.world)
+                    self.moveTowards(closestFood)
+                    if (self.posX, self.posY) == closestFood:
+                        self.eatFood(self.world, closestFood)
+                    self.status = "Hunting"       
+
+                case "Wander":
+                    dx, dy = random.choice([(self.speed,0),(-self.speed,0),(0,self.speed),(0,-self.speed)])
+                    self.posX = (self.posX + dx) % worldSize
+                    self.posY = (self.posY + dy) % worldSize
+                    self.status = "Wandering"
+            
+            yield self.env.timeout(1)
+
+def mate(org1, org2):
+    if (distance := int(math.sqrt((org1.posX - org2.posX)**2 + (org1.posY - org2.posY)**2))) <= org1.speed + org2.speed:
+        print(f"{org1.name} and {org2.name} have mated at distance {distance}!")
+        org1.energy = max(org1.energy - 50, 0)
+        org2.energy = max(org2.energy - 50, 0)
+        sys.exit()
 
 def main():
-    
-    averageAge = 0
-    for i in range(10):  # Simulate for 1 organism
-        Leo = Organism("Leo", "Lion", 5, np.random.randint(0, worldSize), np.random.randint(0, worldSize), 20, 50, 100)
-        map = initMap()
+    env = simpy.Environment()
+    map = initMap()
+    leoTraits = Traits(
+        detectionRadius = 20,
+        speed = 5,
+        energy = 50,
+        slowDownAge = 30,
+        reproductionAge = 10,
+        matingCallRadius = 200
+    )
 
-        i=0
-        while(i<100):
-            closestFood = Leo.scanForFood(map)
-            Leo.tick()
-            if Leo.energy <= 0:
-                print(f"{Leo.name} has run out of energy and died at age {Leo.age}.")
-                averageAge += Leo.age
-                break
-            if closestFood:
-                print(f"Nearest food at ({closestFood[0]}, {closestFood[1]})")
-                print(f"Leo at ({Leo.x}, {Leo.y}) moving towards food...")
-                Leo.moveTowarsds(closestFood)
-                print(f"Leo moved to ({Leo.x}, {Leo.y})")
-                if (Leo.x, Leo.y) == closestFood:
-                    Leo.eatFood(map, closestFood)
-                    
-            else:
-                dx, dy = random.choice([(1,0),(-1,0),(0,1),(0,-1)])
-                Leo.x = (Leo.x + dx) % worldSize
-                Leo.y = (Leo.y + dy) % worldSize
-                print("No food detected. Moving...")
-                print(f"Leo moved to ({Leo.x}, {Leo.y})")
-            i += 1
-    
-    print(f"Average age of organisms: {averageAge / 10}")
+    Leo = Organism(
+        name = "Leo", 
+        species = "Lion", 
+        age = 5, 
+        posX = np.random.randint(0, worldSize), 
+        posY = np.random.randint(0, worldSize), 
+        traits = leoTraits,
+        env = env, 
+        world = map
+    )
+
+    Leia = Organism(
+        name = "Leia", 
+        species = "Lion", 
+        age = 5, 
+        posX = np.random.randint(0, worldSize), 
+        posY = np.random.randint(0, worldSize), 
+        traits = leoTraits,
+        env = env, 
+        world = map
+    )
+
+    Leona = Organism(
+        name = "Leona", 
+        species = "Lion", 
+        age = 5, 
+        posX = np.random.randint(0, worldSize), 
+        posY = np.random.randint(0, worldSize), 
+        traits = leoTraits,
+        env = env, 
+        world = map
+    )
+
+    organismList.append(Leo)
+    organismList.append(Leia)
+    organismList.append(Leona)
+
+    env.run(until=5000)
 
 
 def initMap():
@@ -109,4 +240,3 @@ def initMap():
 
 if __name__ == "__main__":
     main()
-            
