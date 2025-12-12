@@ -12,6 +12,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Shared 2D world environment for all organisms using SimPy for concurrent simulation.
 - Added reproduction functionality where organisms can create offspring with inherited traits.
 
+
 ## Future Plans
 - Reproduction with genetic variation.
 - Evolutionary dynamics and population growth.
