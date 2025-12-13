@@ -9,22 +9,24 @@ class Simulation:
     def __init__(self, worldsize):
         self.env = simpy.Environment()
         self.worldSize = worldsize
-        self.world = self.initMap()
+        self.world = self.initWorld()
         self.organismList = []
         self.childCounter = 0
         self.generation = 1
 
 
-    def initMap(self):
-        map = np.zeros((self.worldSize, self.worldSize), dtype=int)
+    def initWorld(self):
+        world = np.empty((self.worldSize, self.worldSize), dtype=object)
+        world.fill(None)
         numPoints = (self.worldSize * self.worldSize) // 800  # approx 1 every 800 spaces
 
         # pick random coordinates
         xs = np.random.randint(0, self.worldSize, numPoints)
         ys = np.random.randint(0, self.worldSize, numPoints)
-        map[xs, ys] = 1
+        world[xs, ys] = Food(pos=Position(x=xs, y=ys))
 
-        return map
+        print(world)
+        return world
 
 
     def run(self, ticks):
@@ -70,7 +72,7 @@ class Actions:
         # Slice region around the organism
         area = self.org.sim.world[xMin:xMax, yMin:yMax]
         # Find actual coordinates of food
-        foodPositions = np.argwhere(area == 1) 
+        foodPositions = np.argwhere(area != None) 
         if len(foodPositions) == 0:
             return None  # No food found
 
@@ -113,8 +115,8 @@ class Actions:
 
     def eatFood(self, foodPos):
         foodX, foodY = foodPos
-        if self.org.sim.world[foodX, foodY] == 1:
-            self.org.sim.world[foodX, foodY] = 0  # Remove food from the world
+        if self.org.sim.world[foodX, foodY] is not None:
+            self.org.sim.world[foodX, foodY] = None  # Remove food from the world
             print(f"{self.org.name} ate food at ({foodX}, {foodY})")
         else:
             print(f"{self.org.name} can't find food to eat at this position.")
