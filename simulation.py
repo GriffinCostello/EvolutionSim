@@ -11,8 +11,7 @@ class Simulation:
         self.worldSize = worldsize
         self.world = self.initWorld()
         self.organismList = []
-        self.childCounter = 0
-        self.generation = 1
+        self.childCounter ={}
 
 
     def initWorld(self):
@@ -28,12 +27,49 @@ class Simulation:
         return world
 
 
+    def mate(self, parent1, parent2):
+        parent1.energy = max(parent1.energy - parent1.energyCapacity//3, 0)
+        parent2.energy = max(parent2.energy - parent2.energyCapacity//3, 0)
+
+        generation = max(parent1.generation, parent2.generation) + 1
+        if generation not in parent1.sim.childCounter:
+            parent1.sim.childCounter[generation] = 0
+        parent1.sim.childCounter[generation] += 1
+        childName = "Gen" + str(generation) + "_" + str(parent1.sim.childCounter[generation])
+
+        childTraits = Traits(
+            detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),
+            speed = (parent1.speed + parent2.speed) //2 + 1*random.randint(-1,1),
+            energy = (parent1.energyCapacity //3 + parent2.energyCapacity //3) // 2, #takse a third of parents' energy capacity
+            energyCapacity = (parent1.energyCapacity + parent2.energyCapacity) // 2 + 10*random.randint(-1,1),
+            slowDownAge = (parent1.slowDownAge + parent2.slowDownAge) // 2 + 3*random.randint(-1,1),
+            reproductionAge = (parent1.reproductionAge + parent2.reproductionAge) // 2 + 1*random.randint(-1,1),
+            matingCallRadius = (parent1.matingCallRadius + parent2.matingCallRadius) // 2 + 10*random.randint(-1,1),
+            generation = generation
+        )
+
+        
+        child = Organism(
+            name = childName, 
+            species = "Lion", 
+            age = 0, 
+            position = Position(
+                x = (parent1.position.x + parent2.position.x) // 2,
+                y = (parent1.position.y + parent2.position.y) // 2
+            ),
+            traits = childTraits,
+            sim = parent1.sim
+        )
+        print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.generation})")
+        parent1.sim.organismList.append(child)
+
+
     def run(self, ticks):
         self.env.run(until=ticks)
 
 
 class Traits:
-    def __init__(self, detectionRadius, speed, energy, energyCapacity, slowDownAge, reproductionAge, matingCallRadius):
+    def __init__(self, detectionRadius, speed, energy, energyCapacity, slowDownAge, reproductionAge, matingCallRadius, generation):
         self.detectionRadius = detectionRadius
         self.speed = speed
         self.energy = energy
@@ -42,6 +78,7 @@ class Traits:
         self.slowDownAge = slowDownAge
         self.reproductionAge = reproductionAge
         self.matingCallRadius = matingCallRadius
+        self.generation = generation
         self.status = "Idle"
 
 
@@ -75,12 +112,9 @@ class Actions:
         if len(foodPositions) == 0:
             return None  # No food found
 
-        # Convert to world coordinates
-        foodGlobal = [(xMin + foodX, yMin + foodY) for foodX, foodY in foodPositions]
-
-        # Compute closest food by distance
-        closest = min(foodGlobal, key=lambda pos: (pos[0]-self.org.position.x)**2 + (pos[1]-self.org.position.y)**2)
-        return closest 
+        foodGlobal = [Position(int(xMin + foodX), int(yMin + foodY)) for foodX, foodY in foodPositions]
+        closest = min(foodGlobal, key=lambda p: p.distanceTo(self.org.position))
+        return closest.asTuple()
 
     
     def moveTowards(self, target):
@@ -135,53 +169,13 @@ class Actions:
             distance = self.org.position.distanceTo(otherOrganism.position)
 
             if distance <= self.org.matingCallRadius:
-                print(f"{otherOrganism.name} heard the mating call from {self.org.name}!")
+                #print(f"{otherOrganism.name} heard the mating call from {self.org.name}!")
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
-                print(f"{otherOrganism.name} moved towards {self.org.name} for mating.")
+                #print(f"{otherOrganism.name} moved towards {self.org.name} for mating.")
                 if distance <= self.org.speed + otherOrganism.speed and otherOrganism.energy > 50 and self.org.energy > 50:
-                    self.org.actions.mate(otherOrganism)
+                    self.org.sim.mate(self.org, otherOrganism)
 
-    def mate(self, otherOrganism):
-        org1 = self.org
-        org2 = otherOrganism
-        distance = org1.position.distanceTo(org2.position)
-        print(f"{org1.name} and {org2.name} have mated at distance {org1.position.asTuple()}!")
-        org1.energy = max(org1.energy - org1.energyCapacity//3, 0)
-        org2.energy = max(org2.energy - org2.energyCapacity//3, 0)
-        org1.actions.reproduce(org2)
-
-
-    def reproduce(self, otherParent):
-        parent1 = self.org
-        parent2 = otherParent
-
-        parent1.sim.childCounter += 1
-        childName = "Gen2_" + str(parent1.sim.childCounter)
-        childTraits = Traits(
-            detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),
-            speed = (parent1.speed + parent2.speed) //2 + 1*random.randint(-1,1),
-            energy = (parent1.energyCapacity //3 + parent2.energyCapacity //3) // 2, #takse a third of parents' energy capacity
-            energyCapacity = (parent1.energyCapacity + parent2.energyCapacity) // 2 + 10*random.randint(-1,1),
-            slowDownAge = (parent1.slowDownAge + parent2.slowDownAge) // 2 + 3*random.randint(-1,1),
-            reproductionAge = (parent1.reproductionAge + parent2.reproductionAge) // 2 + 1*random.randint(-1,1),
-            matingCallRadius = (parent1.matingCallRadius + parent2.matingCallRadius) // 2 + 10*random.randint(-1,1)
-        )
-
-        child = Organism(
-            name = childName, 
-            species = "Lion", 
-            age = 0, 
-            position = Position(
-                x = (parent1.position.x + parent2.position.x) // 2,
-                y = (parent1.position.y + parent2.position.y) // 2
-            ),
-            traits = childTraits,
-            sim = parent1.sim
-        )
-        parent1.sim.organismList.append(child)
-        print(f"{parent1.name} and {parent2.name} have reproduced to create {child.name}!")
-    
     
 class Organism:
     def __init__(self, name, species, age, position: Position, traits: Traits, sim):
@@ -199,6 +193,7 @@ class Organism:
         self.slowDownAge = traits.slowDownAge
         self.reproductionAge = traits.reproductionAge
         self.matingCallRadius = traits.matingCallRadius
+        self.generation = traits.generation
 
         self.sim = sim
         self.env = sim.env
@@ -264,6 +259,7 @@ class Position:
     def asTuple(self):
         return (int(self.x), int(self.y))
 
+
 class Food:
     def __init__(self, pos: Position, nutritionValue):
         self.pos = pos
@@ -285,7 +281,8 @@ def main():
         energyCapacity = 150,
         slowDownAge = 30,
         reproductionAge = 20,
-        matingCallRadius = 200
+        matingCallRadius = 200,
+        generation = 1
     )
 
     for i in range(100):
