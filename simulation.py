@@ -23,9 +23,8 @@ class Simulation:
         # pick random coordinates
         xs = np.random.randint(0, self.worldSize, numPoints)
         ys = np.random.randint(0, self.worldSize, numPoints)
-        world[xs, ys] = Food(pos=Position(x=xs, y=ys))
+        world[xs, ys] = Food(pos=Position(x=xs, y=ys), nutritionValue=random.randint(40,60))
 
-        print(world)
         return world
 
 
@@ -113,15 +112,16 @@ class Actions:
         self.org.energy = max(self.org.energy - self.org.energyConsumption, 0)
 
 
-    def eatFood(self, foodPos):
-        foodX, foodY = foodPos
-        if self.org.sim.world[foodX, foodY] is not None:
-            self.org.sim.world[foodX, foodY] = None  # Remove food from the world
-            print(f"{self.org.name} ate food at ({foodX}, {foodY})")
+    def eatFood(self, closestFood):
+        closestFoodX, closestFoodY = closestFood
+        NutritionValue = self.org.sim.world[closestFoodX, closestFoodY].nutritionValue
+        if self.org.sim.world[closestFoodX, closestFoodY] is not None:
+            self.org.sim.world[closestFoodX, closestFoodY] = None  # Remove food from the world
+            print(f"{self.org.name} ate food at ({closestFoodX}, {closestFoodY})")
         else:
             print(f"{self.org.name} can't find food to eat at this position.")
 
-        self.org.energy = min(self.org.energy + 50, self.org.energyCapacity)  # Gain energy
+        self.org.energy = min(self.org.energy + NutritionValue, self.org.energyCapacity)  # Gain energy
 
 
     def matingCall(self):
@@ -159,13 +159,13 @@ class Actions:
         parent1.sim.childCounter += 1
         childName = "Gen2_" + str(parent1.sim.childCounter)
         childTraits = Traits(
-            detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.choice([-1, 1]),
-            speed = (parent1.speed + parent2.speed) //2 + 1*random.choice([-1, 1]),
+            detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),
+            speed = (parent1.speed + parent2.speed) //2 + 1*random.randint(-1,1),
             energy = (parent1.energyCapacity //3 + parent2.energyCapacity //3) // 2, #takse a third of parents' energy capacity
-            energyCapacity = (parent1.energyCapacity + parent2.energyCapacity) // 2 + 10*random.choice([-1, 1]),
-            slowDownAge = (parent1.slowDownAge + parent2.slowDownAge) // 2 + 3*random.choice([-1, 1]),
-            reproductionAge = (parent1.reproductionAge + parent2.reproductionAge) // 2 + 1*random.choice([-1, 1]),
-            matingCallRadius = (parent1.matingCallRadius + parent2.matingCallRadius) // 2 + 10*random.choice([-1, 1])
+            energyCapacity = (parent1.energyCapacity + parent2.energyCapacity) // 2 + 10*random.randint(-1,1),
+            slowDownAge = (parent1.slowDownAge + parent2.slowDownAge) // 2 + 3*random.randint(-1,1),
+            reproductionAge = (parent1.reproductionAge + parent2.reproductionAge) // 2 + 1*random.randint(-1,1),
+            matingCallRadius = (parent1.matingCallRadius + parent2.matingCallRadius) // 2 + 10*random.randint(-1,1)
         )
 
         child = Organism(
@@ -265,8 +265,9 @@ class Position:
         return (int(self.x), int(self.y))
 
 class Food:
-    def __init__(self, pos: Position):
+    def __init__(self, pos: Position, nutritionValue):
         self.pos = pos
+        self.nutritionValue = nutritionValue
 
 
 def main():

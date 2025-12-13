@@ -14,7 +14,6 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 
 
 ## Future Plans
-- Reproduction with genetic variation.
 - Evolutionary dynamics and population growth.
 - More complex behaviors: group hunting, competition, or territory defense.
 - Environmental effects: seasonal food availability, hazards, or migration.
