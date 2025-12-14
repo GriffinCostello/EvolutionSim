@@ -1,0 +1,46 @@
+import simpy
+import numpy as np
+import random
+import math
+
+from simulation import Simulation
+from traits import Traits
+from position import Position
+from organism import Organism
+
+
+
+def main():
+    sim = Simulation(worldsize=1000)
+
+    position = Position(
+        x=np.random.randint(0, sim.worldSize),
+        y=np.random.randint(0, sim.worldSize)
+    )
+
+    genOneTraits = Traits(
+        detectionRadius = 20,
+        speed = 5,
+        energy = 50,
+        energyCapacity = 150,
+        slowDownAge = 30,
+        reproductionAge = 20,
+        matingCallRadius = 200,
+        generation = 1
+    )
+
+    for i in range(100):
+        org = Organism(
+            name = "Gen1_" + str(i), 
+            species = "Lion", 
+            age = random.randint(1, 10), 
+            position = position,
+            traits = genOneTraits,
+            sim = sim
+        )
+        org.sim.organismList.append(org)
+
+    sim.run(ticks = 50000)
+
+if __name__ == "__main__":
+    main()
