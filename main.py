@@ -31,8 +31,19 @@ def main():
 
     for i in range(100):
         org = Organism(
-            name = "Gen1_" + str(i), 
+            name = "Lion_Gen1_" + str(i), 
             species = "Lion", 
+            age = random.randint(1, 10), 
+            position = position,
+            traits = genOneTraits,
+            sim = sim
+        )
+        org.sim.organismList.append(org)
+
+    for i in range(50):
+        org = Organism(
+            name = "Zebra_Gen1_" + str(i), 
+            species = "Zebra", 
             age = random.randint(1, 10), 
             position = position,
             traits = genOneTraits,
