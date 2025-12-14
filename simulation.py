@@ -25,7 +25,9 @@ class Simulation:
         # pick random coordinates
         xs = np.random.randint(0, self.worldSize, numPoints)
         ys = np.random.randint(0, self.worldSize, numPoints)
-        world[xs, ys] = Food(pos=Position(x=xs, y=ys), nutritionValue=random.randint(40,60))
+
+        for x, y in zip(xs, ys):
+            world[x, y] = Food(Position(x, y), random.randint(40, 60))
 
         return world
 
