@@ -14,7 +14,6 @@ class Simulation:
         self.worldSize = worldsize
         self.world = self.initWorld()
         self.organismList = []
-        self.childCounter ={}
 
 
     def initWorld(self):
@@ -33,14 +32,16 @@ class Simulation:
 
 
     def mate(self, parent1, parent2):
+        if parent1.species is not parent2.species:
+            return
         parent1.energy = max(parent1.energy - parent1.energyCapacity//3, 0)
         parent2.energy = max(parent2.energy - parent2.energyCapacity//3, 0)
 
         generation = max(parent1.generation, parent2.generation) + 1
-        if generation not in parent1.sim.childCounter:
-            parent1.sim.childCounter[generation] = 0
-        parent1.sim.childCounter[generation] += 1
-        childName = "Gen" + str(generation) + "_" + str(parent1.sim.childCounter[generation])
+        if generation not in parent1.childCounter:
+            parent1.childCounter[generation] = 0
+        parent1.childCounter[generation] += 1
+        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.childCounter[generation])
 
         childTraits = Traits(
             detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),

@@ -90,12 +90,12 @@ class Actions:
                 continue
             if otherOrganism.age < otherOrganism.reproductionAge:
                 continue 
+            if otherOrganism.species is not self.org.species:
+                continue
             distance = self.org.position.distanceTo(otherOrganism.position)
 
             if distance <= self.org.matingCallRadius:
-                #print(f"{otherOrganism.name} heard the mating call from {self.org.name}!")
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
-                #print(f"{otherOrganism.name} moved towards {self.org.name} for mating.")
                 if distance <= self.org.speed + otherOrganism.speed and otherOrganism.energy > 50 and self.org.energy > 50:
                     self.org.sim.mate(self.org, otherOrganism)

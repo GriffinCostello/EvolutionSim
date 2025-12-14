@@ -13,6 +13,7 @@ class Organism:
         self.name = name
         self.species = species
         self.age = age
+        self.childCounter ={}
         
         self.position = position
 
