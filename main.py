@@ -24,7 +24,7 @@ def main():
         generation = 1
     )
 
-    for i in range(100):
+    for i in range(200):
         org = Organism(
             name = "Lion_Gen1_" + str(i), 
             species = "Lion", 
@@ -37,7 +37,7 @@ def main():
             sim = sim
         )
         org.sim.organismList.append(org)
-
+    """
     for i in range(50):
         org = Organism(
             name = "Zebra_Gen1_" + str(i), 
@@ -51,8 +51,9 @@ def main():
             sim = sim
         )
         org.sim.organismList.append(org)
+    """
 
-    sim.run(ticks = 50000)
+    sim.run(ticks = 500000)
 
 if __name__ == "__main__":
     main()

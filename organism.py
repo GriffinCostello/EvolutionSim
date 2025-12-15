@@ -48,12 +48,12 @@ class Organism:
         while True:
             
             self.tick()
+            if len(self.sim.organismList) == 1:
+                    print("All alone")
+                    sys.exit()
             if self.energy <= 0:
                 print(f"{self.name} has run out of energy and died at age {self.age}.")
                 
-                if len(self.sim.organismList) == 1:
-                    print("All organisms have died. Ending simulation.")
-                    sys.exit()
                 self.sim.organismList.remove(self)
                 break
 
