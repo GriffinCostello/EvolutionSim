@@ -14,6 +14,7 @@ class Simulation:
         self.worldSize = worldsize
         self.world = self.initWorld()
         self.organismList = []
+        self.childCounters = {}
 
 
     def initWorld(self):
@@ -38,10 +39,11 @@ class Simulation:
         parent2.energy = max(parent2.energy - parent2.energyCapacity//3, 0)
 
         generation = max(parent1.generation, parent2.generation) + 1
-        if generation not in parent1.childCounter:
-            parent1.childCounter[generation] = 0
-        parent1.childCounter[generation] += 1
-        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.childCounter[generation])
+        key = (parent1.species, generation)
+        if key not in parent1.sim.childCounters:
+            parent1.sim.childCounters[key] = 0
+        parent1.sim.childCounters[key] += 1
+        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.sim.childCounters[key])
 
         childTraits = Traits(
             detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),
@@ -57,7 +59,7 @@ class Simulation:
         
         child = Organism(
             name = childName, 
-            species = "Lion", 
+            species = parent1.species, 
             age = 0, 
             position = Position(
                 x = (parent1.position.x + parent2.position.x) // 2,
