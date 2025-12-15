@@ -13,18 +13,13 @@ from organism import Organism
 def main():
     sim = Simulation(worldsize=1000)
 
-    position = Position(
-        x=np.random.randint(0, sim.worldSize),
-        y=np.random.randint(0, sim.worldSize)
-    )
-
     genOneTraits = Traits(
         detectionRadius = 20,
         speed = 5,
         energy = 50,
         energyCapacity = 150,
         slowDownAge = 30,
-        reproductionAge = 20,
+        reproductionAge = 10,
         matingCallRadius = 200,
         generation = 1
     )
@@ -34,7 +29,10 @@ def main():
             name = "Lion_Gen1_" + str(i), 
             species = "Lion", 
             age = random.randint(1, 10), 
-            position = position,
+            position = Position(
+                x=np.random.randint(0, sim.worldSize),
+                y=np.random.randint(0, sim.worldSize)
+            ),
             traits = genOneTraits,
             sim = sim
         )
@@ -45,7 +43,10 @@ def main():
             name = "Zebra_Gen1_" + str(i), 
             species = "Zebra", 
             age = random.randint(1, 10), 
-            position = position,
+            position = Position(
+                x=np.random.randint(0, sim.worldSize),
+                y=np.random.randint(0, sim.worldSize)
+            ),
             traits = genOneTraits,
             sim = sim
         )

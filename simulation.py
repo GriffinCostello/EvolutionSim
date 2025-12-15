@@ -15,6 +15,7 @@ class Simulation:
         self.world = self.initWorld()
         self.organismList = []
         self.childCounters = {}
+        self.env.process(self.regrowFood())
 
 
     def initWorld(self):
@@ -30,6 +31,16 @@ class Simulation:
             world[x, y] = Food(Position(x, y), random.randint(40, 60))
 
         return world
+
+    def regrowFood(self):
+        while True:
+            if(self.env.now % 10 ==0):
+                numPoints = 50
+                xs = np.random.randint(0, self.worldSize, numPoints)
+                ys = np.random.randint(0, self.worldSize, numPoints)
+                for x, y in zip(xs, ys):
+                    self.world[x, y] = Food(Position(x, y), random.randint(40, 60))
+            yield self.env.timeout(1)
 
 
     def mate(self, parent1, parent2):
