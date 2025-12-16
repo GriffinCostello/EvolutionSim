@@ -4,7 +4,7 @@ import random
 import math
 
 from simulation import Simulation
-from traits import Traits
+from traits import *
 from position import Position
 from organism import Organism
 
@@ -13,7 +13,8 @@ from organism import Organism
 def main():
     sim = Simulation(worldsize=1000)
 
-    genOneTraits = Traits(
+    genOneTraits = OrganismTraits(
+        age = random.randint(1, 10), 
         detectionRadius = 20,
         speed = 5,
         energy = 50,
@@ -28,7 +29,6 @@ def main():
         org = Organism(
             name = "Lion_Gen1_" + str(i), 
             species = "Lion", 
-            age = random.randint(1, 10), 
             position = Position(
                 x=np.random.randint(0, sim.worldSize),
                 y=np.random.randint(0, sim.worldSize)
@@ -37,21 +37,6 @@ def main():
             sim = sim
         )
         org.sim.organismList.append(org)
-    """
-    for i in range(50):
-        org = Organism(
-            name = "Zebra_Gen1_" + str(i), 
-            species = "Zebra", 
-            age = random.randint(1, 10), 
-            position = Position(
-                x=np.random.randint(0, sim.worldSize),
-                y=np.random.randint(0, sim.worldSize)
-            ),
-            traits = genOneTraits,
-            sim = sim
-        )
-        org.sim.organismList.append(org)
-    """
 
     sim.run(ticks = 500000)
 

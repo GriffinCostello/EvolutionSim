@@ -9,13 +9,13 @@ from position import Position
 from traits import Traits
 
 class Organism:
-    def __init__(self, name, species, age, position: Position, traits: Traits, sim):
+    def __init__(self, name, species, position: Position, traits: OrganismTraits, sim):
         self.name = name
         self.species = species
-        self.age = age
         
         self.position = position
 
+        self.age = traits.age
         self.detectionRadius = traits.detectionRadius
         self.speed = traits.speed
         self.energy = traits.energy
