@@ -83,7 +83,6 @@ class Actions:
 
 
     def matingCall(self):
-        print(f"{self.org.name} is making a mating call!")
 
         for otherOrganism in self.org.sim.organismList:
             if otherOrganism == self.org:

@@ -4,7 +4,7 @@ import random
 import math
 
 from organism import Organism
-from traits import Traits
+from traits import *
 from position import Position
 from food import Food
 
@@ -30,10 +30,20 @@ class Simulation:
 
 
     def placeFood(self, numFood):
+        
+
         xs = np.random.randint(0, self.worldSize, numFood)
         ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
-            self.world[x, y] = Food(Position(x, y), random.randint(40, 60))
+            self.world[x, y] = Food(
+                Position(x, y), 
+                traits = FoodTraits(
+                    age = 0,
+                    slowDownAge = 20, 
+                    generation = 1, 
+                    nutritionValue = random.randint(40, 60)
+                )
+            )
 
 
     def regrowFood(self):
@@ -58,7 +68,8 @@ class Simulation:
         parent1.sim.childCounters[key] += 1
         childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.sim.childCounters[key])
 
-        childTraits = Traits(
+        childTraits = OrganismTraits(
+            age = 0,
             detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),
             speed = (parent1.speed + parent2.speed) //2 + 1*random.randint(-1,1),
             energy = (parent1.energyCapacity //3 + parent2.energyCapacity //3) // 2, #takse a third of parents' energy capacity
@@ -73,7 +84,6 @@ class Simulation:
         child = Organism(
             name = childName, 
             species = parent1.species, 
-            age = 0, 
             position = Position(
                 x = (parent1.position.x + parent2.position.x) // 2,
                 y = (parent1.position.y + parent2.position.y) // 2
