@@ -21,25 +21,27 @@ class Simulation:
     def initWorld(self):
         world = np.empty((self.worldSize, self.worldSize), dtype=object)
         world.fill(None)
-        numPoints = (self.worldSize * self.worldSize) // 800  # approx 1 every 800 spaces
+        numFood = (self.worldSize * self.worldSize) // 800
+        self.world = world
+        self.placeFood(
+            numFood = numFood
+        )
+        return self.world
 
-        # pick random coordinates
-        xs = np.random.randint(0, self.worldSize, numPoints)
-        ys = np.random.randint(0, self.worldSize, numPoints)
 
+    def placeFood(self, numFood):
+        xs = np.random.randint(0, self.worldSize, numFood)
+        ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
-            world[x, y] = Food(Position(x, y), random.randint(40, 60))
+            self.world[x, y] = Food(Position(x, y), random.randint(40, 60))
 
-        return world
 
     def regrowFood(self):
         while True:
             if(self.env.now % 10 ==0):
-                numPoints = 50
-                xs = np.random.randint(0, self.worldSize, numPoints)
-                ys = np.random.randint(0, self.worldSize, numPoints)
-                for x, y in zip(xs, ys):
-                    self.world[x, y] = Food(Position(x, y), random.randint(40, 60))
+                self.placeFood(
+                    numFood = 50
+                )
             yield self.env.timeout(1)
 
 
