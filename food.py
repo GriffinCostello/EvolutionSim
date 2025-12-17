@@ -7,18 +7,21 @@ from position import Position
 from traits import *
 
 class Food:
-    def __init__(self, age, position: Position, traits: FoodTraits):
+    def __init__(self, age, position: Position, traits: FoodTraits, simulation: Simulation):
         self.age = age
         
         self.position = position
         
         self.traits = traits
 
-        #self.simulation = simulation
+        self.simulation = simulation
 
-        #self.live = self.simulation.env.process(self.live())
+        self.live = self.simulation.env.process(self.live())
 
-    def live():
+    def tick(self):
+        self.age += 1
+
+    def live(self):
         while True:
-            print("Hello")
+            self.tick()
             yield self.simulation.env.timeout(1)

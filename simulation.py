@@ -14,7 +14,7 @@ class Simulation:
         self.worldSize = worldsize
         self.world = self.initWorld()
         self.organismList = []
-        self.childCounters = {}
+        self.organismChildCounter = {}
         self.env.process(self.regrowFood())
 
 
@@ -39,7 +39,8 @@ class Simulation:
                     slowDownAge = 20, 
                     generation = 1, 
                     nutritionValue = random.randint(40, 60)
-                )
+                ),
+                simulation = self
             )
 
 
@@ -60,10 +61,10 @@ class Simulation:
 
         generation = max(parent1.traits.generation, parent2.traits.generation) + 1
         key = (parent1.species, generation)
-        if key not in parent1.simulation.childCounters:
-            parent1.simulation.childCounters[key] = 0
-        parent1.simulation.childCounters[key] += 1
-        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.simulation.childCounters[key])
+        if key not in parent1.simulation.organismChildCounter:
+            parent1.simulation.organismChildCounter[key] = 0
+        parent1.simulation.organismChildCounter[key] += 1
+        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.simulation.organismChildCounter[key])
         
         child = Organism(
             name = childName, 
