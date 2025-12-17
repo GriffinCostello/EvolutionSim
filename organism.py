@@ -9,39 +9,31 @@ from position import Position
 from traits import Traits
 
 class Organism:
-    def __init__(self, name, species, position: Position, traits: OrganismTraits, sim):
+    def __init__(self, name, species, age, energy, position: Position, traits: OrganismTraits, sim):
         self.name = name
         self.species = species
+        self.age = age
+        self.energy = energy
         
         self.position = position
 
-        self.age = traits.age
-        self.detectionRadius = traits.detectionRadius
-        self.speed = traits.speed
-        self.energy = traits.energy
-        self.energyCapacity = traits.energyCapacity
-        self.energyConsumption = traits.energyConsumption
-        self.slowDownAge = traits.slowDownAge
-        self.reproductionAge = traits.reproductionAge
-        self.matingCallRadius = traits.matingCallRadius
-        self.generation = traits.generation
+        self.traits = traits
 
         self.sim = sim
         self.env = sim.env
         self.world = sim.world
 
         self.actions = Actions(self)
-
         self.live = self.env.process(self.live())
 
 
     def tick(self):
         self.age += 1
-        if self.age == self.slowDownAge:
-            self.speed = max(self.speed - 1, 1)
-            self.slowDownAge += (self.slowDownAge // 2)
+        if self.age == self.traits.slowDownAge:
+            self.traits.speed = max(self.traits.speed - 1, 1)
+            self.traits.slowDownAge += (self.traits.slowDownAge // 2)
     
-        self.energy = max(self.energy - self.energyConsumption, 0)  # Decrease energy each tick
+        self.energy = max(self.energy - self.traits.energyConsumption, 0)  # Decrease energy each tick
 
 
     def live(self):
@@ -71,7 +63,7 @@ class Organism:
                     self.status = "Hunting"       
 
                 case "Wander":
-                    dx, dy = random.choice([(self.speed,0),(-self.speed,0),(0,self.speed),(0,-self.speed)])
+                    dx, dy = random.choice([(self.traits.speed,0),(-self.traits.speed,0),(0,self.traits.speed),(0,-self.traits.speed)])
                     self.position.x = (self.position.x + dx) % self.sim.worldSize
                     self.position.y = (self.position.y + dy) % self.sim.worldSize
                     self.status = "Wandering"
