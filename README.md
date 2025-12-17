@@ -11,6 +11,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Mating calls: organisms can detect nearby potential mates within a radius.
 - Shared 2D world environment for all organisms using SimPy for concurrent simulation.
 - Added reproduction functionality where organisms can create offspring with inherited traits.
+- Food regrows every 10 ticks
 
 
 ## Future Plans

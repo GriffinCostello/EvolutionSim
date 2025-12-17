@@ -64,10 +64,10 @@ class Simulation:
 
         generation = max(parent1.traits.generation, parent2.traits.generation) + 1
         key = (parent1.species, generation)
-        if key not in parent1.sim.childCounters:
-            parent1.sim.childCounters[key] = 0
-        parent1.sim.childCounters[key] += 1
-        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.sim.childCounters[key])
+        if key not in parent1.simulation.childCounters:
+            parent1.simulation.childCounters[key] = 0
+        parent1.simulation.childCounters[key] += 1
+        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.simulation.childCounters[key])
         
         child = Organism(
             name = childName, 
@@ -87,10 +87,10 @@ class Simulation:
                 matingCallRadius = (parent1.traits.matingCallRadius + parent2.traits.matingCallRadius) // 2 + 10*random.randint(-1,1),
                 generation = generation
             ),
-            sim = parent1.sim
+            simulation = parent1.simulation
         )
         print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
-        parent1.sim.organismList.append(child)
+        parent1.simulation.organismList.append(child)
 
 
     def run(self, ticks):
