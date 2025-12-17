@@ -38,7 +38,6 @@ class Simulation:
             self.world[x, y] = Food(
                 Position(x, y), 
                 traits = FoodTraits(
-                    age = 0,
                     slowDownAge = 20, 
                     generation = 1, 
                     nutritionValue = random.randint(40, 60)
@@ -58,40 +57,37 @@ class Simulation:
     def mate(self, parent1, parent2):
         if parent1.species is not parent2.species:
             return
-        parent1.energy = max(parent1.energy - parent1.energyCapacity//3, 0)
-        parent2.energy = max(parent2.energy - parent2.energyCapacity//3, 0)
+        parent1.energy = max(parent1.energy - parent1.traits.energyCapacity//3, 0)
+        parent2.energy = max(parent2.energy - parent2.traits.energyCapacity//3, 0)
 
-        generation = max(parent1.generation, parent2.generation) + 1
+        generation = max(parent1.traits.generation, parent2.traits.generation) + 1
         key = (parent1.species, generation)
         if key not in parent1.sim.childCounters:
             parent1.sim.childCounters[key] = 0
         parent1.sim.childCounters[key] += 1
         childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.sim.childCounters[key])
-
-        childTraits = OrganismTraits(
-            age = 0,
-            detectionRadius = (parent1.detectionRadius + parent2.detectionRadius) // 2 + 2*random.randint(-1,1),
-            speed = (parent1.speed + parent2.speed) //2 + 1*random.randint(-1,1),
-            energy = (parent1.energyCapacity //3 + parent2.energyCapacity //3) // 2, #takse a third of parents' energy capacity
-            energyCapacity = (parent1.energyCapacity + parent2.energyCapacity) // 2 + 10*random.randint(-1,1),
-            slowDownAge = (parent1.slowDownAge + parent2.slowDownAge) // 2 + 3*random.randint(-1,1),
-            reproductionAge = (parent1.reproductionAge + parent2.reproductionAge) // 2 + 1*random.randint(-1,1),
-            matingCallRadius = (parent1.matingCallRadius + parent2.matingCallRadius) // 2 + 10*random.randint(-1,1),
-            generation = generation
-        )
-
         
         child = Organism(
             name = childName, 
-            species = parent1.species, 
+            species = parent1.species,
+            age = 0,
+            energy = (parent1.traits.energyCapacity //3 + parent2.traits.energyCapacity //3) // 2, #takse a third of parents' energy capacity
             position = Position(
                 x = (parent1.position.x + parent2.position.x) // 2,
                 y = (parent1.position.y + parent2.position.y) // 2
             ),
-            traits = childTraits,
+            traits = OrganismTraits(
+                detectionRadius = (parent1.traits.detectionRadius + parent2.traits.detectionRadius) // 2 + 2*random.randint(-1,1),
+                speed = (parent1.traits.speed + parent2.traits.speed) //2 + 1*random.randint(-1,1),
+                energyCapacity = (parent1.traits.energyCapacity + parent2.traits.energyCapacity) // 2 + 10*random.randint(-1,1),
+                slowDownAge = (parent1.traits.slowDownAge + parent2.traits.slowDownAge) // 2 + 3*random.randint(-1,1),
+                reproductionAge = (parent1.traits.reproductionAge + parent2.traits.reproductionAge) // 2 + 1*random.randint(-1,1),
+                matingCallRadius = (parent1.traits.matingCallRadius + parent2.traits.matingCallRadius) // 2 + 10*random.randint(-1,1),
+                generation = generation
+            ),
             sim = parent1.sim
         )
-        print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.generation})")
+        print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         parent1.sim.organismList.append(child)
 
 

@@ -12,8 +12,8 @@ class Actions:
 
 
     def decideNextAction(self):
-        if self.org.energy > self.org.energyCapacity * 0.7:
-            if(self.org.age >= self.org.reproductionAge):
+        if self.org.energy > self.org.traits.energyCapacity * 0.7:
+            if(self.org.age >= self.org.traits.reproductionAge):
                 return "Mate"
 
         closestFood = self.org.actions.scanForFood()
@@ -24,10 +24,10 @@ class Actions:
 
 
     def scanForFood(self):
-        xMin = max(self.org.position.x - self.org.detectionRadius, 0)
-        xMax = min(self.org.position.x + self.org.detectionRadius + 1, self.org.sim.worldSize)
-        yMin = max(self.org.position.y - self.org.detectionRadius, 0)
-        yMax = min(self.org.position.y + self.org.detectionRadius + 1, self.org.sim.worldSize)
+        xMin = max(self.org.position.x - self.org.traits.detectionRadius, 0)
+        xMax = min(self.org.position.x + self.org.traits.detectionRadius + 1, self.org.sim.worldSize)
+        yMin = max(self.org.position.y - self.org.traits.detectionRadius, 0)
+        yMax = min(self.org.position.y + self.org.traits.detectionRadius + 1, self.org.sim.worldSize)
 
         # Slice region around the organism
         area = self.org.sim.world[xMin:xMax, yMin:yMax]
@@ -44,30 +44,30 @@ class Actions:
     def moveTowards(self, target):
         targetX, targetY = target
         if self.org.position.x < targetX:
-            if(self.org.position.x + self.org.speed > targetX): #if this step would overshoot
+            if(self.org.position.x + self.org.traits.speed > targetX): #if this step would overshoot
                 self.org.position.x = targetX               #then just go to target
             else:
-                self.org.position.x += self.org.speed
+                self.org.position.x += self.org.traits.speed
 
         elif self.org.position.x > targetX:
-            if(self.org.position.x - self.org.speed < targetX):
+            if(self.org.position.x - self.org.traits.speed < targetX):
                 self.org.position.x = targetX
             else:
-                self.org.position.x -= self.org.speed
+                self.org.position.x -= self.org.traits.speed
 
         if self.org.position.y < targetY:
-            if(self.org.position.y + self.org.speed > targetY):
+            if(self.org.position.y + self.org.traits.speed > targetY):
                 self.org.position.y = targetY
             else:
-                self.org.position.y += self.org.speed
+                self.org.position.y += self.org.traits.speed
 
         elif self.org.position.y > targetY:
-            if(self.org.position.y - self.org.speed < targetY):
+            if(self.org.position.y - self.org.traits.speed < targetY):
                 self.org.position.y = targetY
             else:
-                self.org.position.y -= self.org.speed
+                self.org.position.y -= self.org.traits.speed
 
-        self.org.energy = max(self.org.energy - self.org.energyConsumption, 0)
+        self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
 
 
     def eatFood(self, closestFood):
@@ -79,7 +79,7 @@ class Actions:
         else:
             print(f"{self.org.name} can't find food to eat at this position.")
 
-        self.org.energy = min(self.org.energy + NutritionValue, self.org.energyCapacity)  # Gain energy
+        self.org.energy = min(self.org.energy + NutritionValue, self.org.traits.energyCapacity)  # Gain energy
 
 
     def matingCall(self):
@@ -87,14 +87,14 @@ class Actions:
         for otherOrganism in self.org.sim.organismList:
             if otherOrganism == self.org:
                 continue
-            if otherOrganism.age < otherOrganism.reproductionAge:
+            if otherOrganism.age < otherOrganism.traits.reproductionAge:
                 continue 
             if otherOrganism.species is not self.org.species:
                 continue
             distance = self.org.position.distanceTo(otherOrganism.position)
 
-            if distance <= self.org.matingCallRadius:
+            if distance <= self.org.traits.matingCallRadius:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
-                if distance <= self.org.speed + otherOrganism.speed and otherOrganism.energy > 50 and self.org.energy > 50:
+                if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > 50 and self.org.energy > 50:
                     self.org.sim.mate(self.org, otherOrganism)

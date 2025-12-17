@@ -13,27 +13,25 @@ from organism import Organism
 def main():
     sim = Simulation(worldsize=1000)
 
-    genOneTraits = OrganismTraits(
-        age = random.randint(1, 10), 
-        detectionRadius = 20,
-        speed = 5,
-        energy = 50,
-        energyCapacity = 150,
-        slowDownAge = 30,
-        reproductionAge = 10,
-        matingCallRadius = 200,
-        generation = 1
-    )
-
     for i in range(200):
         org = Organism(
             name = "Lion_Gen1_" + str(i), 
-            species = "Lion", 
+            species = "Lion",
+            age = random.randint(1, 10),
+            energy = random.randint(40,60),
             position = Position(
                 x=np.random.randint(0, sim.worldSize),
                 y=np.random.randint(0, sim.worldSize)
             ),
-            traits = genOneTraits,
+            traits = OrganismTraits(
+                detectionRadius = 20,
+                speed = 5,
+                energyCapacity = 150,
+                slowDownAge = 30,
+                reproductionAge = 10,
+                matingCallRadius = 200,
+                generation = 1
+            ),
             sim = sim
         )
         org.sim.organismList.append(org)
