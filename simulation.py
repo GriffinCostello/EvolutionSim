@@ -21,11 +21,7 @@ class Simulation:
     def initWorld(self):
         world = np.empty((self.worldSize, self.worldSize), dtype=object)
         world.fill(None)
-        numFood = (self.worldSize * self.worldSize) // 800
         self.world = world
-        self.placeFood(
-            numFood = numFood
-        )
         return self.world
 
 

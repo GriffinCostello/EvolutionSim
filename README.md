@@ -19,6 +19,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - More complex behaviors: group hunting, competition, or territory defense.
 - Environmental effects: seasonal food availability, hazards, or migration.
 - Visualization of the simulation using graphical libraries.
+- Add third plane of space for height
 
 ## How to Run
 1. Install Python 3.8+.

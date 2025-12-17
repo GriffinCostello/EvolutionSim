@@ -6,7 +6,7 @@ import sys
 
 from actions import Actions
 from position import Position
-from traits import Traits
+from traits import *
 
 class Organism:
     def __init__(self, name, species, age, energy, position: Position, traits: OrganismTraits, simulation: Simulation):
