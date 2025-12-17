@@ -72,12 +72,13 @@ class Actions:
 
     def eatFood(self, closestFood):
         closestFoodX, closestFoodY = closestFood
-        NutritionValue = self.org.sim.world[closestFoodX, closestFoodY].nutritionValue
+        NutritionValue = self.org.sim.world[closestFoodX, closestFoodY].traits.nutritionValue
         if self.org.sim.world[closestFoodX, closestFoodY] is not None:
             self.org.sim.world[closestFoodX, closestFoodY] = None  # Remove food from the world
             print(f"{self.org.name} ate food at ({closestFoodX}, {closestFoodY})")
         else:
             print(f"{self.org.name} can't find food to eat at this position.")
+            return
 
         self.org.energy = min(self.org.energy + NutritionValue, self.org.traits.energyCapacity)  # Gain energy
 

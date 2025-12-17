@@ -30,13 +30,15 @@ class Simulation:
 
 
     def placeFood(self, numFood):
-        
-
         xs = np.random.randint(0, self.worldSize, numFood)
         ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
             self.world[x, y] = Food(
-                Position(x, y), 
+                age = random.randint(0,15),
+                position = Position(
+                    x, 
+                    y
+                ), 
                 traits = FoodTraits(
                     slowDownAge = 20, 
                     generation = 1, 

@@ -6,9 +6,9 @@ import math
 from position import Position
 
 class Food:
-    def __init__(self, position: Position, traits: FoodTraits):
+    def __init__(self, age, position: Position, traits: FoodTraits):
+        self.age = age
+        
         self.position = position
-
-        self.nutritionValue = traits.nutritionValue
-        self.slowDownAge = traits.slowDownAge
-        self.generation = traits.generation
+        
+        self.traits = traits
