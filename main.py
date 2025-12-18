@@ -24,7 +24,7 @@ def main():
                 y=np.random.randint(0, sim.worldSize)
             ),
             traits = OrganismTraits(
-                detectionRadius = 20,
+                detectionRadius = 30,
                 speed = 5,
                 energyCapacity = 150,
                 slowDownAge = 30,

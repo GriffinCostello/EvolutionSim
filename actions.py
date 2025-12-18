@@ -24,10 +24,11 @@ class Actions:
 
 
     def scanForFood(self):
-        xMin = max(self.org.position.x - self.org.traits.detectionRadius, 0)
-        xMax = min(self.org.position.x + self.org.traits.detectionRadius + 1, self.org.simulation.worldSize)
-        yMin = max(self.org.position.y - self.org.traits.detectionRadius, 0)
-        yMax = min(self.org.position.y + self.org.traits.detectionRadius + 1, self.org.simulation.worldSize)
+        oppositeAdjacent = int(math.sqrt(self.org.traits.detectionRadius**2 / 2)) 
+        xMin = max(self.org.position.x - oppositeAdjacent, 0)
+        xMax = min(self.org.position.x + oppositeAdjacent + 1, self.org.simulation.worldSize)
+        yMin = max(self.org.position.y - oppositeAdjacent, 0)
+        yMax = min(self.org.position.y + oppositeAdjacent + 1, self.org.simulation.worldSize)
 
         # Slice region around the organism
         area = self.org.simulation.world[xMin:xMax, yMin:yMax]
@@ -38,6 +39,7 @@ class Actions:
 
         foodGlobal = [Position(int(xMin + foodX), int(yMin + foodY)) for foodX, foodY in foodPositions]
         closest = min(foodGlobal, key=lambda p: p.distanceTo(self.org.position))
+
         return closest.asTuple()
 
     
