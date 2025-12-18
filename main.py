@@ -32,9 +32,9 @@ def main():
                 matingCallRadius = 200,
                 generation = 1
             ),
-            sim = sim
+            simulation = sim
         )
-        org.sim.organismList.append(org)
+        org.simulation.organismList.append(org)
 
     sim.run(ticks = 500000)
 

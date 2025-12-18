@@ -14,44 +14,36 @@ class Simulation:
         self.worldSize = worldsize
         self.world = self.initWorld()
         self.organismList = []
-        self.childCounters = {}
-        self.env.process(self.regrowFood())
+        self.organismChildCounter = {}
 
 
     def initWorld(self):
         world = np.empty((self.worldSize, self.worldSize), dtype=object)
         world.fill(None)
-        numFood = (self.worldSize * self.worldSize) // 800
         self.world = world
-        self.placeFood(
-            numFood = numFood
-        )
-        return self.world
-
-
-    def placeFood(self, numFood):
-        
-
+        numFood = (self.worldSize*self.worldSize) // 600 #one food every 800 places
         xs = np.random.randint(0, self.worldSize, numFood)
         ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
             self.world[x, y] = Food(
-                Position(x, y), 
+                age = random.randint(0,50),
+                position = Position(
+                    x = x, 
+                    y = y
+                ), 
                 traits = FoodTraits(
-                    slowDownAge = 20, 
-                    generation = 1, 
-                    nutritionValue = random.randint(40, 60)
-                )
+                    generation = 1,
+                    stageConfiguration = {
+                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(1, 5)},
+                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 20)},
+                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(40, 60)},
+                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 20)},
+                        FoodStage.ROTTEN: {"duration": random.randint(7, 10), "nutrition": 0},
+                    }                   
+                ),
+                simulation = self
             )
-
-
-    def regrowFood(self):
-        while True:
-            if(self.env.now % 10 ==0):
-                self.placeFood(
-                    numFood = 50
-                )
-            yield self.env.timeout(1)
+        return self.world
 
 
     def mate(self, parent1, parent2):
@@ -62,10 +54,10 @@ class Simulation:
 
         generation = max(parent1.traits.generation, parent2.traits.generation) + 1
         key = (parent1.species, generation)
-        if key not in parent1.sim.childCounters:
-            parent1.sim.childCounters[key] = 0
-        parent1.sim.childCounters[key] += 1
-        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.sim.childCounters[key])
+        if key not in parent1.simulation.organismChildCounter:
+            parent1.simulation.organismChildCounter[key] = 0
+        parent1.simulation.organismChildCounter[key] += 1
+        childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.simulation.organismChildCounter[key])
         
         child = Organism(
             name = childName, 
@@ -85,10 +77,10 @@ class Simulation:
                 matingCallRadius = (parent1.traits.matingCallRadius + parent2.traits.matingCallRadius) // 2 + 10*random.randint(-1,1),
                 generation = generation
             ),
-            sim = parent1.sim
+            simulation = parent1.simulation
         )
         print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
-        parent1.sim.organismList.append(child)
+        parent1.simulation.organismList.append(child)
 
 
     def run(self, ticks):

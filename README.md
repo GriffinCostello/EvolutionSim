@@ -11,13 +11,19 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Mating calls: organisms can detect nearby potential mates within a radius.
 - Shared 2D world environment for all organisms using SimPy for concurrent simulation.
 - Added reproduction functionality where organisms can create offspring with inherited traits.
+- Food regrows every 10 ticks
 
+## Short Term PLans
+- Have animals search for food with best nutritional value
+- Track plant generation for evolutional purposes
+- Have animals spread food seeds from the food eaten 
 
 ## Future Plans
 - Evolutionary dynamics and population growth.
 - More complex behaviors: group hunting, competition, or territory defense.
 - Environmental effects: seasonal food availability, hazards, or migration.
 - Visualization of the simulation using graphical libraries.
+- Add third plane of space for height
 
 ## How to Run
 1. Install Python 3.8+.

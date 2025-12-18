@@ -25,12 +25,12 @@ class Actions:
 
     def scanForFood(self):
         xMin = max(self.org.position.x - self.org.traits.detectionRadius, 0)
-        xMax = min(self.org.position.x + self.org.traits.detectionRadius + 1, self.org.sim.worldSize)
+        xMax = min(self.org.position.x + self.org.traits.detectionRadius + 1, self.org.simulation.worldSize)
         yMin = max(self.org.position.y - self.org.traits.detectionRadius, 0)
-        yMax = min(self.org.position.y + self.org.traits.detectionRadius + 1, self.org.sim.worldSize)
+        yMax = min(self.org.position.y + self.org.traits.detectionRadius + 1, self.org.simulation.worldSize)
 
         # Slice region around the organism
-        area = self.org.sim.world[xMin:xMax, yMin:yMax]
+        area = self.org.simulation.world[xMin:xMax, yMin:yMax]
         # Find actual coordinates of food
         foodPositions = np.argwhere(area != None) 
         if len(foodPositions) == 0:
@@ -72,19 +72,23 @@ class Actions:
 
     def eatFood(self, closestFood):
         closestFoodX, closestFoodY = closestFood
-        NutritionValue = self.org.sim.world[closestFoodX, closestFoodY].nutritionValue
-        if self.org.sim.world[closestFoodX, closestFoodY] is not None:
-            self.org.sim.world[closestFoodX, closestFoodY] = None  # Remove food from the world
+        nutritionalValue = self.org.simulation.world[closestFoodX, closestFoodY].getNutrition()
+        if self.org.simulation.world[closestFoodX, closestFoodY] is not None:
+            self.org.simulation.world[closestFoodX, closestFoodY] = None  # Remove food from the world
             print(f"{self.org.name} ate food at ({closestFoodX}, {closestFoodY})")
         else:
             print(f"{self.org.name} can't find food to eat at this position.")
+            return
 
-        self.org.energy = min(self.org.energy + NutritionValue, self.org.traits.energyCapacity)  # Gain energy
+        self.org.energy = min(
+            self.org.energy + nutritionalValue, 
+            self.org.traits.energyCapacity
+        )  # Gain energy
 
 
     def matingCall(self):
 
-        for otherOrganism in self.org.sim.organismList:
+        for otherOrganism in self.org.simulation.organismList:
             if otherOrganism == self.org:
                 continue
             if otherOrganism.age < otherOrganism.traits.reproductionAge:
@@ -97,4 +101,4 @@ class Actions:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
                 if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > 50 and self.org.energy > 50:
-                    self.org.sim.mate(self.org, otherOrganism)
+                    self.org.simulation.mate(self.org, otherOrganism)
