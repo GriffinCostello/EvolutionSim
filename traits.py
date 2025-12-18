@@ -1,21 +1,42 @@
+from enum import Enum, auto
+import random
+
 class Traits:
-    def __init__(self, slowDownAge, generation):
-        self.slowDownAge = slowDownAge
+    def __init__(self, generation):
         self.generation = generation
         
 
 class OrganismTraits(Traits):
     def __init__(self, detectionRadius, speed, energyCapacity, slowDownAge, reproductionAge, matingCallRadius, generation):
-        super().__init__(slowDownAge, generation)
+        super().__init__(generation)
         self.detectionRadius = detectionRadius
         self.speed = speed
         self.energyCapacity = energyCapacity
         self.energyConsumption = speed /2
         self.reproductionAge = reproductionAge
+        self.slowDownAge = slowDownAge
         self.matingCallRadius = matingCallRadius
         self.status = "Idle"
 
+
 class FoodTraits(Traits):
-    def __init__(self, slowDownAge, generation, nutritionValue):
-        super().__init__(slowDownAge, generation)
-        self.nutritionValue = nutritionValue
+    def __init__(self,generation, stageConfiguration):
+        super().__init__(generation)
+
+        self.stageDurations = {}
+        self.nutritionalValue = {}
+
+        durationCalculator = 0
+        for stage, dictionary in stageConfiguration.items():
+            duration = dictionary["duration"]
+            self.stageDurations[stage] = (durationCalculator, durationCalculator + duration)  #Adds duration to length so it can be compared to age
+            self.nutritionalValue[stage] = dictionary["nutrition"]
+            durationCalculator += duration
+
+
+class FoodStage(Enum):
+    SEED = auto()
+    RIPENING = auto()
+    RIPE = auto()
+    ROTTING = auto()
+    ROTTEN = auto()

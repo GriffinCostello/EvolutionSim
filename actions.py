@@ -72,7 +72,7 @@ class Actions:
 
     def eatFood(self, closestFood):
         closestFoodX, closestFoodY = closestFood
-        NutritionValue = self.org.simulation.world[closestFoodX, closestFoodY].traits.nutritionValue
+        nutritionalValue = self.org.simulation.world[closestFoodX, closestFoodY].getNutrition()
         if self.org.simulation.world[closestFoodX, closestFoodY] is not None:
             self.org.simulation.world[closestFoodX, closestFoodY] = None  # Remove food from the world
             print(f"{self.org.name} ate food at ({closestFoodX}, {closestFoodY})")
@@ -80,7 +80,10 @@ class Actions:
             print(f"{self.org.name} can't find food to eat at this position.")
             return
 
-        self.org.energy = min(self.org.energy + NutritionValue, self.org.traits.energyCapacity)  # Gain energy
+        self.org.energy = min(
+            self.org.energy + nutritionalValue, 
+            self.org.traits.energyCapacity
+        )  # Gain energy
 
 
     def matingCall(self):

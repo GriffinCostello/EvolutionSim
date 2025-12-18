@@ -13,6 +13,10 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Added reproduction functionality where organisms can create offspring with inherited traits.
 - Food regrows every 10 ticks
 
+## Short Term PLans
+- Have animals search for food with best nutritional value
+- Track plant generation for evolutional purposes
+- Have animals spread food seeds from the food eaten 
 
 ## Future Plans
 - Evolutionary dynamics and population growth.

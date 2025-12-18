@@ -18,10 +18,27 @@ class Food:
 
         self.live = self.simulation.env.process(self.live())
 
+
     def tick(self):
         self.age += 1
+
 
     def live(self):
         while True:
             self.tick()
+            if(self.age >= 70):
+                break
             yield self.simulation.env.timeout(1)
+
+
+    def getStage(self):
+        for stage, (start, end) in self.traits.stageDurations.items():
+            if start <= self.age < end:
+                return stage
+                
+        return FoodStage.ROTTEN
+
+
+    def getNutrition(self):
+        stage = self.getStage()
+        return self.traits.nutritionalValue[stage]

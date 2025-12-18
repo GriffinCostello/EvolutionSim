@@ -15,42 +15,35 @@ class Simulation:
         self.world = self.initWorld()
         self.organismList = []
         self.organismChildCounter = {}
-        self.env.process(self.regrowFood())
 
 
     def initWorld(self):
         world = np.empty((self.worldSize, self.worldSize), dtype=object)
         world.fill(None)
         self.world = world
-        return self.world
-
-
-    def placeFood(self, numFood):
+        numFood = (self.worldSize*self.worldSize) // 600 #one food every 800 places
         xs = np.random.randint(0, self.worldSize, numFood)
         ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
             self.world[x, y] = Food(
-                age = random.randint(0,15),
+                age = random.randint(0,50),
                 position = Position(
                     x, 
                     y
                 ), 
                 traits = FoodTraits(
-                    slowDownAge = 20, 
-                    generation = 1, 
-                    nutritionValue = random.randint(40, 60)
+                    generation = 1,
+                    stageConfiguration = {
+                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(1, 5)},
+                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 20)},
+                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(40, 60)},
+                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 20)},
+                        FoodStage.ROTTEN: {"duration": random.randint(7, 10), "nutrition": 0},
+                    }                   
                 ),
                 simulation = self
             )
-
-
-    def regrowFood(self):
-        while True:
-            if(self.env.now % 10 ==0):
-                self.placeFood(
-                    numFood = 50
-                )
-            yield self.env.timeout(1)
+        return self.world
 
 
     def mate(self, parent1, parent2):

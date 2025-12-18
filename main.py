@@ -36,11 +36,6 @@ def main():
         )
         org.simulation.organismList.append(org)
 
-    numFood = (sim.worldSize * sim.worldSize) // 800
-    sim.placeFood(
-        numFood = numFood
-    )
-
     sim.run(ticks = 500000)
 
 if __name__ == "__main__":
