@@ -28,8 +28,8 @@ class Simulation:
             self.world[x, y] = Food(
                 age = random.randint(0,50),
                 position = Position(
-                    x, 
-                    y
+                    x = x, 
+                    y = y
                 ), 
                 traits = FoodTraits(
                     generation = 1,
