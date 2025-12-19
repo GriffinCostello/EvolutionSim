@@ -21,7 +21,7 @@ class Simulation:
         world = np.empty((self.worldSize, self.worldSize), dtype=object)
         world.fill(None)
         self.world = world
-        numFood = (self.worldSize*self.worldSize) // 600 #one food every 800 places
+        numFood = (self.worldSize*self.worldSize) // 400 #one food every 800 places
         xs = np.random.randint(0, self.worldSize, numFood)
         ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
@@ -75,6 +75,7 @@ class Simulation:
                 slowDownAge = (parent1.traits.slowDownAge + parent2.traits.slowDownAge) // 2 + 3*random.randint(-1,1),
                 reproductionAge = (parent1.traits.reproductionAge + parent2.traits.reproductionAge) // 2 + 1*random.randint(-1,1),
                 matingCallRadius = (parent1.traits.matingCallRadius + parent2.traits.matingCallRadius) // 2 + 10*random.randint(-1,1),
+                digestionTime = (parent1.traits.digestionTime + parent2.traits.digestionTime) // 2 + 1*random.randint(-1,1),
                 generation = generation
             ),
             simulation = parent1.simulation

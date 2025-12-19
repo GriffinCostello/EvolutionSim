@@ -54,10 +54,12 @@ class Organism:
                     self.status = "Mating"
 
                 case "LookForFood":
-                    closestFood = self.actions.scanForFood()
-                    self.actions.moveTowards(closestFood)
-                    if (self.position.x, self.position.y) == closestFood:
-                        self.actions.eatFood(closestFood)
+                    bestFood = self.actions.scanForFood()
+                    self.actions.moveTowards(bestFood)
+                    if (self.position.x, self.position.y) == bestFood:
+                        self.simulation.env.process(
+                            self.actions.eatFood(bestFood)
+                        )
                     self.status = "Hunting"       
 
                 case "Wander":

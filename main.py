@@ -25,11 +25,12 @@ def main():
             ),
             traits = OrganismTraits(
                 detectionRadius = 30,
-                speed = 5,
+                speed = 8,
                 energyCapacity = 150,
                 slowDownAge = 30,
                 reproductionAge = 10,
                 matingCallRadius = 200,
+                digestionTime = 8,
                 generation = 1
             ),
             simulation = sim
