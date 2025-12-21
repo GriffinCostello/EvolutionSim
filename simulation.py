@@ -80,7 +80,7 @@ class Simulation:
                 x = (parent1.position.x + parent2.position.x) // 2,
                 y = (parent1.position.y + parent2.position.y) // 2
             ),
-            traits = self.inheritTraits(parent1.traits, parent2.traits, generation),
+            traits = self.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
             simulation = parent1.simulation
         )
         print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
@@ -100,7 +100,7 @@ class Simulation:
 
 
     #This calculates the traits of the parents plus slight variation for evolution to occur
-    def inheritTraits(self, traits1, traits2, generation):
+    def inheritOrganismTraits(self, traits1, traits2, generation):
         return OrganismTraits(
             detectionRadius = self.inherit((traits1.detectionRadius + traits2.detectionRadius) // 2, 2),
             speed = self.inherit((traits1.speed + traits2.speed) //2, 1),
@@ -118,6 +118,7 @@ class Simulation:
     @staticmethod
     def inherit(value, variance):
         return value + variance*random.randint(-1,1)
+
 
     def run(self, ticks):
         self.env.run(until=ticks)

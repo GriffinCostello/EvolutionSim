@@ -130,24 +130,26 @@ class Actions:
 
     def poop(self, org, foodTraits):
         stageConfigurationCopy = {}
-        
+
         # Copy stage configuration 
         for stage, dictionary in foodTraits.stageConfiguration.items():
             # stage-specific variation ranges
             if stage == FoodStage.SEED:
-                duration = random.randint(-1, 1)
-                nutrition = random.randint(-1, 1)
+                stageConfigurationCopy[stage] = {
+                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 1)),
+                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 1)),
+                }
             elif stage == FoodStage.RIPE:
-                duration = random.randint(-3, 3)
-                nutrition = random.randint(-5, 5)
+                stageConfigurationCopy[stage] = {
+                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 3)),
+                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 5)),
+                }
             else:
-                duration = random.randint(-2, 2)
-                nutrition = random.randint(-2, 2)
+                stageConfigurationCopy[stage] = {
+                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 2)),
+                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 2)),
+                }
 
-            stageConfigurationCopy[stage] = {
-                "duration": max(1, dictionary["duration"] + duration),
-                "nutrition": max(0, dictionary["nutrition"] + nutrition),
-            }
 
         org.simulation.world[org.position.x, org.position.y] = Food(
             age=0,
