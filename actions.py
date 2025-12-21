@@ -124,7 +124,7 @@ class Actions:
             if distance <= self.org.traits.matingCallRadius:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
-                if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > 50 and self.org.energy > 50:
+                if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > otherOrganism.traits.birthEnergy and self.org.energy > self.org.traits.birthEnergy:
                     self.org.simulation.mate(self.org, otherOrganism)
 
 
