@@ -20,13 +20,14 @@ def main():
             age = random.randint(1, 10),
             energy = random.randint(40,60),
             position = Position(
-                x=np.random.randint(0, sim.worldSize),
-                y=np.random.randint(0, sim.worldSize)
+                x=np.random.randint(0, simulation.worldSize),
+                y=np.random.randint(0, simulation.worldSize)
             ),
             traits = OrganismTraits(
                 detectionRadius = 30,
                 speed = 8,
                 energyCapacity = 250,
+                birthEnergy = 80,
                 slowDownAge = 30,
                 reproductionAge = 20,
                 matingCallRadius = 200,

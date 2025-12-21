@@ -7,11 +7,12 @@ class Traits:
         
 
 class OrganismTraits(Traits):
-    def __init__(self, detectionRadius, speed, energyCapacity, slowDownAge, reproductionAge, matingCallRadius, digestionTime, generation):
+    def __init__(self, detectionRadius, speed, energyCapacity, birthEnergy, slowDownAge, reproductionAge, matingCallRadius, digestionTime, generation):
         super().__init__(generation)
         self.detectionRadius = detectionRadius
         self.speed = speed
         self.energyCapacity = energyCapacity
+        self.birthEnergy = birthEnergy
         self.energyConsumption = speed /2
         self.reproductionAge = reproductionAge
         self.slowDownAge = slowDownAge

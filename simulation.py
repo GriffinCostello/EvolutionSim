@@ -49,8 +49,8 @@ class Simulation:
     def mate(self, parent1, parent2):
         if parent1.species is not parent2.species:
             return
-        parent1.energy = max(parent1.energy - parent1.traits.energyCapacity//3, 0)
-        parent2.energy = max(parent2.energy - parent2.traits.energyCapacity//3, 0)
+        parent1.energy = max(parent1.energy - parent1.traits.birthEnergy//3, 0)
+        parent2.energy = max(parent2.energy - parent2.traits.birthEnergy//3, 0)
 
         generation = max(parent1.traits.generation, parent2.traits.generation) + 1
         key = (parent1.species, generation)
@@ -72,6 +72,7 @@ class Simulation:
                 detectionRadius = (parent1.traits.detectionRadius + parent2.traits.detectionRadius) // 2 + 2*random.randint(-1,1),
                 speed = (parent1.traits.speed + parent2.traits.speed) //2 + 1*random.randint(-1,1),
                 energyCapacity = (parent1.traits.energyCapacity + parent2.traits.energyCapacity) // 2 + 10*random.randint(-1,1),
+                birthEnergy = (parent1.traits.birthEnergy + parent2.traits.birthEnergy) // 2 + 5*random.randint(-1,1),
                 slowDownAge = (parent1.traits.slowDownAge + parent2.traits.slowDownAge) // 2 + 3*random.randint(-1,1),
                 reproductionAge = (parent1.traits.reproductionAge + parent2.traits.reproductionAge) // 2 + 1*random.randint(-1,1),
                 matingCallRadius = (parent1.traits.matingCallRadius + parent2.traits.matingCallRadius) // 2 + 10*random.randint(-1,1),
