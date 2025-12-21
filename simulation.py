@@ -21,7 +21,7 @@ class Simulation:
         world = np.empty((self.worldSize, self.worldSize), dtype=object)
         world.fill(None)
         self.world = world
-        numFood = (self.worldSize*self.worldSize) // 400 #one food every 800 places
+        numFood = (self.worldSize*self.worldSize) // 300 #one food every 800 places
         xs = np.random.randint(0, self.worldSize, numFood)
         ys = np.random.randint(0, self.worldSize, numFood)
         for x, y in zip(xs, ys):
@@ -34,10 +34,10 @@ class Simulation:
                 traits = FoodTraits(
                     generation = 1,
                     stageConfiguration = {
-                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(1, 5)},
-                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 20)},
-                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(40, 60)},
-                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 20)},
+                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(1, 10)},
+                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 25)},
+                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(50, 60)},
+                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(20, 25)},
                         FoodStage.ROTTEN: {"duration": random.randint(7, 10), "nutrition": 0},
                     }                   
                 ),

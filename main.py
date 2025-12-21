@@ -11,9 +11,9 @@ from organism import Organism
 
 
 def main():
-    sim = Simulation(worldsize=1000)
+    simulation = Simulation(worldsize=1000)
 
-    for i in range(200):
+    for i in range(100):
         org = Organism(
             name = "Lion_Gen1_" + str(i), 
             species = "Lion",
@@ -26,18 +26,18 @@ def main():
             traits = OrganismTraits(
                 detectionRadius = 30,
                 speed = 8,
-                energyCapacity = 150,
+                energyCapacity = 250,
                 slowDownAge = 30,
-                reproductionAge = 10,
+                reproductionAge = 20,
                 matingCallRadius = 200,
                 digestionTime = 8,
                 generation = 1
             ),
-            simulation = sim
+            simulation = simulation
         )
         org.simulation.organismList.append(org)
 
-    sim.run(ticks = 500000)
+    simulation.run(ticks = 500000)
 
 if __name__ == "__main__":
     main()
