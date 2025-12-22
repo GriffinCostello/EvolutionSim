@@ -18,7 +18,9 @@ class Simulation:
         self.organismList = []
         self.organismChildCounter = {}
 
-        numFood = (self.worldSize*self.worldSize) // 300 #one food every 300 places
+        self.env.process(self.systemTick())
+
+        numFood = (self.worldSize*self.worldSize) // 500 #one food every 300 places
         self.placeFood(numFood)
 
 
@@ -83,7 +85,7 @@ class Simulation:
             traits = self.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
             simulation = parent1.simulation
         )
-        print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
+        #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         return child
 
     
@@ -122,3 +124,20 @@ class Simulation:
 
     def run(self, ticks):
         self.env.run(until=ticks)
+
+
+    def systemTick(self):
+        while True:
+            yield self.env.timeout(1)
+            if self.env.now % 100 == 0:
+                self.findStats()
+                        
+
+    def findStats(self):
+        print("-------------------------------------------------")
+        print(f"Number of Organisms Alive {len(self.organismList)}")
+        numInstances = 0
+        speedTotal = sum(o.traits.speed for o in self.organismList)
+        print(f"Speed {speedTotal / len(self.organismList):.4f}")
+
+

@@ -42,7 +42,7 @@ class Organism:
                     print("All alone")
                     sys.exit()
             if self.energy <= 0:
-                print(f"{self.name} has run out of energy and died at age {self.age}.")
+                #print(f"{self.name} has run out of energy and died at age {self.age}.")
                 
                 self.simulation.organismList.remove(self)
                 break

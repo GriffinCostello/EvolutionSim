@@ -12,6 +12,7 @@ class Actions:
         self.org = organism
 
 
+    #Choose the next action for what to do
     def decideNextAction(self):
         if self.org.energy > self.org.traits.energyCapacity * 0.7:
             if(self.org.age >= self.org.traits.reproductionAge):
@@ -24,6 +25,7 @@ class Actions:
             return "Wander"
 
 
+    #Looks for food nearby
     def scanForFood(self):
         oppositeAdjacent = int(math.sqrt(self.org.traits.detectionRadius**2 / 2)) 
         xMin = max(self.org.position.x - oppositeAdjacent, 0)
@@ -38,6 +40,11 @@ class Actions:
         if len(foodPositions) == 0:
             return None
 
+        return self.findBestFood(foodPositions, xMin, xMax, yMin, yMax)
+
+        
+    #Finds the best food 
+    def findBestFood(self, foodPositions, xMin, xMax, yMin, yMax):
         bestFood = None
         bestScore = 0
 
@@ -51,14 +58,14 @@ class Actions:
 
             # Formula that calculates best score based off nutrition and distance
             score = nutrition / (distance + 1)
-
             if score > bestScore:
                 bestScore = score
                 bestFood = (foodX, foodY)
             
         return bestFood
 
-    
+
+    #moves an organism towards a location
     def moveTowards(self, target):
         targetX, targetY = target
         speedRemaining = self.org.traits.speed
@@ -89,13 +96,13 @@ class Actions:
         self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
 
 
+    #Eats food at a location
     def eatFood(self, bestFood):
         bestFoodX, bestFoodY = bestFood
         if self.org.simulation.world[bestFoodX, bestFoodY] is not None:
             nutritionalValue = self.org.simulation.world[bestFoodX, bestFoodY].getNutrition()
             foodTraits = self.org.simulation.world[bestFoodX, bestFoodY].traits
-            self.org.simulation.world[bestFoodX, bestFoodY] = None  # Remove food from the world
-            #print(f"{self.org.name} ate food at ({bestFoodX}, {bestFoodY})")
+            self.org.simulation.world[bestFoodX, bestFoodY] = None  
         else:
             print(f"{self.org.name} can't find food to eat at this position.")
             return
@@ -109,7 +116,7 @@ class Actions:
         self.org.actions.poop(self.org, foodTraits)
         
 
-
+    #Looks for mates nearby and either moves towards them or mates with them
     def matingCall(self):
 
         for otherOrganism in self.org.simulation.organismList:
@@ -128,6 +135,7 @@ class Actions:
                     self.org.simulation.mate(self.org, otherOrganism)
 
 
+    #Organism poops out the foodtraits as a seed
     def poop(self, org, foodTraits):
         stageConfigurationCopy = {}
 
