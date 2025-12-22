@@ -1,0 +1,41 @@
+# 2024-12-22 — Baseline Run
+
+## Parameters
+- World size: 1000×1000
+- Food spawn: One food every 200 places
+- Initial organisms: 100
+- Initial Organism Features
+    - age = random.randint(1, 10),
+    - energy = random.randint(40,60),
+    - traits
+        - detectionRadius = 30,
+        - speed = 8,
+        - energyCapacity = 250,
+        - birthEnergy = 80,
+        - slowDownAge = 30,
+        - reproductionAge = 20,
+        - matingCallRadius = 200,
+        - digestionTime = 8,
+        - generation = 1
+
+## Observations
+- Population halves by ~100 ticks
+- The Population then starts dying off again steadily
+- Speed ALWAYS reaches the minimum value (1)
+    - I suspect that this is because energy consumption is proportional to speed
+    - A lack of predators means there is not much reason for speed much like galapagos tortoises
+
+## Stats
+- Average life span typically sits somewhere around 160-180
+- Slow down age typically increases to 32-35
+- Reproduction age dcreases by 1 or 2 ticks, 18-19
+- Energy for birth also decreases to 72-78
+
+## Hypotheses
+- A lack of predators and need for speed results in a slow population
+- There is not enough food or time for the speices to be able to live long enough to see large changes
+
+## Next things to try
+- Add predators to kill slower members
+- This will let us observe trophic levels and how populations balance by number of predators and prey
+- Give food more energy to allow for creatures to live longer
