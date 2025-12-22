@@ -19,6 +19,9 @@ class Organism:
 
         self.traits = traits
 
+        # Per-organism state for when they will next slow down during their lifetime.
+        self.nextSlowDownAge = self.traits.slowDownAge
+
         self.simulation = simulation
 
         self.actions = Actions(self)
@@ -27,9 +30,9 @@ class Organism:
 
     def tick(self):
         self.age += 1
-        if self.age == self.traits.slowDownAge:
+        if self.age == self.nextSlowDownAge:
             self.traits.speed = max(self.traits.speed - 1, 1)
-            self.traits.slowDownAge += (self.traits.slowDownAge // 2)
+            self.nextSlowDownAge += (self.nextSlowDownAge // 2)
     
         self.energy = max(self.energy - self.traits.energyConsumption, 0)  # Decrease energy each tick
 
@@ -39,11 +42,11 @@ class Organism:
             
             self.tick()
             if len(self.simulation.organismList) == 1:
-                    print("All alone")
+                    print(f"All dead, Average Life Span: {sum(self.simulation.lifeSpan) / len(self.simulation.lifeSpan):.4f}")
                     sys.exit()
             if self.energy <= 0:
                 #print(f"{self.name} has run out of energy and died at age {self.age}.")
-                
+                self.simulation.lifeSpan.append(self.age)
                 self.simulation.organismList.remove(self)
                 break
 

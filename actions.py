@@ -104,7 +104,7 @@ class Actions:
             foodTraits = self.org.simulation.world[bestFoodX, bestFoodY].traits
             self.org.simulation.world[bestFoodX, bestFoodY] = None  
         else:
-            print(f"{self.org.name} can't find food to eat at this position.")
+            #print(f"{self.org.name} can't find food to eat at this position.")
             return
 
         self.org.energy = min(
@@ -144,18 +144,18 @@ class Actions:
             # stage-specific variation ranges
             if stage == FoodStage.SEED:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 1)),
+                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 1, 1)),
+                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 1, 1)),
                 }
             elif stage == FoodStage.RIPE:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 3)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 5)),
+                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 3, 1)),
+                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 5, 1)),
                 }
             else:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 2)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 2)),
+                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 2, 1)),
+                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 2, 1)),
                 }
 
 

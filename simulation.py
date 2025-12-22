@@ -17,10 +17,11 @@ class Simulation:
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
+        self.lifeSpan = []
 
         self.env.process(self.systemTick())
 
-        numFood = (self.worldSize*self.worldSize) // 500 #one food every 300 places
+        numFood = (self.worldSize*self.worldSize) // 200 #one food every 200 places
         self.placeFood(numFood)
 
 
@@ -104,22 +105,22 @@ class Simulation:
     #This calculates the traits of the parents plus slight variation for evolution to occur
     def inheritOrganismTraits(self, traits1, traits2, generation):
         return OrganismTraits(
-            detectionRadius = self.inherit((traits1.detectionRadius + traits2.detectionRadius) // 2, 2),
-            speed = self.inherit((traits1.speed + traits2.speed) //2, 1),
-            energyCapacity = self.inherit((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10),
-            birthEnergy = self.inherit((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5),
-            slowDownAge = self.inherit((traits1.slowDownAge + traits2.slowDownAge) // 2 , 3),
-            reproductionAge = self.inherit((traits1.reproductionAge + traits2.reproductionAge) // 2 , 1),
-            matingCallRadius = self.inherit((traits1.matingCallRadius + traits2.matingCallRadius) // 2 , 10),
-            digestionTime = self.inherit((traits1.digestionTime + traits2.digestionTime) // 2 , 1),
+            detectionRadius = self.inherit((traits1.detectionRadius + traits2.detectionRadius) // 2, 2, 1),
+            speed = self.inherit((traits1.speed + traits2.speed) //2, 1, 1),
+            energyCapacity = self.inherit((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
+            birthEnergy = self.inherit((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
+            slowDownAge = self.inherit((traits1.slowDownAge + traits2.slowDownAge) // 2 , 3, 1),
+            reproductionAge = self.inherit((traits1.reproductionAge + traits2.reproductionAge) // 2 , 1, 2),
+            matingCallRadius = self.inherit((traits1.matingCallRadius + traits2.matingCallRadius) // 2 , 10, 1),
+            digestionTime = self.inherit((traits1.digestionTime + traits2.digestionTime) // 2 , 1, 1),
             generation = generation
         )
     
 
     #Helper function for finding variance levels, static since used by whole class, not object instances 
     @staticmethod
-    def inherit(value, variance):
-        return value + variance*random.randint(-1,1)
+    def inherit(value, variance, minimum):
+        return max(value + variance*random.randint(-1,1), minimum)
 
 
     def run(self, ticks):
@@ -129,6 +130,8 @@ class Simulation:
     def systemTick(self):
         while True:
             yield self.env.timeout(1)
+            if self.env.now == 1:
+                self.findStats()
             if self.env.now % 100 == 0:
                 self.findStats()
                         
@@ -136,8 +139,24 @@ class Simulation:
     def findStats(self):
         print("-------------------------------------------------")
         print(f"Number of Organisms Alive {len(self.organismList)}")
-        numInstances = 0
+
         speedTotal = sum(o.traits.speed for o in self.organismList)
-        print(f"Speed {speedTotal / len(self.organismList):.4f}")
+        print(f"Speed: {speedTotal / len(self.organismList):.4f}")
 
+        detectionTotal = sum(o.traits.detectionRadius for o in self.organismList)
+        print(f"Detection Radius: {detectionTotal / len(self.organismList):.4f}")
 
+        energyCapacityTotal = sum(o.traits.energyCapacity for o in self.organismList)
+        print(f"Energy Capacity: {energyCapacityTotal / len(self.organismList):.4f}")
+
+        matingCallTotal = sum(o.traits.matingCallRadius for o in self.organismList)
+        print(f"Mating Call Radius: {matingCallTotal / len(self.organismList):.4f}")
+
+        slowDownTotal = sum(o.traits.slowDownAge for o in self.organismList)
+        print(f"SlowDownAge: {slowDownTotal / len(self.organismList):.4f}")
+
+        reproductionAgeTotal = sum(o.traits.reproductionAge for o in self.organismList)
+        print(f"Reproduction Age: {reproductionAgeTotal / len(self.organismList):.4f}")
+
+        birthEnergyTotal = sum(o.traits.birthEnergy for o in self.organismList)
+        print(f"Birth Energy: {birthEnergyTotal / len(self.organismList):.4f}")
