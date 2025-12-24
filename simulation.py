@@ -119,7 +119,7 @@ class Simulation:
 
         elif isintance(traits1, CarnivoreTraits):
             return CarnivoreTraits(
-                huntingRadius = self.inherit((traits1.detectionRadius + traits2.detectionRadius) // 2, 2, 1),
+                huntingRadius = self.inherit((traits1.huntingRadius + traits2.huntingRadius) // 2, 2, 1),
                 speed = self.inherit((traits1.speed + traits2.speed) //2, 1, 1),
                 energyCapacity = self.inherit((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
                 birthEnergy = self.inherit((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
