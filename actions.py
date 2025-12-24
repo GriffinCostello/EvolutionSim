@@ -8,7 +8,7 @@ from food import Food
 from traits import *
 
 class Actions:
-    def __init__(self, organism: Orgnanism):
+    def __init__(self, organism: "Organism"):
         self.org = organism
 
 
@@ -18,8 +18,14 @@ class Actions:
             if(self.org.age >= self.org.traits.reproductionAge):
                 return "Mate"
 
-        closestFood = self.org.actions.scanForFood()
-        if closestFood:
+        # Choose scanning method depending on trait type
+        target = None
+        if isinstance(self.org.traits, HerbivoreTraits):
+            target = self.scanForFood()
+        elif isinstance(self.org.traits, CarnivoreTraits):
+            target = self.scanForPrey()
+
+        if target:
             return "LookForFood"
         else:
             return "Wander"
@@ -42,8 +48,30 @@ class Actions:
 
         return self.findBestFood(foodPositions, xMin, xMax, yMin, yMax)
 
+
+    # Looks for prey nearby for carnivores
+    def scanForPrey(self):
+        bestPrey = None
+        bestScore = 0
+        for other in self.org.simulation.organismList:
+            if other is self.org:
+                continue
+            if other.species == self.org.species:
+                continue
+
+            distance = self.org.position.distanceTo(other.position)
+            if distance > self.org.traits.huntingRadius:
+                continue
+
+            score = other.energy / (distance + 1)
+            if score > bestScore:
+                bestScore = score
+                bestPrey = other
+
+        return bestPrey
         
-    #Finds the best food 
+
+    #Finds the best food for Herbivores
     def findBestFood(self, foodPositions, xMin, xMax, yMin, yMax):
         bestFood = None
         bestScore = 0

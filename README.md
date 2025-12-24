@@ -13,6 +13,10 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Added reproduction functionality where organisms can create offspring with inherited traits.
 - Food is regrown by animals eating and spreading seeds
 
+## Short Term Plan
+- Spawn Carnivores in that eat prey
+- Add functionality for carnivores to eat prey, not just search
+
 ## Future Plans
 - Evolutionary dynamics and population growth.
 - More complex behaviors: group hunting, competition, or territory defense.

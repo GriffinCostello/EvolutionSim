@@ -57,13 +57,19 @@ class Organism:
                     self.status = "Mating"
 
                 case "LookForFood":
-                    bestFood = self.actions.scanForFood()
-                    self.actions.moveTowards(bestFood)
-                    if (self.position.x, self.position.y) == bestFood:
-                        self.simulation.env.process(
-                            self.actions.eatFood(bestFood)
-                        )
-                    self.status = "Hunting"       
+                    if isinstance(self.traits, HerbivoreTraits):
+                        bestFood = self.actions.scanForFood()
+                        if bestFood:
+                            self.actions.moveTowards(bestFood)
+                            if (self.position.x, self.position.y) == bestFood:
+                                self.simulation.env.process(self.actions.eatFood(bestFood))
+                        self.status = "Hunting"
+
+                    elif isinstance(self.traits, CarnivoreTraits):
+                        prey = self.actions.scanForPrey()
+                        if prey:
+                            continue #Add Eating prey here
+                        self.status = "Hunting"
 
                 case "Wander":
                     dx, dy = random.choice([(self.traits.speed,0),(-self.traits.speed,0),(0,self.traits.speed),(0,-self.traits.speed)])
