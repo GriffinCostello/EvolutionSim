@@ -15,15 +15,15 @@ def main():
 
     for i in range(100):
         org = Organism(
-            name = "Lion_Gen1_" + str(i), 
-            species = "Lion",
+            name = "Herbivore_Gen1_" + str(i), 
+            species = "Herbivore",
             age = random.randint(1, 10),
             energy = random.randint(40,60),
             position = Position(
                 x=np.random.randint(0, simulation.worldSize),
                 y=np.random.randint(0, simulation.worldSize)
             ),
-            traits = OrganismTraits(
+            traits = HerbivoreTraits(
                 detectionRadius = 30,
                 speed = 8,
                 energyCapacity = 250,

@@ -7,9 +7,8 @@ class Traits:
         
 
 class OrganismTraits(Traits):
-    def __init__(self, detectionRadius, speed, energyCapacity, birthEnergy, slowDownAge, reproductionAge, matingCallRadius, digestionTime, generation):
+    def __init__(self, speed, energyCapacity, birthEnergy, slowDownAge, reproductionAge, matingCallRadius, digestionTime, generation):
         super().__init__(generation)
-        self.detectionRadius = detectionRadius
         self.speed = speed
         self.energyCapacity = energyCapacity
         self.birthEnergy = birthEnergy
@@ -19,6 +18,18 @@ class OrganismTraits(Traits):
         self.matingCallRadius = matingCallRadius
         self.digestionTime = digestionTime
         self.status = "Idle"
+
+
+class HerbivoreTraits(OrganismTraits):
+    def __init__(self, detectionRadius, **kwargs):
+        super().__init__(**kwargs)
+        self.detectionRadius = detectionRadius
+
+
+class CarnivoreTraits(OrganismTraits):
+    def __init__(self, huntingRadius, **kwargs):
+        super().__init__(**kwargs)
+        self.huntingRadius = huntingRadius
 
 
 class FoodTraits(Traits):
