@@ -68,7 +68,9 @@ class Organism:
                     elif isinstance(self.traits, CarnivoreTraits):
                         prey = self.actions.scanForPrey()
                         if prey:
-                            continue #Add Eating prey here
+                            self.actions.moveTowards(prey.position)
+                            if (self.position.x, self.position.y) == (prey.position.x, prey.position.y):
+                                self.actions.attackPrey(prey)
                         self.status = "Hunting"
 
                 case "Wander":

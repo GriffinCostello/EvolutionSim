@@ -143,6 +143,23 @@ class Actions:
         yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
         self.org.actions.poop(self.org, foodTraits)
         
+    
+    #Eats food at a location
+    def eatPrey(self, prey):
+        if prey in self.org.simulation.organismList:
+            gainedEnergy = prey.energy
+            self.org.simulation.organismList.remove(prey)
+        else:
+            #print(f"{self.org.name} can't find prey to eat.")
+            return
+
+        self.org.energy = min(
+            self.org.energy + gainedEnergy, 
+            self.org.traits.energyCapacity
+        )  # Gain energy
+
+        yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
+
 
     #Looks for mates nearby and either moves towards them or mates with them
     def matingCall(self):
