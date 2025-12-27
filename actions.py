@@ -157,20 +157,20 @@ class Actions:
             self.org.energy + gainedEnergy, 
             self.org.traits.energyCapacity
         )  # Gain energy
-
+        print(f"{self.org.name} has eaten {prey.name} and gained {gainedEnergy} energy.")
         yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
+        
 
 
     #Looks for mates nearby and either moves towards them or mates with them
     def matingCall(self):
-
         for otherOrganism in self.org.simulation.organismList:
             if otherOrganism == self.org:
                 continue
             if otherOrganism.age < otherOrganism.traits.reproductionAge:
                 continue 
-            if otherOrganism.species is not self.org.species:
-                continue
+            if type(self.org.traits) is not type(otherOrganism.traits):
+                return
             distance = self.org.position.distanceTo(otherOrganism.position)
 
             if distance <= self.org.traits.matingCallRadius:

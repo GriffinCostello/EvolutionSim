@@ -12,7 +12,7 @@ class OrganismTraits(Traits):
         self.speed = speed
         self.energyCapacity = energyCapacity
         self.birthEnergy = birthEnergy
-        self.energyConsumption = speed /2
+        self.energyConsumption = speed // 2  
         self.reproductionAge = reproductionAge
         self.slowDownAge = slowDownAge
         self.matingCallRadius = matingCallRadius

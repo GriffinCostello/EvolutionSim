@@ -60,7 +60,10 @@ class Simulation:
 
     #Creates a child from two parent organisms
     def mate(self, parent1, parent2):
-        if parent1.species is not parent2.species:
+        if parent1.species != parent2.species:
+            return
+
+        if type(parent1.traits) is not type(parent2.traits):
             return
 
         parent1.energy = max(parent1.energy - parent1.traits.birthEnergy//3, 0)
@@ -117,7 +120,7 @@ class Simulation:
                 generation = generation
             )
 
-        elif isintance(traits1, CarnivoreTraits):
+        elif isinstance(traits1, CarnivoreTraits):
             return CarnivoreTraits(
                 huntingRadius = self.inherit((traits1.huntingRadius + traits2.huntingRadius) // 2, 2, 1),
                 speed = self.inherit((traits1.speed + traits2.speed) //2, 1, 1),
@@ -144,11 +147,13 @@ class Simulation:
     def systemTick(self):
         while True:
             yield self.env.timeout(1)
+
+            """
             if self.env.now == 1:
                 self.findStats()
             if self.env.now % 100 == 0:
                 self.findStats()
-                        
+            """   
 
     def findStats(self):
         print("-------------------------------------------------")
@@ -157,8 +162,8 @@ class Simulation:
         speedTotal = sum(o.traits.speed for o in self.organismList)
         print(f"Speed: {speedTotal / len(self.organismList):.4f}")
 
-        detectionTotal = sum(o.traits.detectionRadius for o in self.organismList)
-        print(f"Detection Radius: {detectionTotal / len(self.organismList):.4f}")
+        #detectionTotal = sum(o.traits.detectionRadius for o in self.organismList)
+       # print(f"Detection Radius: {detectionTotal / len(self.organismList):.4f}")
 
         energyCapacityTotal = sum(o.traits.energyCapacity for o in self.organismList)
         print(f"Energy Capacity: {energyCapacityTotal / len(self.organismList):.4f}")
