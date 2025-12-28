@@ -17,7 +17,7 @@ class Simulation:
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
-        self.lifeSpan = []
+        self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
 
         self.env.process(self.systemTick())
 
@@ -155,6 +155,8 @@ class Simulation:
 
 
     def findStats(self):
+        if len(self.organismList) == 0:
+            return
         print("-------------------------------------------------")
         print(f"Number of Organisms Alive {len(self.organismList)}")
 

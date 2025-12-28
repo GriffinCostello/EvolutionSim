@@ -41,7 +41,7 @@ class Organism:
         while True:
             
             self.tick()
-            if len(self.simulation.organismList) == 1:
+            if len(self.simulation.organismList) == 1 and self in self.simulation.organismList:
                     print(f"All dead, Average Life Span: {sum(self.simulation.lifeSpan) / len(self.simulation.lifeSpan):.4f}")
                     sys.exit()
             if self.energy <= 0:
@@ -68,9 +68,9 @@ class Organism:
                     elif isinstance(self.traits, CarnivoreTraits):
                         prey = self.actions.scanForPrey()
                         if prey:
-                            self.actions.moveTowards(prey.position)
+                            self.actions.moveTowards(prey.position.asTuple())
                             if (self.position.x, self.position.y) == (prey.position.x, prey.position.y):
-                                self.actions.attackPrey(prey)
+                                self.simulation.env.process(self.actions.eatPrey(prey))
                         self.status = "Hunting"
 
                 case "Wander":
