@@ -12,10 +12,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Shared 2D world environment for all organisms using SimPy for concurrent simulation.
 - Added reproduction functionality where organisms can create offspring with inherited traits.
 - Food is regrown by animals eating and spreading seeds
-
-## Short Term Plan
-- Spawn Carnivores in that eat prey
-- Add functionality for carnivores to eat prey, not just search
+- Carnivores can now be spawned in the simulation and carnivores can hunt herbivores for food.
 
 ## Future Plans
 - Evolutionary dynamics and population growth.
