@@ -148,9 +148,8 @@ class Actions:
     def eatPrey(self, prey):
         if prey in self.org.simulation.organismList:
             gainedEnergy = prey.energy
-            self.org.simulation.organismList.remove(prey)
+            prey.energy = -(1000000)  # Ensure prey dies, lets the live() method handle removal
         else:
-            #print(f"{self.org.name} can't find prey to eat.")
             return
 
         self.org.energy = min(

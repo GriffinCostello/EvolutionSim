@@ -18,6 +18,7 @@ class Simulation:
         self.organismList = []
         self.organismChildCounter = {}
         self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
+        self.stopEvent = self.env.event()
 
         self.env.process(self.systemTick())
 
@@ -141,7 +142,9 @@ class Simulation:
 
 
     def run(self, ticks):
-        self.env.run(until=ticks)
+        self.env.run(
+            until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
+        )
 
 
     def systemTick(self):

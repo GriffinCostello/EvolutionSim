@@ -11,7 +11,7 @@ from traits import *
 from position import Position
 from organism import Organism
 
-def main():
+def test_carnivore_eats_herbivore():
     simulation = Simulation(worldsize=10)
     herbivore = Organism(
         name = "Herbivore_Test", 
@@ -54,6 +54,10 @@ def main():
     )
     carnivore.simulation.organismList.append(carnivore)
     simulation.run(ticks = 10)
+    assert carnivore.energy > 100, "Carnivore did not gain energy after eating prey."
 
+def main():
+        test_carnivore_eats_herbivore()
+        
 if __name__ == "__main__":
-    main()
+        main()

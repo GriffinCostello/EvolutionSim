@@ -41,13 +41,17 @@ class Organism:
         while True:
             
             self.tick()
-            if len(self.simulation.organismList) == 1 and self in self.simulation.organismList:
-                    print(f"All dead, Average Life Span: {sum(self.simulation.lifeSpan) / len(self.simulation.lifeSpan):.4f}")
-                    sys.exit()
+            
             if self.energy <= 0:
                 #print(f"{self.name} has run out of energy and died at age {self.age}.")
                 self.simulation.lifeSpan.append(self.age)
                 self.simulation.organismList.remove(self)
+                
+                if len(self.simulation.organismList) == 1:
+                    print(f"All dead, Average Life Span: {sum(self.simulation.lifeSpan) / len(self.simulation.lifeSpan):.4f}")
+                    if not self.simulation.stopEvent.triggered:
+                        self.simulation.stopEvent.succeed()
+
                 break
 
             nextAction = self.actions.decideNextAction()
