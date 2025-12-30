@@ -26,3 +26,17 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 2. Install dependencies:
    ```bash
    pip install numpy simpy
+3. Run the simulation:
+   ```bash
+   python evolution_sim.py
+   ```
+
+## How to Test
+1. Install pytest:
+   ```bash
+   pip install pytest
+   ```
+2. Run the test suite:
+   ```bash
+   pytest -v
+   ```
