@@ -35,7 +35,7 @@ def test_carnivore_eats_herbivore():
         species = "Carnivore",
         age = 5,
         energy = 100,
-        position = Position(x=9, y=9),
+        position = Position(x=2, y=2),
         traits = CarnivoreTraits(
             huntingRadius = 5,
             speed = 4,
