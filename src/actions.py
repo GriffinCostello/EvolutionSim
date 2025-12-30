@@ -3,9 +3,9 @@ import numpy as np
 import random
 import math
 
-from position import Position
-from food import Food
-from traits import *
+from .position import Position
+from .food import Food
+from .traits import *
 
 class Actions:
     def __init__(self, organism: "Organism"):

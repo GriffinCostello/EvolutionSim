@@ -3,10 +3,10 @@ import numpy as np
 import random
 import math
 
-from organism import Organism
-from traits import *
-from position import Position
-from food import Food
+from .organism import Organism
+from .traits import *
+from .position import Position
+from .food import Food
 
 class Simulation:
     def __init__(self, worldsize):

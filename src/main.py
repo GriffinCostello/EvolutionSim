@@ -3,10 +3,10 @@ import numpy as np
 import random
 import math
 
-from simulation import Simulation
-from traits import *
-from position import Position
-from organism import Organism
+from .simulation import Simulation
+from .traits import *
+from .position import Position
+from .organism import Organism
 
 
 

@@ -3,8 +3,8 @@ import numpy as np
 import random
 import math
 
-from position import Position
-from traits import *
+from .position import Position
+from .traits import *
 
 class Food:
     def __init__(self, age, position: Position, traits: FoodTraits, simulation: Simulation):
