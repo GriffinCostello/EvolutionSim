@@ -53,3 +53,4 @@ def test_carnivore_eats_herbivore():
     simulation.run(ticks = 5)
     assert herbivore.energy > 100, "Herbivore did not gain energy after eating food."
     assert food not in simulation.world, "Food was not removed from the simulation after being eaten."
+    assert simulation.world[food.position.x, food.position.y] is None, "Food position in the world was not cleared after being eaten."
