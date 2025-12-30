@@ -183,3 +183,8 @@ class Simulation:
 
         birthEnergyTotal = sum(o.traits.birthEnergy for o in self.organismList)
         print(f"Birth Energy: {birthEnergyTotal / len(self.organismList):.4f}")
+
+    
+    def validatePosition(self, position: Position):
+        if not (0 <= position.x < self.worldSize and 0 <= position.y < self.worldSize):
+            raise IndexError("Position out of bounds of the simulation world.")

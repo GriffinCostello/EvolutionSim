@@ -15,6 +15,7 @@ class Food:
         self.traits = traits
 
         self.simulation = simulation
+        self.simulation.validatePosition(self.position)
 
         self.live = self.simulation.env.process(self.live())
 

@@ -16,6 +16,7 @@ class Organism:
         self.energy = energy
         
         self.position = position
+        
 
         self.traits = traits
 
@@ -23,6 +24,7 @@ class Organism:
         self.nextSlowDownAge = self.traits.slowDownAge
 
         self.simulation = simulation
+        self.simulation.validatePosition(self.position)
 
         self.actions = Actions(self)
         self.live = self.simulation.env.process(self.live())
