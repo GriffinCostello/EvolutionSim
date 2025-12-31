@@ -13,7 +13,7 @@ from .organism import Organism
 def main():
     simulation = Simulation(worldsize=1000)
 
-    for i in range(100):
+    for i in range(110):
         org = Organism(
             name = "Herbivore_Gen1_" + str(i), 
             species = "Herbivore",
