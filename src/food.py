@@ -7,7 +7,7 @@ from .position import Position
 from .traits import *
 
 class Food:
-    def __init__(self, age, position: Position, traits: FoodTraits, simulation: Simulation):
+    def __init__(self, age, position: Position, traits: FoodTraits, simulation: "Simulation"):
         self.age = age
         
         self.position = position

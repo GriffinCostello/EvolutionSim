@@ -9,7 +9,7 @@ from .position import Position
 from .traits import *
 
 class Organism:
-    def __init__(self, name, species, age, energy, position: Position, traits: OrganismTraits, simulation: Simulation):
+    def __init__(self, name, species, age, energy, position: Position, traits: OrganismTraits, simulation: "Simulation"):
         self.name = name
         self.species = species
         self.age = age
