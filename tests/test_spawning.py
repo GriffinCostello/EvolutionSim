@@ -115,7 +115,7 @@ def test_food_same_spawn():
 def test_organism_out_of_bounds():
     simulation = Simulation(worldsize=4) #4x4 world
 
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         herbivore1 = Organism(
             name = "Herbivore_Test", 
             species = "Herbivore",
@@ -138,7 +138,7 @@ def test_organism_out_of_bounds():
         herbivore1.simulation.organismList.append(herbivore1)
     assert len(simulation.organismList) == 0, "Organism out of bounds was added to the simulation."
 
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         herbivore2 = Organism(
             name = "Herbivore_Test", 
             species = "Herbivore",
@@ -166,7 +166,7 @@ def test_organism_out_of_bounds():
 def test_food_out_of_bounds():
     simulation = Simulation(worldsize=4) #4x4 world
 
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         food1 = Food(
             age = random.randint(20, 25),
             position = Position(
@@ -191,7 +191,7 @@ def test_food_out_of_bounds():
     count = sum(x is not None for x in sumList)
     assert count == 0, "Food out of bounds was added to the simulation."
 
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         food2 = Food(
             age = random.randint(20, 25),
             position = Position(
@@ -211,7 +211,7 @@ def test_food_out_of_bounds():
             simulation = simulation
         )
         simulation.world[food2.position.x, food2.position.y] = food2
-        
+
     sumList = simulation.world.flatten().tolist()
     count = sum(x is not None for x in sumList)
     assert count == 0, "Food out of bounds was added to the simulation."

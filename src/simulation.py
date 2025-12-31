@@ -187,4 +187,4 @@ class Simulation:
     
     def validatePosition(self, position: Position):
         if not (0 <= position.x < self.worldSize and 0 <= position.y < self.worldSize):
-            raise IndexError("Position out of bounds of the simulation world.")
+            raise ValueError("Position out of bounds of the simulation world.")
