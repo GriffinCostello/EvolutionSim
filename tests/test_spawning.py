@@ -215,3 +215,117 @@ def test_food_out_of_bounds():
     sumList = simulation.world.flatten().tolist()
     count = sum(x is not None for x in sumList)
     assert count == 0, "Food out of bounds was added to the simulation."
+
+
+#Tests carnivore reproductive behavior
+def test_carnivore_reproduction():
+    simulation = Simulation(worldsize=4)
+    carnivore1 = Organism(
+        name = "Carnivore_NoPrey", 
+        species = "Carnivore1",
+        age = 25,
+        energy = 200,
+        position = Position(x=3, y=3),
+        traits = CarnivoreTraits(
+            huntingRadius = 2,
+            speed = 1,
+            energyCapacity = 250,
+            birthEnergy = 80,
+            slowDownAge = 30,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 8,
+            generation = 1
+        ),
+        simulation = simulation
+    )
+    carnivore1.simulation.organismList.append(carnivore1)
+
+    carnivore2 = Organism(
+        name = "Carnivore_NoPrey", 
+        species = "Carnivore1",
+        age = 25,
+        energy = 200,
+        position = Position(x=3, y=3),
+        traits = CarnivoreTraits(
+            huntingRadius = 2,
+            speed = 1,
+            energyCapacity = 250,
+            birthEnergy = 80,
+            slowDownAge = 30,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 8,
+            generation = 1
+        ),
+        simulation = simulation
+    )
+    carnivore2.simulation.organismList.append(carnivore2)
+
+    simulation.run(ticks = 1)
+    assert carnivore1 in simulation.organismList, "Carnivore was incorrectly removed from the simulation."
+    assert carnivore2 in simulation.organismList, "Carnivore was incorrectly removed from the simulation."
+    assert len(simulation.organismList) == 3, "No offspring was produced after carnivores mated or too many organisms present."
+    for x in simulation.organismList:
+        if x not in [carnivore1, carnivore2]:
+            assert isinstance(x.traits, CarnivoreTraits), "Offspring does not have CarnivoreTraits."
+            assert x.traits.generation == 2, "Offspring generation is not correct."
+            assert x.traits.energyCapacity <= (carnivore1.traits.energyCapacity + carnivore2.traits.energyCapacity)//2 + 10, "Offspring energy capacity is too high."
+            assert x.traits.energyCapacity >= (carnivore1.traits.energyCapacity + carnivore2.traits.energyCapacity)//2 - 10, "Offspring energy capacity is too low."
+
+
+#Tests herbivore reproductive behavior
+def test_herbivore_reproduction():
+    simulation = Simulation(worldsize=4)
+    herbivore1 = Organism(
+        name = "Herbivore_NoPrey", 
+        species = "Herbivore1",
+        age = 25,
+        energy = 200,
+        position = Position(x=2, y=2),
+        traits = HerbivoreTraits(
+            detectionRadius = 5,
+            speed = 4,
+            energyCapacity = 250,
+            birthEnergy = 80,
+            slowDownAge = 30,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 8,
+            generation = 1
+        ),
+        simulation = simulation
+    )
+    herbivore1.simulation.organismList.append(herbivore1)
+
+    herbivore2 = Organism(
+        name = "Herbivore_NoPrey", 
+        species = "Herbivore1",
+        age = 25,
+        energy = 200,
+        position = Position(x=2, y=2),
+        traits = HerbivoreTraits(
+            detectionRadius = 5,
+            speed = 4,
+            energyCapacity = 250,
+            birthEnergy = 80,
+            slowDownAge = 30,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 8,
+            generation = 1
+        ),
+        simulation = simulation
+    )
+    herbivore2.simulation.organismList.append(herbivore2)
+
+    simulation.run(ticks = 2)
+    assert herbivore1 in simulation.organismList, "Herbivore was incorrectly removed from the simulation."
+    assert herbivore2 in simulation.organismList, "Herbivore was incorrectly removed from the simulation."
+    assert len(simulation.organismList) == 3, "No offspring was produced after herbivores mated or too many organisms present."
+    for x in simulation.organismList:
+        if x not in [herbivore1, herbivore2]:
+            assert isinstance(x.traits, HerbivoreTraits), "Offspring does not have HerbivoreTraits."
+            assert x.traits.generation == 2, "Offspring generation is not correct."
+            assert x.traits.energyCapacity <= (herbivore1.traits.energyCapacity + herbivore2.traits.energyCapacity)//2 + 10, "Offspring energy capacity is too high."
+            assert x.traits.energyCapacity >= (herbivore1.traits.energyCapacity + herbivore2.traits.energyCapacity)//2 - 10, "Offspring energy capacity is too low."
