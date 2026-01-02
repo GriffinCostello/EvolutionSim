@@ -51,10 +51,10 @@ class Simulation:
                 traits = FoodTraits(
                     generation = 1,
                     stageConfiguration = {
-                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(1, 10)},
-                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 25)},
-                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(50, 60)},
-                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(20, 25)},
+                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(10, 60)},
+                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(70, 120)},
+                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(150, 200)},
+                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(60, 90)},
                         FoodStage.ROTTEN: {"duration": random.randint(7, 10), "nutrition": 0},
                     }                   
                 ),
@@ -175,8 +175,8 @@ class Simulation:
         plt.figure()
         plt.plot(gens, meds, marker='o')
         plt.xlabel("Generation")
-        plt.ylabel("Median Birth Energy")
-        plt.title("Herbivore Birth Energy Evolution")
+        plt.ylabel("Median Speed")
+        plt.title("Herbivore Speed Evolution")
         plt.show()
                 
        

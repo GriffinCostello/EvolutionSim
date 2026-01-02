@@ -156,7 +156,7 @@ class Actions:
             self.org.energy + gainedEnergy, 
             self.org.traits.energyCapacity
         )  # Gain energy
-        print(f"{self.org.name} has eaten {prey.name} and gained {gainedEnergy} energy.")
+        #print(f"{self.org.name} has eaten {prey.name} and gained {gainedEnergy} energy.")
         yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
         
 
