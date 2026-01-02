@@ -2,7 +2,9 @@ import simpy
 import numpy as np
 import random
 import math
+import matplotlib.pyplot as plt
 
+from collections import defaultdict
 from .organism import Organism
 from .traits import *
 from .position import Position
@@ -151,10 +153,27 @@ class Simulation:
         while True:
             yield self.env.timeout(1)
 
+
             if self.env.now == 1:
-                self.findStats()
+                #self.findStats()
+                pass
+
             if self.env.now % 100 == 0:
-                self.findStats() 
+                #self.findStats() 
+                self.printGraph()
+
+    def printGraph(self):
+        generationValues = defaultdict(list)
+
+        for organism in self.organismList:
+            if isinstance(organism.traits, HerbivoreTraits):
+                generationValues[organism.traits.generation].append(organism.traits.speed)
+        
+        generations = sorted(generationValues.keys())
+        averageSpeeds = [sum(generationValues[gen]) / len(generationValues[gen]) for gen in generations]
+        print(averageSpeeds)
+                
+            
 
 
     def findStats(self):
@@ -183,6 +202,7 @@ class Simulation:
 
         birthEnergyTotal = sum(o.traits.birthEnergy for o in self.organismList)
         print(f"Birth Energy: {birthEnergyTotal / len(self.organismList):.4f}")
+
 
     
     def validatePosition(self, position: Position):
