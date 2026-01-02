@@ -34,6 +34,7 @@ def test_herbivore_eats_food():
         simulation = simulation
     )
     herbivore.simulation.organismList.append(herbivore)
+
     food = Food(
         age = random.randint(20, 25),
         position = Position(
@@ -52,7 +53,7 @@ def test_herbivore_eats_food():
         ),
         simulation = simulation
     )
-    herbivore.simulation.world[food.position.x, food.position.y] = food
+
     simulation.run(ticks = 5)
     assert herbivore.energy > 100, "Herbivore did not gain energy after eating food."
     assert food not in simulation.world, "Food was not removed from the simulation after being eaten."
@@ -97,7 +98,7 @@ def test_food_aging_and_stage_transition():
 #tests if food is placed correctly after an organism poops
 def test_food_placement_after_poop():
     simulation = Simulation(worldsize=4)
-    food1 = Food(
+    food = Food(
         age = 10,
         position = Position(
             x = 1, 
@@ -115,7 +116,6 @@ def test_food_placement_after_poop():
         ),
         simulation = simulation
     )
-    simulation.world[food1.position.x, food1.position.y] = food1
 
     herbivore = Organism(
         name = "Herbivore_Test", 
