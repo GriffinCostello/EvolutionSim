@@ -39,7 +39,7 @@ class Simulation:
         for i in range(0,numFood):
             x = random.randint(0, self.worldSize -1)
             y = random.randint(0, self.worldSize -1)
-            self.world[x, y] = Food(
+            food = Food(
                 age = random.randint(0,50),
                 position = Position(
                     x = x, 

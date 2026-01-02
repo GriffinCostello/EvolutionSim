@@ -84,7 +84,7 @@ def test_food_same_spawn():
         ),
         simulation = simulation
     )
-    simulation.world[food1.position.x, food1.position.y] = food1
+
     food2 = Food(
         age = random.randint(20, 25),
         position = Position(
@@ -103,7 +103,7 @@ def test_food_same_spawn():
         ),
         simulation = simulation
     )
-    simulation.world[xTest, yTest] = food2
+
     assert simulation.world[xTest, yTest] == food2, "Second food did not overwrite the first food at the same position."
     assert simulation.world[xTest, yTest] != food1, "First food still exists at the position after second food spawned there."
     simulation.run(ticks = 1)
@@ -185,7 +185,6 @@ def test_food_out_of_bounds():
             ),
             simulation = simulation
         )
-        simulation.world[food1.position.x, food1.position.y] = food1
 
     sumList = simulation.world.flatten().tolist()
     count = sum(x is not None for x in sumList)
@@ -210,7 +209,6 @@ def test_food_out_of_bounds():
             ),
             simulation = simulation
         )
-        simulation.world[food2.position.x, food2.position.y] = food2
 
     sumList = simulation.world.flatten().tolist()
     count = sum(x is not None for x in sumList)
