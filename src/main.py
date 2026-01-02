@@ -37,8 +37,10 @@ def main():
             simulation = simulation
         )
         org.simulation.organismList.append(org)
+        org.simulation.traitLog[org.traits.generation].append(org.traits.speed)
 
     simulation.run(ticks = 500000)
+    simulation.plotTraitEvolutionSpeed()
 
 if __name__ == "__main__":
     main()

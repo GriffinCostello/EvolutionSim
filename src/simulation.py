@@ -19,6 +19,7 @@ class Simulation:
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
+        self.traitLog = defaultdict(list)
         self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.stopEvent = self.env.event()
 
@@ -92,6 +93,8 @@ class Simulation:
             traits = self.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
             simulation = parent1.simulation
         )
+        if isinstance(child.traits, HerbivoreTraits):
+            self.traitLog[child.traits.generation].append(child.traits.speed)
         #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         return child
 
@@ -152,30 +155,31 @@ class Simulation:
     def systemTick(self):
         while True:
             yield self.env.timeout(1)
-
-
             if self.env.now == 1:
-                #self.findStats()
+                pass
+            if self.env.now % 1000 == 0:
                 pass
 
-            if self.env.now % 100 == 0:
-                #self.findStats() 
-                self.printGraph()
 
-    def printGraph(self):
-        generationValues = defaultdict(list)
+    #Prints graph for average speed per generation
+    def plotTraitEvolutionSpeed(self):
+        generations = []
+        medians = []
 
-        for organism in self.organismList:
-            if isinstance(organism.traits, HerbivoreTraits):
-                generationValues[organism.traits.generation].append(organism.traits.speed)
-        
-        generations = sorted(generationValues.keys())
-        averageSpeeds = [sum(generationValues[gen]) / len(generationValues[gen]) for gen in generations]
-        print(averageSpeeds)
+        for generation, speed in self.traitLog.items():
+            generations.append(generation)
+            medians.append(np.median(speed))
+
+        gens, meds = zip(*sorted(zip(generations, medians)))
+
+        plt.figure()
+        plt.plot(gens, meds, marker='o')
+        plt.xlabel("Generation")
+        plt.ylabel("Median Birth Energy")
+        plt.title("Herbivore Birth Energy Evolution")
+        plt.show()
                 
-            
-
-
+       
     def findStats(self):
         if len(self.organismList) == 0:
             return
