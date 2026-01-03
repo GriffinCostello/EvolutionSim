@@ -19,7 +19,7 @@ class Simulation:
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
-        self.traitLog = defaultdict(list)
+        self.traitLog = defaultdict(lambda: defaultdict(list))
         self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.stopEvent = self.env.event()
 
@@ -94,7 +94,9 @@ class Simulation:
             simulation = parent1.simulation
         )
         if isinstance(child.traits, HerbivoreTraits):
-            self.traitLog[child.traits.generation].append(child.traits.speed)
+            for traitName, value in vars(child.traits).items():
+                if traitName != "generation":
+                    self.traitLog[traitName][child.traits.generation].append(value)
         #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         return child
 
@@ -155,58 +157,26 @@ class Simulation:
     def systemTick(self):
         while True:
             yield self.env.timeout(1)
-            if self.env.now == 1:
-                pass
-            if self.env.now % 1000 == 0:
-                pass
 
 
     #Prints graph for average speed per generation
-    def plotTraitEvolutionSpeed(self):
-        generations = []
-        medians = []
+    def plotTraitEvolution(self, traitName):
+        if traitName not in self.traitLog:
+            print(f"No trait: '{traitName}'")
+            return
 
-        for generation, speed in self.traitLog.items():
-            generations.append(generation)
-            medians.append(np.median(speed))
-
-        gens, meds = zip(*sorted(zip(generations, medians)))
+        generations = sorted(self.traitLog[traitName].keys())
+        medians = [
+            np.median(self.traitLog[traitName][g])
+            for g in generations
+        ]
 
         plt.figure()
-        plt.plot(gens, meds, marker='o')
+        plt.plot(generations, medians, marker='o')
         plt.xlabel("Generation")
-        plt.ylabel("Median Speed")
-        plt.title("Herbivore Speed Evolution")
+        plt.ylabel(f"Median {traitName}")
+        plt.title(f"Herbivore {traitName} Evolution")
         plt.show()
-                
-       
-    def findStats(self):
-        if len(self.organismList) == 0:
-            return
-        print("-------------------------------------------------")
-        print(f"Number of Organisms Alive {len(self.organismList)}")
-
-        speedTotal = sum(o.traits.speed for o in self.organismList)
-        print(f"Speed: {speedTotal / len(self.organismList):.4f}")
-
-        #detectionTotal = sum(o.traits.detectionRadius for o in self.organismList)
-       # print(f"Detection Radius: {detectionTotal / len(self.organismList):.4f}")
-
-        energyCapacityTotal = sum(o.traits.energyCapacity for o in self.organismList)
-        print(f"Energy Capacity: {energyCapacityTotal / len(self.organismList):.4f}")
-
-        matingCallTotal = sum(o.traits.matingCallRadius for o in self.organismList)
-        print(f"Mating Call Radius: {matingCallTotal / len(self.organismList):.4f}")
-
-        slowDownTotal = sum(o.traits.slowDownAge for o in self.organismList)
-        print(f"SlowDownAge: {slowDownTotal / len(self.organismList):.4f}")
-
-        reproductionAgeTotal = sum(o.traits.reproductionAge for o in self.organismList)
-        print(f"Reproduction Age: {reproductionAgeTotal / len(self.organismList):.4f}")
-
-        birthEnergyTotal = sum(o.traits.birthEnergy for o in self.organismList)
-        print(f"Birth Energy: {birthEnergyTotal / len(self.organismList):.4f}")
-
 
     
     def validatePosition(self, position: Position):

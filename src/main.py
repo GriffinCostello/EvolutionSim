@@ -13,6 +13,8 @@ from .organism import Organism
 def main():
     simulation = Simulation(worldsize=1000)
 
+
+    #Add initial herbivores
     for i in range(1000):
         org = Organism(
             name = "Herbivore_Gen1_" + str(i), 
@@ -37,9 +39,11 @@ def main():
             simulation = simulation
         )
         org.simulation.organismList.append(org)
-        org.simulation.traitLog[org.traits.generation].append(org.traits.speed)
+        for traitName, value in vars(org.traits).items():
+            if traitName != "generation":
+                simulation.traitLog[traitName][org.traits.generation].append(value)
 
-
+    #Add initial carnivores
     for i in range(100):
         org = Organism(
             name = "Carnivore_Gen1_" + str(i), 
@@ -65,8 +69,10 @@ def main():
         )
         org.simulation.organismList.append(org)
 
-    simulation.run(ticks = 500000)
-    simulation.plotTraitEvolutionSpeed()
+    simulation.run(ticks = 50000)
+    simulation.plotTraitEvolution("speed")
+    simulation.plotTraitEvolution("energyCapacity")
+    simulation.plotTraitEvolution("reproductionAge")
 
 if __name__ == "__main__":
     main()
