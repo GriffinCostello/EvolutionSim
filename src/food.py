@@ -30,7 +30,7 @@ class Food:
     def live(self):
         while True:
             self.tick()
-            if(self.age >= 70):
+            if(self.age >= self.traits.totalLifespan):
                 break
             yield self.simulation.env.timeout(1)
 

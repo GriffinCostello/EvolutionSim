@@ -2,7 +2,9 @@ import simpy
 import numpy as np
 import random
 import math
+import matplotlib.pyplot as plt
 
+from collections import defaultdict
 from .organism import Organism
 from .traits import *
 from .position import Position
@@ -17,6 +19,7 @@ class Simulation:
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
+        self.traitLog = defaultdict(lambda: defaultdict(list))
         self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.stopEvent = self.env.event()
 
@@ -48,10 +51,10 @@ class Simulation:
                 traits = FoodTraits(
                     generation = 1,
                     stageConfiguration = {
-                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(1, 10)},
-                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(15, 25)},
-                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(50, 60)},
-                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(20, 25)},
+                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(10, 60)},
+                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(70, 120)},
+                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(150, 200)},
+                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(60, 90)},
                         FoodStage.ROTTEN: {"duration": random.randint(7, 10), "nutrition": 0},
                     }                   
                 ),
@@ -90,6 +93,10 @@ class Simulation:
             traits = self.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
             simulation = parent1.simulation
         )
+        if isinstance(child.traits, HerbivoreTraits):
+            for traitName, value in vars(child.traits).items():
+                if traitName != "generation":
+                    self.traitLog[traitName][child.traits.generation].append(value)
         #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         return child
 
@@ -151,38 +158,25 @@ class Simulation:
         while True:
             yield self.env.timeout(1)
 
-            if self.env.now == 1:
-                self.findStats()
-            if self.env.now % 100 == 0:
-                self.findStats() 
 
-
-    def findStats(self):
-        if len(self.organismList) == 0:
+    #Prints graph for average speed per generation
+    def plotTraitEvolution(self, traitName):
+        if traitName not in self.traitLog:
+            print(f"No trait: '{traitName}'")
             return
-        print("-------------------------------------------------")
-        print(f"Number of Organisms Alive {len(self.organismList)}")
 
-        speedTotal = sum(o.traits.speed for o in self.organismList)
-        print(f"Speed: {speedTotal / len(self.organismList):.4f}")
+        generations = sorted(self.traitLog[traitName].keys())
+        medians = [
+            np.median(self.traitLog[traitName][g])
+            for g in generations
+        ]
 
-        #detectionTotal = sum(o.traits.detectionRadius for o in self.organismList)
-       # print(f"Detection Radius: {detectionTotal / len(self.organismList):.4f}")
-
-        energyCapacityTotal = sum(o.traits.energyCapacity for o in self.organismList)
-        print(f"Energy Capacity: {energyCapacityTotal / len(self.organismList):.4f}")
-
-        matingCallTotal = sum(o.traits.matingCallRadius for o in self.organismList)
-        print(f"Mating Call Radius: {matingCallTotal / len(self.organismList):.4f}")
-
-        slowDownTotal = sum(o.traits.slowDownAge for o in self.organismList)
-        print(f"SlowDownAge: {slowDownTotal / len(self.organismList):.4f}")
-
-        reproductionAgeTotal = sum(o.traits.reproductionAge for o in self.organismList)
-        print(f"Reproduction Age: {reproductionAgeTotal / len(self.organismList):.4f}")
-
-        birthEnergyTotal = sum(o.traits.birthEnergy for o in self.organismList)
-        print(f"Birth Energy: {birthEnergyTotal / len(self.organismList):.4f}")
+        plt.figure()
+        plt.plot(generations, medians, marker='o')
+        plt.xlabel("Generation")
+        plt.ylabel(f"Median {traitName}")
+        plt.title(f"Herbivore {traitName} Evolution")
+        plt.show()
 
     
     def validatePosition(self, position: Position):

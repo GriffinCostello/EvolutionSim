@@ -40,13 +40,16 @@ class FoodTraits(Traits):
 
         self.stageDurations = {}
         self.nutritionalValue = {}
-
+        
         durationCalculator = 0
         for stage, dictionary in stageConfiguration.items():
             duration = dictionary["duration"]
             self.stageDurations[stage] = (durationCalculator, durationCalculator + duration)  #Adds duration to length so it can be compared to age
             self.nutritionalValue[stage] = dictionary["nutrition"]
             durationCalculator += duration
+            
+        self.totalLifespan = durationCalculator
+        
 
 
 class FoodStage(Enum):
