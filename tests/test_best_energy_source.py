@@ -71,10 +71,32 @@ def test_best_food():
         ),
         simulation = simulation
     )
+
+    food3 = Food(
+        age = 20,
+        position = Position(
+            x = 1, 
+            y = 0
+        ), 
+        traits = FoodTraits(
+            generation = 1,
+            stageConfiguration = {
+                FoodStage.SEED: {"duration": 10, "nutrition": 5},
+                FoodStage.RIPENING: {"duration": 20, "nutrition": 5},
+                FoodStage.RIPE: {"duration": 10, "nutrition": 5},
+                FoodStage.ROTTING: {"duration": 10, "nutrition": 5},
+                FoodStage.ROTTEN: {"duration": 10, "nutrition": 5},
+                }                   
+        ),
+        simulation = simulation
+    )
+
+
     simulation.run(ticks = 1)
 
     assert food1 not in simulation.world.flatten(), "Best food source was incorrectly removed from the simulation."
     assert food2 in simulation.world.flatten(), "Non-chosen food source was incorrectly removed from the simulation."
+    assert food3 in simulation.world.flatten(), "Non-chosen food source was incorrectly removed from the simulation."
 
 
 def test_best_Prey():
@@ -131,7 +153,7 @@ def test_best_Prey():
         name = "Herbivore_Test", 
         species = "Herbivore",
         age = 5,
-        energy = 100,
+        energy = 500,
         position = Position(
             x=1, 
             y=2
@@ -150,8 +172,33 @@ def test_best_Prey():
         simulation = simulation
     )
     herbivore2.simulation.organismList.append(herbivore2)
+
+    herbivore3 = Organism(
+        name = "Herbivore_Test", 
+        species = "Herbivore",
+        age = 5,
+        energy = 500,
+        position = Position(
+            x=0, 
+            y=1
+        ),
+        traits = HerbivoreTraits(
+            detectionRadius = 5,
+            speed = 0,
+            energyCapacity = 250,
+            birthEnergy = 80,
+            slowDownAge = 30,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 8,
+            generation = 1
+        ),
+        simulation = simulation
+    )
+    herbivore3.simulation.organismList.append(herbivore3)
     
     simulation.run(ticks = 1)
 
     assert herbivore1 not in simulation.organismList, "Carnivore did not eat the best prey available."
     assert herbivore2 in simulation.organismList, "Carnivore incorrectly ate the worse prey."
+    assert herbivore3 in simulation.organismList, "Carnivore incorrectly ate the worse prey."
