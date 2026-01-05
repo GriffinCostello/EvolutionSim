@@ -104,11 +104,11 @@ def test_food_same_spawn():
         simulation = simulation
     )
 
-    assert simulation.world[xTest, yTest] == food2, "Second food did not overwrite the first food at the same position."
-    assert simulation.world[xTest, yTest] != food1, "First food still exists at the position after second food spawned there."
+    assert simulation.world.getObjectAt(Position(xTest, yTest)) == food2, "Second food did not overwrite the first food at the same position."
+    assert simulation.world.getObjectAt(Position(xTest, yTest))  != food1, "First food still exists at the position after second food spawned there."
     simulation.run(ticks = 1)
-    assert simulation.world[xTest, yTest] == food2, "Food position changed after simulation run, it should remain the same."
-    assert simulation.world[xTest, yTest] != food1, "First food reappeared at the position after simulation run."
+    assert simulation.world.getObjectAt(Position(xTest, yTest))  == food2, "Food position changed after simulation run, it should remain the same."
+    assert simulation.world.getObjectAt(Position(xTest, yTest))  != food1, "First food reappeared at the position after simulation run."
 
 
 #test organisms and food spawning out of bounds
@@ -186,7 +186,7 @@ def test_food_out_of_bounds():
             simulation = simulation
         )
 
-    sumList = simulation.world.flatten().tolist()
+    sumList = simulation.world.flatten()
     count = sum(x is not None for x in sumList)
     assert count == 0, "Food out of bounds was added to the simulation."
 
@@ -210,7 +210,7 @@ def test_food_out_of_bounds():
             simulation = simulation
         )
 
-    sumList = simulation.world.flatten().tolist()
+    sumList = simulation.world.flatten()
     count = sum(x is not None for x in sumList)
     assert count == 0, "Food out of bounds was added to the simulation."
 
