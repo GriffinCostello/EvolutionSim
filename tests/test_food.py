@@ -56,8 +56,8 @@ def test_herbivore_eats_food():
 
     simulation.run(ticks = 5)
     assert herbivore.energy > 100, "Herbivore did not gain energy after eating food."
-    assert food not in simulation.world, "Food was not removed from the simulation after being eaten."
-    assert simulation.world[food.position.x, food.position.y] is None, "Food position in the world was not cleared after being eaten."
+    assert food not in simulation.world.flatten(), "Food was not removed from the simulation after being eaten."
+    assert simulation.world.getObjectAt(Position(food.position.x, food.position.y)) is None, "Food position in the world was not cleared after being eaten."
 
 
 #Tests if food is ages properly
@@ -142,7 +142,7 @@ def test_food_placement_after_poop():
 
     simulation.run(ticks = 5)
     
-    items = [x for x in simulation.world.flatten().tolist() if x is not None]
+    items = simulation.world.flatten()
     for food in items:
         assert food.generation != 1, "New food from poop has incorrect generation."
 

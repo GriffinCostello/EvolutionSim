@@ -40,13 +40,35 @@ class Actions:
         yMax = min(self.org.position.y + oppositeAdjacent + 1, self.org.simulation.worldSize)
 
         # Slice region around the organism
-        area = self.org.simulation.world[xMin:xMax, yMin:yMax]
+        area = self.org.simulation.world.objectsInRegion(xMin, xMax, yMin, yMax)
         # Find actual coordinates of food
-        foodPositions = np.argwhere(area != None) 
-        if len(foodPositions) == 0:
+        foods = []
+        for obj in area:
+            foods.append(obj)
+        
+        bestFood = self.findBestFood(foods, xMin, xMax, yMin, yMax)
+        if bestFood is None:
             return None
 
-        return self.findBestFood(foodPositions, xMin, xMax, yMin, yMax)
+        return bestFood.position.asTuple()
+
+
+    #Finds the best food for Herbivores
+    def findBestFood(self, foods, xMin, xMax, yMin, yMax):
+        bestFood = None
+        bestScore = 0
+
+        for food in foods:
+            nutrition = food.getNutrition()
+            distance = self.org.position.distanceTo(food.position)
+
+            score = nutrition / (distance + 1)
+
+            if score > bestScore:
+                bestScore = score
+                bestFood = food
+
+        return bestFood
 
 
     # Looks for prey nearby for carnivores
@@ -71,27 +93,7 @@ class Actions:
         return bestPrey
         
 
-    #Finds the best food for Herbivores
-    def findBestFood(self, foodPositions, xMin, xMax, yMin, yMax):
-        bestFood = None
-        bestScore = 0
-
-        for fx, fy in foodPositions:
-            foodX = int(xMin + fx)
-            foodY = int(yMin + fy)
-
-            food = self.org.simulation.world[foodX, foodY]
-            nutrition = food.getNutrition()
-            distance = self.org.position.distanceTo(Position(foodX, foodY))
-
-            # Formula that calculates best score based off nutrition and distance
-            score = nutrition / (distance + 1)
-            if score > bestScore:
-                bestScore = score
-                bestFood = (foodX, foodY)
-            
-        return bestFood
-
+    
 
     #moves an organism towards a location
     def moveTowards(self, target):
@@ -126,11 +128,12 @@ class Actions:
 
     #Eats food at a location
     def eatFood(self, bestFood):
-        bestFoodX, bestFoodY = bestFood
-        if self.org.simulation.world[bestFoodX, bestFoodY] is not None:
-            nutritionalValue = self.org.simulation.world[bestFoodX, bestFoodY].getNutrition()
-            foodTraits = self.org.simulation.world[bestFoodX, bestFoodY].traits
-            self.org.simulation.world[bestFoodX, bestFoodY] = None  
+        bestFoodX , bestFoodY = bestFood
+        foodToBeEaten = self.org.simulation.world.getObjectAt(Position(bestFoodX, bestFoodY))
+        if foodToBeEaten is not None:
+            nutritionalValue = foodToBeEaten.getNutrition()
+            foodTraits = foodToBeEaten.traits
+            foodToBeEaten.simulation.world.remove(foodToBeEaten.position)
         else:
             #print(f"{self.org.name} can't find food to eat at this position.")
             return
@@ -201,9 +204,8 @@ class Actions:
                     "duration": max(1, org.simulation.inherit(dictionary["duration"] , 2, 1)),
                     "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 2, 1)),
                 }
-
-
-        org.simulation.world[org.position.x, org.position.y] = Food(
+        
+        food = Food(
             age=0,
             position=Position(
                 x=org.position.x,

@@ -9,12 +9,13 @@ from .organism import Organism
 from .traits import *
 from .position import Position
 from .food import Food
+from .world import World
 
 class Simulation:
     def __init__(self, worldsize):
         self.env = simpy.Environment()
         self.worldSize = worldsize
-        self.world = self.initWorld()
+        self.world = World(worldsize)
 
         #Global variables 
         self.organismList = []
@@ -27,14 +28,6 @@ class Simulation:
 
         numFood = (self.worldSize*self.worldSize) // 300 #one food every 200 places
         self.placeFood(numFood)
-
-
-    #Initializes the world as a worldSize * worldSize grid with type objects
-    def initWorld(self):
-        world = np.empty((self.worldSize, self.worldSize), dtype=object)
-        world.fill(None)
-        self.world = world
-        return self.world
 
 
     #places food on the map
