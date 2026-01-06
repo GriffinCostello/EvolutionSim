@@ -170,8 +170,3 @@ class Simulation:
         plt.ylabel(f"Median {traitName}")
         plt.title(f"Herbivore {traitName} Evolution")
         plt.show()
-
-    
-    def validatePosition(self, position: Position):
-        if not (0 <= position.x < self.worldSize and 0 <= position.y < self.worldSize):
-            raise ValueError("Position out of bounds of the simulation world.")

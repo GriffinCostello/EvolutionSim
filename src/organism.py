@@ -24,7 +24,7 @@ class Organism:
         self.nextSlowDownAge = self.traits.slowDownAge
 
         self.simulation = simulation
-        self.simulation.validatePosition(self.position)
+        self.simulation.world.validPosition(self.position)
 
         self.actions = Actions(self)
         self.live = self.simulation.env.process(self.live())
