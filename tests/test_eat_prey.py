@@ -54,7 +54,7 @@ def test_carnivore_eats_herbivore():
     print(carnivore.position.asTuple())
     assert carnivore.energy > 100, "Carnivore did not gain energy after eating prey."
     assert herbivore not in simulation.organismList, "Herbivore was not removed from the simulation after being eaten."
-    assert herbivore.age in simulation.lifeSpan, "Herbivore's age at death was not recorded in lifeSpan."
+    assert herbivore.age in simulation.statistics.lifeSpan, "Herbivore's age at death was not recorded in lifeSpan."
     assert carnivore in simulation.organismList, "Carnivore was incorrectly removed from the simulation."
     assert len(simulation.organismList) == 1, "There should be only one organism left in the simulation."
 

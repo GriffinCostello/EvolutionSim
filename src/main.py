@@ -41,7 +41,7 @@ def main():
         org.simulation.organismList.append(org)
         for traitName, value in vars(org.traits).items():
             if traitName != "generation":
-                simulation.traitLog[traitName][org.traits.generation].append(value)
+                simulation.statistics.logTraits(traitName, org.traits.generation, value)
 
     #Add initial carnivores
     for i in range(100):
@@ -70,9 +70,9 @@ def main():
         org.simulation.organismList.append(org)
 
     simulation.run(ticks = 50000)
-    simulation.plotTraitEvolution("speed")
-    simulation.plotTraitEvolution("energyCapacity")
-    simulation.plotTraitEvolution("reproductionAge")
+    simulation.statistics.plotTraitEvolution("speed")
+    simulation.statistics.plotTraitEvolution("energyCapacity")
+    simulation.statistics.plotTraitEvolution("reproductionAge")
 
 if __name__ == "__main__":
     main()

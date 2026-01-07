@@ -1,7 +1,6 @@
 import simpy
 import numpy as np
 import random
-import math
 import matplotlib.pyplot as plt
 
 from collections import defaultdict
@@ -10,18 +9,18 @@ from .traits import *
 from .position import Position
 from .food import Food
 from .world import World
+from .statistics import Statistics
 
 class Simulation:
     def __init__(self, worldsize):
         self.env = simpy.Environment()
         self.worldSize = worldsize
         self.world = World(worldsize)
+        self.statistics = Statistics()
 
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
-        self.traitLog = defaultdict(lambda: defaultdict(list))
-        self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.stopEvent = self.env.event()
 
         self.env.process(self.systemTick())
@@ -89,7 +88,7 @@ class Simulation:
         if isinstance(child.traits, HerbivoreTraits):
             for traitName, value in vars(child.traits).items():
                 if traitName != "generation":
-                    self.traitLog[traitName][child.traits.generation].append(value)
+                    self.statistics.logTraits(traitName, child.traits.generation, value)
         #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         return child
 

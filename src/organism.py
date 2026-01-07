@@ -46,11 +46,11 @@ class Organism:
             
             if self.energy <= 0:
                 #print(f"{self.name} has run out of energy and died at age {self.age}.")
-                self.simulation.lifeSpan.append(self.age)
+                self.simulation.statistics.logLifespan(self.age)
                 self.simulation.organismList.remove(self)
                 
                 if len(self.simulation.organismList) == 0:
-                    print(f"All dead, Average Life Span: {sum(self.simulation.lifeSpan) / len(self.simulation.lifeSpan):.4f}")
+                    print(f"All dead, Average Life Span: {sum(self.simulation.statistics.lifeSpan) / len(self.simulation.statistics.lifeSpan):.4f}")
                     if not self.simulation.stopEvent.triggered:
                         self.simulation.stopEvent.succeed()
 
