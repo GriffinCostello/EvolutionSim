@@ -1,7 +1,4 @@
-import simpy
-import numpy as np
 import random
-import math
 
 from .simulation import Simulation
 from .traits import *
@@ -22,8 +19,8 @@ def main():
             age = random.randint(1, 20),
             energy = random.randint(150,200),
             position = Position(
-                x=np.random.randint(0, simulation.worldSize),
-                y=np.random.randint(0, simulation.worldSize)
+                x=random.randint(0, simulation.worldSize-1),
+                y=random.randint(0, simulation.worldSize-1)
             ),
             traits = HerbivoreTraits(
                 detectionRadius = 30,
@@ -41,7 +38,7 @@ def main():
         org.simulation.organismList.append(org)
         for traitName, value in vars(org.traits).items():
             if traitName != "generation":
-                simulation.traitLog[traitName][org.traits.generation].append(value)
+                simulation.statistics.logTraits(traitName, org.traits.generation, value)
 
     #Add initial carnivores
     for i in range(100):
@@ -51,8 +48,8 @@ def main():
             age = random.randint(1, 20),
             energy = random.randint(150,200),
             position = Position(
-                x=np.random.randint(0, simulation.worldSize),
-                y=np.random.randint(0, simulation.worldSize)
+                x=random.randint(0, simulation.worldSize-1),
+                y=random.randint(0, simulation.worldSize-1)
             ),
             traits = CarnivoreTraits(
                 huntingRadius = 30,
@@ -70,9 +67,9 @@ def main():
         org.simulation.organismList.append(org)
 
     simulation.run(ticks = 50000)
-    simulation.plotTraitEvolution("speed")
-    simulation.plotTraitEvolution("energyCapacity")
-    simulation.plotTraitEvolution("reproductionAge")
+    simulation.statistics.plotTraitEvolution("speed")
+    simulation.statistics.plotTraitEvolution("energyCapacity")
+    simulation.statistics.plotTraitEvolution("reproductionAge")
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,4 @@
 from enum import Enum, auto
-import random
 
 class Traits:
     def __init__(self, generation):

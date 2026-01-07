@@ -1,8 +1,5 @@
 import simpy
-import numpy as np
 import random
-import math
-import matplotlib.pyplot as plt
 
 from collections import defaultdict
 from .organism import Organism
@@ -10,18 +7,18 @@ from .traits import *
 from .position import Position
 from .food import Food
 from .world import World
+from .statistics import Statistics
 
 class Simulation:
     def __init__(self, worldsize):
         self.env = simpy.Environment()
         self.worldSize = worldsize
         self.world = World(worldsize)
+        self.statistics = Statistics()
 
         #Global variables 
         self.organismList = []
         self.organismChildCounter = {}
-        self.traitLog = defaultdict(lambda: defaultdict(list))
-        self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.stopEvent = self.env.event()
 
         self.env.process(self.systemTick())
@@ -89,7 +86,7 @@ class Simulation:
         if isinstance(child.traits, HerbivoreTraits):
             for traitName, value in vars(child.traits).items():
                 if traitName != "generation":
-                    self.traitLog[traitName][child.traits.generation].append(value)
+                    self.statistics.logTraits(traitName, child.traits.generation, value)
         #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
         return child
 
@@ -150,28 +147,3 @@ class Simulation:
     def systemTick(self):
         while True:
             yield self.env.timeout(1)
-
-
-    #Prints graph for average speed per generation
-    def plotTraitEvolution(self, traitName):
-        if traitName not in self.traitLog:
-            print(f"No trait: '{traitName}'")
-            return
-
-        generations = sorted(self.traitLog[traitName].keys())
-        medians = [
-            np.median(self.traitLog[traitName][g])
-            for g in generations
-        ]
-
-        plt.figure()
-        plt.plot(generations, medians, marker='o')
-        plt.xlabel("Generation")
-        plt.ylabel(f"Median {traitName}")
-        plt.title(f"Herbivore {traitName} Evolution")
-        plt.show()
-
-    
-    def validatePosition(self, position: Position):
-        if not (0 <= position.x < self.worldSize and 0 <= position.y < self.worldSize):
-            raise ValueError("Position out of bounds of the simulation world.")
