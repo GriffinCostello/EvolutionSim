@@ -52,6 +52,7 @@ def test_best_food():
         ),
         simulation = simulation
     )
+    food1.simulation.world.place(food1, food1.position)
 
     food2 = Food(
         age = 20,
@@ -71,6 +72,7 @@ def test_best_food():
         ),
         simulation = simulation
     )
+    food2.simulation.world.place(food2, food2.position)
 
     food3 = Food(
         age = 20,
@@ -90,6 +92,7 @@ def test_best_food():
         ),
         simulation = simulation
     )
+    food3.simulation.world.place(food3, food3.position)
 
 
     simulation.run(ticks = 1)

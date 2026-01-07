@@ -34,6 +34,7 @@ def test_organism_same_spawn():
         simulation = simulation
     )
     herbivore1.simulation.organismList.append(herbivore1)
+
     herbivore2 = Organism(
         name = "Herbivore_Test2",
         species = "Herbivore",
@@ -54,6 +55,7 @@ def test_organism_same_spawn():
         simulation = simulation
     )
     herbivore2.simulation.organismList.append(herbivore2)
+
     assert herbivore1.position.asTuple() == herbivore2.position.asTuple(), "Organisms spawned at different position."
     assert len(simulation.organismList) == 2, "Herbivore1 or Herbivore2 not correctly added to simulation."
     simulation.run(ticks = 1)
@@ -84,6 +86,7 @@ def test_food_same_spawn():
         ),
         simulation = simulation
     )
+    simulation.world.place(food1, food1.position)
 
     food2 = Food(
         age = random.randint(20, 25),
@@ -103,6 +106,7 @@ def test_food_same_spawn():
         ),
         simulation = simulation
     )
+    simulation.world.place(food2, food2.position)
 
     assert simulation.world.getObjectAt(Position(xTest, yTest)) == food2, "Second food did not overwrite the first food at the same position."
     assert simulation.world.getObjectAt(Position(xTest, yTest))  != food1, "First food still exists at the position after second food spawned there."
@@ -185,6 +189,7 @@ def test_food_out_of_bounds():
             ),
             simulation = simulation
         )
+        simulation.world.place(food1, food1.position)
 
     sumList = simulation.world.flatten()
     count = sum(x is not None for x in sumList)
@@ -209,6 +214,7 @@ def test_food_out_of_bounds():
             ),
             simulation = simulation
         )
+        simulation.world.place(food2, food2.position)
 
     sumList = simulation.world.flatten()
     count = sum(x is not None for x in sumList)

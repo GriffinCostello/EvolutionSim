@@ -214,3 +214,4 @@ class Actions:
             ),
             simulation=org.simulation
         )
+        org.simulation.world.place(food, food.position)

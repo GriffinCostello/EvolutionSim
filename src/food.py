@@ -13,9 +13,6 @@ class Food:
 
         self.live = self.simulation.env.process(self.live())
 
-        # Place food in the world grid
-        self.simulation.world.place(self, self.position)
-
 
     def tick(self):
         self.age += 1

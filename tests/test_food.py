@@ -33,7 +33,7 @@ def test_herbivore_eats_food():
         ),
         simulation = simulation
     )
-    herbivore.simulation.organismList.append(herbivore)
+    simulation.organismList.append(herbivore)
 
     food = Food(
         age = random.randint(20, 25),
@@ -53,6 +53,7 @@ def test_herbivore_eats_food():
         ),
         simulation = simulation
     )
+    simulation.world.place(food, food.position)
 
     simulation.run(ticks = 5)
     assert herbivore.energy > 100, "Herbivore did not gain energy after eating food."
