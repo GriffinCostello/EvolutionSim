@@ -13,7 +13,7 @@ class Simulation:
     def __init__(self, worldsize):
         self.env = simpy.Environment()
         self.worldSize = worldsize
-        self.world = World(worldsize)
+        self.world = World(worldsize, self)
         self.statistics = Statistics()
 
         #Global variables 
@@ -23,33 +23,9 @@ class Simulation:
 
         self.env.process(self.systemTick())
 
-        numFood = (self.worldSize*self.worldSize) // 300 #one food every 200 places
-        self.placeFood(numFood)
+        numFood = (self.worldSize*self.worldSize) // 300 #one food every 300 places
+        self.world.placeInitialFood(numFood)
 
-
-    #places food on the map
-    def placeFood(self, numFood):
-        for i in range(0,numFood):
-            x = random.randint(0, self.worldSize -1)
-            y = random.randint(0, self.worldSize -1)
-            food = Food(
-                age = random.randint(0,50),
-                position = Position(
-                    x = x, 
-                    y = y
-                ), 
-                traits = FoodTraits(
-                    generation = 1,
-                    stageConfiguration = {
-                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(10, 60)},
-                        FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(70, 120)},
-                        FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(150, 200)},
-                        FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(60, 90)},
-                        FoodStage.ROTTEN: {"duration": random.randint(7, 10), "nutrition": 0},
-                    }                   
-                ),
-                simulation = self
-            )
 
 
     #Creates a child from two parent organisms
