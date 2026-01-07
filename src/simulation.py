@@ -1,7 +1,5 @@
 import simpy
-import numpy as np
 import random
-import matplotlib.pyplot as plt
 
 from collections import defaultdict
 from .organism import Organism
@@ -149,23 +147,3 @@ class Simulation:
     def systemTick(self):
         while True:
             yield self.env.timeout(1)
-
-
-    #Prints graph for average speed per generation
-    def plotTraitEvolution(self, traitName):
-        if traitName not in self.traitLog:
-            print(f"No trait: '{traitName}'")
-            return
-
-        generations = sorted(self.traitLog[traitName].keys())
-        medians = [
-            np.median(self.traitLog[traitName][g])
-            for g in generations
-        ]
-
-        plt.figure()
-        plt.plot(generations, medians, marker='o')
-        plt.xlabel("Generation")
-        plt.ylabel(f"Median {traitName}")
-        plt.title(f"Herbivore {traitName} Evolution")
-        plt.show()

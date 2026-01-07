@@ -1,7 +1,4 @@
-import simpy
-import numpy as np
 import random
-import math
 
 from .simulation import Simulation
 from .traits import *
@@ -22,8 +19,8 @@ def main():
             age = random.randint(1, 20),
             energy = random.randint(150,200),
             position = Position(
-                x=np.random.randint(0, simulation.worldSize),
-                y=np.random.randint(0, simulation.worldSize)
+                x=random.randint(0, simulation.worldSize-1),
+                y=random.randint(0, simulation.worldSize-1)
             ),
             traits = HerbivoreTraits(
                 detectionRadius = 30,
@@ -51,8 +48,8 @@ def main():
             age = random.randint(1, 20),
             energy = random.randint(150,200),
             position = Position(
-                x=np.random.randint(0, simulation.worldSize),
-                y=np.random.randint(0, simulation.worldSize)
+                x=random.randint(0, simulation.worldSize-1),
+                y=random.randint(0, simulation.worldSize-1)
             ),
             traits = CarnivoreTraits(
                 huntingRadius = 30,
