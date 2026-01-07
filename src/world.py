@@ -72,3 +72,4 @@ class World:
                 #All food created in the world gets a reference to the simulation
                 simulation = self.simulation
             )
+            self.place(food, food.position)
