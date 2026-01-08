@@ -37,6 +37,62 @@ class Simulation:
         while True:
             yield self.env.timeout(1)
 
+    #Create the child object
+    def createInitialHerbivores(self, i):
+        org = Organism(
+            name = "Herbivore_Gen1_" + str(i), 
+            species = "Herbivore",
+            age = random.randint(1, 20),
+            energy = random.randint(150,200),
+            position = Position(
+                x=random.randint(0, self.worldSize-1),
+                y=random.randint(0, self.worldSize-1)
+            ),
+            traits = HerbivoreTraits(
+                detectionRadius = 30,
+                speed = 6,
+                energyCapacity = 500,
+                birthEnergy = 80,
+                slowDownAge = 60,
+                reproductionAge = 20,
+                matingCallRadius = 200,
+                digestionTime = 5,
+                generation = 1
+            ),
+            simulation = self
+        )
+        self.organismList.append(org)
+        for traitName, value in vars(org.traits).items():
+            if traitName != "generation":
+                self.statistics.logTraits(traitName, org.traits.generation, value)
+
+
+    def createInitialCarnivores(self, i):
+        org = Organism(
+            name = "Carnivore_Gen1_" + str(i), 
+            species = "Carnivore",
+            age = random.randint(1, 20),
+            energy = random.randint(150,200),
+            position = Position(
+                x=random.randint(0, self.worldSize-1),
+                y=random.randint(0, self.worldSize-1)
+            ),
+            traits = CarnivoreTraits(
+                huntingRadius = 30,
+                speed = 8,
+                energyCapacity = 500,
+                birthEnergy = 80,
+                slowDownAge = 60,
+                reproductionAge = 20,
+                matingCallRadius = 200,
+                digestionTime = 5,
+                generation = 1
+            ),
+            simulation = self
+        )
+        self.organismList.append(org)
+        
+
     
     #Create the child object
     def createChild(self, parent1, parent2):
