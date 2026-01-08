@@ -140,8 +140,14 @@ class Actions:
             self.org.traits.energyCapacity
         )  # Gain energy
 
+        self.org.simulation.env.process(self.digestAndPoop(foodTraits))
+
+
+    #SimPy process for digestion and pooping seeds
+    def digestAndPoop(self, foodTraits):
         yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
         self.org.actions.poop(self.org, foodTraits)
+
         
     
     #Eats food at a location
@@ -156,8 +162,6 @@ class Actions:
             self.org.energy + gainedEnergy, 
             self.org.traits.energyCapacity
         )  # Gain energy
-        #print(f"{self.org.name} has eaten {prey.name} and gained {gainedEnergy} energy.")
-        yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
         
 
 
@@ -176,7 +180,7 @@ class Actions:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
                 if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > otherOrganism.traits.birthEnergy and self.org.energy > self.org.traits.birthEnergy:
-                    self.org.simulation.mate(self.org, otherOrganism)
+                    self.org.reproduction.mate(otherOrganism)
 
 
     #Organism poops out the foodtraits as a seed
@@ -188,18 +192,18 @@ class Actions:
             # stage-specific variation ranges
             if stage == FoodStage.SEED:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 1, 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 1, 1)),
+                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 1, 1)),
+                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 1, 1)),
                 }
             elif stage == FoodStage.RIPE:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 3, 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 5, 1)),
+                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 3, 1)),
+                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 5, 1)),
                 }
             else:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 2, 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 2, 1)),
+                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 2, 1)),
+                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 2, 1)),
                 }
         
         food = Food(

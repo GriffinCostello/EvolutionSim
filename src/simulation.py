@@ -27,22 +27,17 @@ class Simulation:
         self.world.placeInitialFood(numFood)
 
 
-
-    #Creates a child from two parent organisms
-    def mate(self, parent1, parent2):
-        if parent1.species != parent2.species:
-            return
-
-        if type(parent1.traits) is not type(parent2.traits):
-            return
-
-        parent1.energy = max(parent1.energy - parent1.traits.birthEnergy//3, 0)
-        parent2.energy = max(parent2.energy - parent2.traits.birthEnergy//3, 0)
-
-        child = self.createChild(parent1, parent2)
-        parent1.simulation.organismList.append(child)
+    def run(self, ticks):
+        self.env.run(
+            until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
+        )
 
 
+    def systemTick(self):
+        while True:
+            yield self.env.timeout(1)
+
+    
     #Create the child object
     def createChild(self, parent1, parent2):
         generation = max(parent1.traits.generation, parent2.traits.generation) + 1
@@ -56,7 +51,7 @@ class Simulation:
                 x = (parent1.position.x + parent2.position.x) // 2,
                 y = (parent1.position.y + parent2.position.y) // 2
             ),
-            traits = self.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
+            traits = parent1.traits.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
             simulation = parent1.simulation
         )
         if isinstance(child.traits, HerbivoreTraits):
@@ -77,49 +72,3 @@ class Simulation:
 
         childName = parent1.species + "_Gen" + str(generation) + "_" + str(parent1.simulation.organismChildCounter[key])
         return childName
-
-
-    #This calculates the traits of the parents plus slight variation for evolution to occur
-    def inheritOrganismTraits(self, traits1, traits2, generation):
-        if isinstance(traits1, HerbivoreTraits):
-            return HerbivoreTraits(
-                detectionRadius = self.inherit((traits1.detectionRadius + traits2.detectionRadius) // 2, 2, 1),
-                speed = self.inherit((traits1.speed + traits2.speed) //2, 1, 1),
-                energyCapacity = self.inherit((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
-                birthEnergy = self.inherit((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
-                slowDownAge = self.inherit((traits1.slowDownAge + traits2.slowDownAge) // 2 , 3, 1),
-                reproductionAge = self.inherit((traits1.reproductionAge + traits2.reproductionAge) // 2 , 1, 2),
-                matingCallRadius = self.inherit((traits1.matingCallRadius + traits2.matingCallRadius) // 2 , 10, 1),
-                digestionTime = self.inherit((traits1.digestionTime + traits2.digestionTime) // 2 , 1, 1),
-                generation = generation
-            )
-
-        elif isinstance(traits1, CarnivoreTraits):
-            return CarnivoreTraits(
-                huntingRadius = self.inherit((traits1.huntingRadius + traits2.huntingRadius) // 2, 2, 1),
-                speed = self.inherit((traits1.speed + traits2.speed) //2, 1, 1),
-                energyCapacity = self.inherit((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
-                birthEnergy = self.inherit((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
-                slowDownAge = self.inherit((traits1.slowDownAge + traits2.slowDownAge) // 2 , 3, 1),
-                reproductionAge = self.inherit((traits1.reproductionAge + traits2.reproductionAge) // 2 , 1, 2),
-                matingCallRadius = self.inherit((traits1.matingCallRadius + traits2.matingCallRadius) // 2 , 10, 1),
-                digestionTime = self.inherit((traits1.digestionTime + traits2.digestionTime) // 2 , 1, 1),
-                generation = generation
-            )
-    
-
-    #Helper function for finding variance levels, static since used by whole class, not object instances 
-    @staticmethod
-    def inherit(value, variance, minimum):
-        return max(value + variance*random.randint(-1,1), minimum)
-
-
-    def run(self, ticks):
-        self.env.run(
-            until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
-        )
-
-
-    def systemTick(self):
-        while True:
-            yield self.env.timeout(1)
