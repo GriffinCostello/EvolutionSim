@@ -192,18 +192,18 @@ class Actions:
             # stage-specific variation ranges
             if stage == FoodStage.SEED:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 1, 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 1, 1)),
+                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 1, 1)),
+                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 1, 1)),
                 }
             elif stage == FoodStage.RIPE:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 3, 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 5, 1)),
+                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 3, 1)),
+                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 5, 1)),
                 }
             else:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.simulation.inherit(dictionary["duration"] , 2, 1)),
-                    "nutrition": max(0, org.simulation.inherit(dictionary["nutrition"] , 2, 1)),
+                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 2, 1)),
+                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 2, 1)),
                 }
         
         food = Food(
