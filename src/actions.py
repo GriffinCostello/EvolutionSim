@@ -156,8 +156,6 @@ class Actions:
             self.org.energy + gainedEnergy, 
             self.org.traits.energyCapacity
         )  # Gain energy
-        #print(f"{self.org.name} has eaten {prey.name} and gained {gainedEnergy} energy.")
-        yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
         
 
 
@@ -176,7 +174,7 @@ class Actions:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 self.org.actions.moveTowards(position)
                 if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > otherOrganism.traits.birthEnergy and self.org.energy > self.org.traits.birthEnergy:
-                    self.org.simulation.mate(self.org, otherOrganism)
+                    self.org.reproduction.mate(otherOrganism)
 
 
     #Organism poops out the foodtraits as a seed

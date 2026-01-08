@@ -27,22 +27,17 @@ class Simulation:
         self.world.placeInitialFood(numFood)
 
 
-
-    #Creates a child from two parent organisms
-    def mate(self, parent1, parent2):
-        if parent1.species != parent2.species:
-            return
-
-        if type(parent1.traits) is not type(parent2.traits):
-            return
-
-        parent1.energy = max(parent1.energy - parent1.traits.birthEnergy//3, 0)
-        parent2.energy = max(parent2.energy - parent2.traits.birthEnergy//3, 0)
-
-        child = self.createChild(parent1, parent2)
-        parent1.simulation.organismList.append(child)
+    def run(self, ticks):
+        self.env.run(
+            until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
+        )
 
 
+    def systemTick(self):
+        while True:
+            yield self.env.timeout(1)
+
+    
     #Create the child object
     def createChild(self, parent1, parent2):
         generation = max(parent1.traits.generation, parent2.traits.generation) + 1
@@ -112,14 +107,3 @@ class Simulation:
     @staticmethod
     def inherit(value, variance, minimum):
         return max(value + variance*random.randint(-1,1), minimum)
-
-
-    def run(self, ticks):
-        self.env.run(
-            until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
-        )
-
-
-    def systemTick(self):
-        while True:
-            yield self.env.timeout(1)

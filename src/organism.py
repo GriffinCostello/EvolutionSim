@@ -1,6 +1,7 @@
 import random
 
 from .actions import Actions
+from .reproduction import Reproduction
 from .position import Position
 from .traits import *
 
@@ -23,6 +24,8 @@ class Organism:
         self.simulation.world.validPosition(self.position)
 
         self.actions = Actions(self)
+        self.reproduction = Reproduction(self)
+        
         self.live = self.simulation.env.process(self.live())
 
 
