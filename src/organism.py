@@ -25,7 +25,7 @@ class Organism:
 
         self.actions = Actions(self)
         self.reproduction = Reproduction(self)
-        
+
         self.live = self.simulation.env.process(self.live())
 
 
@@ -67,15 +67,14 @@ class Organism:
                         if bestFood:
                             self.actions.moveTowards(bestFood)
                             if (self.position.x, self.position.y) == bestFood:
-                                self.simulation.env.process(self.actions.eatFood(bestFood))
+                                self.actions.eatFood(bestFood)
                         self.status = "Hunting"
 
                     elif isinstance(self.traits, CarnivoreTraits):
                         prey = self.actions.scanForPrey()
                         if prey:
                             self.actions.moveTowards(prey.position.asTuple())
-                            if (self.position.x, self.position.y) == (prey.position.x, prey.position.y):
-                                self.simulation.env.process(self.actions.eatPrey(prey))
+                            self.actions.eatPrey(prey)
                         self.status = "Hunting"
 
                 case "Wander":

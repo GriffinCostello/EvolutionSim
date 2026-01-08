@@ -140,8 +140,14 @@ class Actions:
             self.org.traits.energyCapacity
         )  # Gain energy
 
+        self.org.simulation.env.process(self.digestAndPoop(foodTraits))
+
+
+    #SimPy process for digestion and pooping seeds
+    def digestAndPoop(self, foodTraits):
         yield self.org.simulation.env.timeout(self.org.traits.digestionTime)
         self.org.actions.poop(self.org, foodTraits)
+
         
     
     #Eats food at a location
