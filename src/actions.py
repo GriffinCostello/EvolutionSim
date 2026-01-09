@@ -167,20 +167,25 @@ class Actions:
 
     #Looks for mates nearby and either moves towards them or mates with them
     def matingCall(self):
-        for otherOrganism in self.org.simulation.organismList:
-            if otherOrganism == self.org:
+        org = self.org
+        matingRadiusSquared = org.traits.matingCallRadius * org.traits.matingCallRadius
+
+        for otherOrganism in org.simulation.organismList:
+            if otherOrganism is org:
                 continue
             if otherOrganism.age < otherOrganism.traits.reproductionAge:
-                continue 
-            if type(self.org.traits) is not type(otherOrganism.traits):
-                return
-            distance = self.org.position.distanceTo(otherOrganism.position)
+                continue
+            if type(org.traits) is not type(otherOrganism.traits):
+                continue
 
-            if distance <= self.org.traits.matingCallRadius:
+            distanceToSquared = org.position.distanceSquaredTo(otherOrganism.position)
+
+            if distanceToSquared <= matingRadiusSquared:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
-                self.org.actions.moveTowards(position)
-                if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > otherOrganism.traits.birthEnergy and self.org.energy > self.org.traits.birthEnergy:
-                    self.org.reproduction.mate(otherOrganism)
+                org.actions.moveTowards(position)
+                speedThresholdSquared = (org.traits.speed + otherOrganism.traits.speed) * (org.traits.speed + otherOrganism.traits.speed)
+                if distanceToSquared <= speedThresholdSquared and otherOrganism.energy > otherOrganism.traits.birthEnergy and org.energy > org.traits.birthEnergy:
+                    org.reproduction.mate(otherOrganism)
 
 
     #Organism poops out the foodtraits as a seed

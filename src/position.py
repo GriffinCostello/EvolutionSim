@@ -12,3 +12,7 @@ class Position:
 
     def asTuple(self):
         return (int(self.x), int(self.y))
+
+
+    def distanceSquaredTo(self, otherPos):
+        return (self.x - otherPos.x)**2 + (self.y - otherPos.y)**2
