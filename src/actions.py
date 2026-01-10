@@ -57,6 +57,8 @@ class Actions:
 
         for food in foods:
             nutrition = food.getNutrition()
+
+            #Need to calculate actual distance of food based on region slice
             distance = self.org.position.distanceTo(food.position)
 
             score = nutrition / (distance + 1)
@@ -178,13 +180,13 @@ class Actions:
             if type(org.traits) is not type(otherOrganism.traits):
                 continue
 
-            distanceToSquared = org.position.distanceSquaredTo(otherOrganism.position)
+            distanceToMateSquared = org.position.distanceSquaredTo(otherOrganism.position)
 
-            if distanceToSquared <= matingRadiusSquared:
+            if distanceToMateSquared <= matingRadiusSquared:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 org.actions.moveTowards(position)
                 speedThresholdSquared = (org.traits.speed + otherOrganism.traits.speed) * (org.traits.speed + otherOrganism.traits.speed)
-                if distanceToSquared <= speedThresholdSquared and otherOrganism.energy > otherOrganism.traits.birthEnergy and org.energy > org.traits.birthEnergy:
+                if distanceToMateSquared <= speedThresholdSquared and otherOrganism.energy > otherOrganism.traits.birthEnergy and org.energy > org.traits.birthEnergy:
                     org.reproduction.mate(otherOrganism)
 
 
