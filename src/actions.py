@@ -30,7 +30,9 @@ class Actions:
 
     #Looks for food nearby
     def scanForFood(self):
-        oppositeAdjacent = int(math.sqrt(self.org.traits.detectionRadius**2 / 2)) 
+        # Calculates the opposite and adjacent sides of the triangle (uses detection radius as hypotenuse)
+        oppositeAdjacent = int(self.org.traits.detectionRadius / math.sqrt(2)) 
+
         xMin = max(self.org.position.x - oppositeAdjacent, 0)
         xMax = min(self.org.position.x + oppositeAdjacent + 1, self.org.simulation.worldSize)
         yMin = max(self.org.position.y - oppositeAdjacent, 0)
@@ -135,6 +137,8 @@ class Actions:
     def eatFood(self, bestFood):
         bestFoodX , bestFoodY = bestFood
         foodToBeEaten = self.org.simulation.world.getObjectAt(Position(bestFoodX, bestFoodY))
+
+
         if foodToBeEaten is not None:
             nutritionalValue = foodToBeEaten.getNutrition()
             foodTraits = foodToBeEaten.traits
@@ -176,6 +180,10 @@ class Actions:
     #Looks for mates nearby and either moves towards them or mates with them
     def matingCall(self):
         org = self.org
+        orgSpeed = org.traits.speed
+        orgEnergy = org.energy
+        orgBirthEnergy = org.traits.birthEnergy
+
         matingRadiusSquared = org.traits.matingCallRadius * org.traits.matingCallRadius
 
         for otherOrganism in org.simulation.organismList:
@@ -191,8 +199,8 @@ class Actions:
             if distanceToMateSquared <= matingRadiusSquared:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
                 org.actions.moveTowards(position)
-                speedThresholdSquared = (org.traits.speed + otherOrganism.traits.speed) * (org.traits.speed + otherOrganism.traits.speed)
-                if distanceToMateSquared <= speedThresholdSquared and otherOrganism.energy > otherOrganism.traits.birthEnergy and org.energy > org.traits.birthEnergy:
+                speedThresholdSquared = (orgSpeed + otherOrganism.traits.speed) * (orgSpeed + otherOrganism.traits.speed)
+                if distanceToMateSquared <= speedThresholdSquared and otherOrganism.energy > otherOrganism.traits.birthEnergy and orgEnergy > orgBirthEnergy:
                     org.reproduction.mate(otherOrganism)
 
 
