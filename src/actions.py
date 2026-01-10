@@ -76,18 +76,14 @@ class Actions:
     def scanForPrey(self):
         bestPrey = None
         bestScore = 0
-        huntingRadius = self.org.traits.huntingRadius
-        thisSpecies = self.org.species
-
         for other in self.org.simulation.organismList:
             if other is self.org:
                 continue
-            if other.species == thisSpecies:
+            if other.species == self.org.species:
                 continue
 
-            #Need to calculate actual distance of prey for score to be
             distance = self.org.position.distanceTo(other.position)
-            if distance > huntingRadius:
+            if distance > self.org.traits.huntingRadius:
                 continue
 
             score = other.energy / (distance + 1)
@@ -103,32 +99,30 @@ class Actions:
     #moves an organism towards a location
     def moveTowards(self, target):
         targetX, targetY = target
-        selfX, selfY = self.org.position.x, self.org.position.y
-        speed = self.org.traits.speed
-
-        if selfX < targetX:
-            if(selfX + speed > targetX): #if this step would overshoot
-                selfX = targetX               #then just go to target
+        speedRemaining = self.org.traits.speed
+        if self.org.position.x < targetX:
+            if(self.org.position.x + self.org.traits.speed > targetX): #if this step would overshoot
+                self.org.position.x = targetX               #then just go to target
             else:
-                selfX += speed
+                self.org.position.x += self.org.traits.speed
 
-        elif selfX > targetX:
-            if(selfX - speed < targetX):
-                selfX = targetX
+        elif self.org.position.x > targetX:
+            if(self.org.position.x - self.org.traits.speed < targetX):
+                self.org.position.x = targetX
             else:
-                selfX -= speed
+                self.org.position.x -= self.org.traits.speed
 
-        if selfY < targetY:
-            if(selfY + speed > targetY):
-                selfY = targetY
+        if self.org.position.y < targetY:
+            if(self.org.position.y + self.org.traits.speed > targetY):
+                self.org.position.y = targetY
             else:
-                selfY += speed
+                self.org.position.y += self.org.traits.speed
 
-        elif selfY > targetY:
-            if(selfY - speed < targetY):
-                selfY = targetY
+        elif self.org.position.y > targetY:
+            if(self.org.position.y - self.org.traits.speed < targetY):
+                self.org.position.y = targetY
             else:
-                selfY -= speed
+                self.org.position.y -= self.org.traits.speed
 
         self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
 
