@@ -30,8 +30,8 @@ class Actions:
 
     #Looks for food nearby
     def scanForFood(self):
-        # Calculates the opposite and adjacent sides of the triangle (uses detection radius as hypotenuse)
-        oppositeAdjacent = int(self.org.traits.detectionRadius / math.sqrt(2)) 
+        # Calculates the opposite and adjacent sides of the triangle 
+        oppositeAdjacent = int(math.sqrt(self.org.traits.detectionRadius**2 / 2)) 
 
         xMin = max(self.org.position.x - oppositeAdjacent, 0)
         xMax = min(self.org.position.x + oppositeAdjacent + 1, self.org.simulation.worldSize)
