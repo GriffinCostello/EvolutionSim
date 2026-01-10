@@ -30,7 +30,9 @@ class Actions:
 
     #Looks for food nearby
     def scanForFood(self):
-        oppositeAdjacent = int(math.sqrt(self.org.traits.detectionRadius**2 / 2)) 
+        # Calculates the opposite and adjacent sides of the triangle (uses detection radius as hypotenuse)
+        oppositeAdjacent = int(self.org.traits.detectionRadius / math.sqrt(2)) 
+
         xMin = max(self.org.position.x - oppositeAdjacent, 0)
         xMax = min(self.org.position.x + oppositeAdjacent + 1, self.org.simulation.worldSize)
         yMin = max(self.org.position.y - oppositeAdjacent, 0)
@@ -57,6 +59,8 @@ class Actions:
 
         for food in foods:
             nutrition = food.getNutrition()
+
+            #Need to calculate actual distance of food based on region slice
             distance = self.org.position.distanceTo(food.position)
 
             score = nutrition / (distance + 1)
@@ -95,30 +99,32 @@ class Actions:
     #moves an organism towards a location
     def moveTowards(self, target):
         targetX, targetY = target
-        speedRemaining = self.org.traits.speed
-        if self.org.position.x < targetX:
-            if(self.org.position.x + self.org.traits.speed > targetX): #if this step would overshoot
+        selfX, selfY = self.org.position.x, self.org.position.y
+        speed = self.org.traits.speed
+    
+        if selfX < targetX:
+            if(selfX + speed > targetX): #if this step would overshoot
                 self.org.position.x = targetX               #then just go to target
             else:
-                self.org.position.x += self.org.traits.speed
+                self.org.position.x += speed
 
-        elif self.org.position.x > targetX:
-            if(self.org.position.x - self.org.traits.speed < targetX):
+        elif selfX > targetX:
+            if(selfX - speed < targetX):
                 self.org.position.x = targetX
             else:
-                self.org.position.x -= self.org.traits.speed
+                self.org.position.x -= speed
 
-        if self.org.position.y < targetY:
-            if(self.org.position.y + self.org.traits.speed > targetY):
+        if selfY < targetY:
+            if(selfY + speed > targetY):
                 self.org.position.y = targetY
             else:
-                self.org.position.y += self.org.traits.speed
+                self.org.position.y += speed
 
-        elif self.org.position.y > targetY:
-            if(self.org.position.y - self.org.traits.speed < targetY):
+        elif selfY > targetY:
+            if(selfY - speed < targetY):
                 self.org.position.y = targetY
             else:
-                self.org.position.y -= self.org.traits.speed
+                self.org.position.y -= speed
 
         self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
 
@@ -127,6 +133,8 @@ class Actions:
     def eatFood(self, bestFood):
         bestFoodX , bestFoodY = bestFood
         foodToBeEaten = self.org.simulation.world.getObjectAt(Position(bestFoodX, bestFoodY))
+
+
         if foodToBeEaten is not None:
             nutritionalValue = foodToBeEaten.getNutrition()
             foodTraits = foodToBeEaten.traits
@@ -167,20 +175,29 @@ class Actions:
 
     #Looks for mates nearby and either moves towards them or mates with them
     def matingCall(self):
-        for otherOrganism in self.org.simulation.organismList:
-            if otherOrganism == self.org:
+        org = self.org
+        orgSpeed = org.traits.speed
+        orgEnergy = org.energy
+        orgBirthEnergy = org.traits.birthEnergy
+
+        matingRadiusSquared = org.traits.matingCallRadius * org.traits.matingCallRadius
+
+        for otherOrganism in org.simulation.organismList:
+            if otherOrganism is org:
                 continue
             if otherOrganism.age < otherOrganism.traits.reproductionAge:
-                continue 
-            if type(self.org.traits) is not type(otherOrganism.traits):
-                return
-            distance = self.org.position.distanceTo(otherOrganism.position)
+                continue
+            if type(org.traits) is not type(otherOrganism.traits):
+                continue
 
-            if distance <= self.org.traits.matingCallRadius:
+            distanceToMateSquared = org.position.distanceSquaredTo(otherOrganism.position)
+
+            if distanceToMateSquared <= matingRadiusSquared:
                 position = (otherOrganism.position.x, otherOrganism.position.y)
-                self.org.actions.moveTowards(position)
-                if distance <= self.org.traits.speed + otherOrganism.traits.speed and otherOrganism.energy > otherOrganism.traits.birthEnergy and self.org.energy > self.org.traits.birthEnergy:
-                    self.org.reproduction.mate(otherOrganism)
+                org.actions.moveTowards(position)
+                speedThresholdSquared = (orgSpeed + otherOrganism.traits.speed) * (orgSpeed + otherOrganism.traits.speed)
+                if distanceToMateSquared <= speedThresholdSquared and otherOrganism.energy > otherOrganism.traits.birthEnergy and orgEnergy > orgBirthEnergy:
+                    org.reproduction.mate(otherOrganism)
 
 
     #Organism poops out the foodtraits as a seed
