@@ -99,30 +99,32 @@ class Actions:
     #moves an organism towards a location
     def moveTowards(self, target):
         targetX, targetY = target
-        speedRemaining = self.org.traits.speed
-        if self.org.position.x < targetX:
-            if(self.org.position.x + self.org.traits.speed > targetX): #if this step would overshoot
+        selfX, selfY = self.org.position.x, self.org.position.y
+        speed = self.org.traits.speed
+    
+        if selfX < targetX:
+            if(selfX + speed > targetX): #if this step would overshoot
                 self.org.position.x = targetX               #then just go to target
             else:
-                self.org.position.x += self.org.traits.speed
+                self.org.position.x += speed
 
-        elif self.org.position.x > targetX:
-            if(self.org.position.x - self.org.traits.speed < targetX):
+        elif selfX > targetX:
+            if(selfX - speed < targetX):
                 self.org.position.x = targetX
             else:
-                self.org.position.x -= self.org.traits.speed
+                self.org.position.x -= speed
 
-        if self.org.position.y < targetY:
-            if(self.org.position.y + self.org.traits.speed > targetY):
+        if selfY < targetY:
+            if(selfY + speed > targetY):
                 self.org.position.y = targetY
             else:
-                self.org.position.y += self.org.traits.speed
+                self.org.position.y += speed
 
-        elif self.org.position.y > targetY:
-            if(self.org.position.y - self.org.traits.speed < targetY):
+        elif selfY > targetY:
+            if(selfY - speed < targetY):
                 self.org.position.y = targetY
             else:
-                self.org.position.y -= self.org.traits.speed
+                self.org.position.y -= speed
 
         self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
 
