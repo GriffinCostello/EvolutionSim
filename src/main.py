@@ -22,6 +22,8 @@ def main():
     simulation.statistics.plotTraitEvolution("speed")
     simulation.statistics.plotTraitEvolution("energyCapacity")
     simulation.statistics.plotTraitEvolution("reproductionAge")
+    simulation.statistics.plotTraitEvolution("foodDetectionRadius")
+    simulation.statistics.plotTraitEvolution("predatorDetectionRadius")
 
 if __name__ == "__main__":
     main()

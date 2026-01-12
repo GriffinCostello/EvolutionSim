@@ -17,7 +17,8 @@ def test_carnivore_eats_herbivore():
         energy = 100,
         position = Position(x=1, y=1),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 1,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -122,7 +123,8 @@ def test_herbivore_flee():
         energy = 100,
         position = Position(x=1, y=1),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 1,
             energyCapacity = 250,
             birthEnergy = 80,

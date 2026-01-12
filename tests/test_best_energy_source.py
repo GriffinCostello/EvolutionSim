@@ -20,7 +20,8 @@ def test_best_food():
             x=0, y=0
         ),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 1,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -138,7 +139,8 @@ def test_best_Prey():
             y=1
         ),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 0,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -162,7 +164,8 @@ def test_best_Prey():
             y=2
         ),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 0,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -186,7 +189,8 @@ def test_best_Prey():
             y=1
         ),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 0,
             energyCapacity = 250,
             birthEnergy = 80,

@@ -49,7 +49,8 @@ class Simulation:
                 y=random.randint(0, self.worldSize-1)
             ),
             traits = HerbivoreTraits(
-                detectionRadius = 30,
+                foodDetectionRadius = 30,
+                predatorDetectionRadius = 10,
                 speed = 6,
                 energyCapacity = 500,
                 birthEnergy = 80,

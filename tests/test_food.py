@@ -21,7 +21,8 @@ def test_herbivore_eats_food():
         energy = 100,
         position = Position(x=1, y=1),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 5,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -127,7 +128,8 @@ def test_food_placement_after_poop():
             x=1, y=1
         ),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 0,
             energyCapacity = 250,
             birthEnergy = 80,

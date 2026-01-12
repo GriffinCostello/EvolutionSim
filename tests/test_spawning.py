@@ -21,7 +21,8 @@ def test_organism_same_spawn():
         energy = 100,
         position = Position(x=0, y=0),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 0,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -42,7 +43,8 @@ def test_organism_same_spawn():
         energy = 100,
         position = Position(x=0, y=0),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 0,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -127,7 +129,8 @@ def test_organism_out_of_bounds():
             energy = 100,
             position = Position(x=4, y=4), #Out of bounds
             traits = HerbivoreTraits(
-                detectionRadius = 5,
+                foodDetectionRadius = 5,
+                predatorDetectionRadius = 2,
                 speed = 0,
                 energyCapacity = 250,
                 birthEnergy = 80,
@@ -150,7 +153,8 @@ def test_organism_out_of_bounds():
             energy = 100,
             position = Position(x=-1, y=-1), #Out of bounds
             traits = HerbivoreTraits(
-                detectionRadius = 5,
+                foodDetectionRadius = 5,
+                predatorDetectionRadius = 2,
                 speed = 0,
                 energyCapacity = 250,
                 birthEnergy = 80,
@@ -288,7 +292,8 @@ def test_herbivore_reproduction():
         energy = 200,
         position = Position(x=2, y=2),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 4,
             energyCapacity = 250,
             birthEnergy = 80,
@@ -309,7 +314,8 @@ def test_herbivore_reproduction():
         energy = 200,
         position = Position(x=2, y=2),
         traits = HerbivoreTraits(
-            detectionRadius = 5,
+            foodDetectionRadius = 5,
+            predatorDetectionRadius = 2,
             speed = 4,
             energyCapacity = 250,
             birthEnergy = 80,

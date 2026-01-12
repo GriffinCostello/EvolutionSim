@@ -30,7 +30,8 @@ class OrganismTraits(Traits):
     def inheritOrganismTraits(self, traits1, traits2, generation):
         if isinstance(traits1, HerbivoreTraits):
             return HerbivoreTraits(
-                detectionRadius = self.mutate((traits1.detectionRadius + traits2.detectionRadius) // 2, 2, 1),
+                foodDetectionRadius = self.mutate((traits1.foodDetectionRadius + traits2.foodDetectionRadius) // 2, 2, 1),
+                predatorDetectionRadius = self.mutate((traits1.predatorDetectionRadius + traits2.predatorDetectionRadius) // 2, 1, 1),
                 speed = self.mutate((traits1.speed + traits2.speed) //2, 1, 1),
                 energyCapacity = self.mutate((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
                 birthEnergy = self.mutate((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
@@ -56,9 +57,10 @@ class OrganismTraits(Traits):
 
 
 class HerbivoreTraits(OrganismTraits):
-    def __init__(self, detectionRadius, **kwargs):
+    def __init__(self, foodDetectionRadius, predatorDetectionRadius, **kwargs):
         super().__init__(**kwargs)
-        self.detectionRadius = detectionRadius
+        self.foodDetectionRadius = foodDetectionRadius
+        self.predatorDetectionRadius = predatorDetectionRadius
 
 
 class CarnivoreTraits(OrganismTraits):
