@@ -57,6 +57,11 @@ class Organism:
 
             nextAction = self.actions.decideNextAction()
             match nextAction:
+                case "Flee":
+                    threatPosition = self.actions.scanForPredators()
+                    if threatPosition:
+                        self.actions.moveAwayFrom(threatPosition)
+                        self.status = "Fleeing"
                 case "Mate":
                     self.actions.matingCall()
                     self.status = "Mating"
