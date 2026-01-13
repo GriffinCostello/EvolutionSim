@@ -45,11 +45,10 @@ class Organism:
             
             if self.energy <= 0:
                 #print(f"{self.name} has run out of energy and died at age {self.age}.")
-                self.simulation.statistics.logLifespan(self.age)
+                self.simulation.statistics.logLifespan(self.age, self.species)
                 self.simulation.organismList.remove(self)
                 
                 if len(self.simulation.organismList) == 0:
-                    print(f"All dead, Average Life Span: {sum(self.simulation.statistics.lifeSpan) / len(self.simulation.statistics.lifeSpan):.4f}")
                     if not self.simulation.stopEvent.triggered:
                         self.simulation.stopEvent.succeed()
 
@@ -57,6 +56,11 @@ class Organism:
 
             nextAction = self.actions.decideNextAction()
             match nextAction:
+                case "Flee":
+                    threatPosition = self.actions.scanForPredators()
+                    if threatPosition:
+                        self.actions.moveAwayFrom(threatPosition)
+                        self.status = "Fleeing"
                 case "Mate":
                     self.actions.matingCall()
                     self.status = "Mating"

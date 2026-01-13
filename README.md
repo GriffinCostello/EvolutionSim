@@ -25,10 +25,10 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 1. Install Python 3.8+.
 2. Install dependencies:
    ```bash
-   pip install numpy simpy
+   pip install numpy simpy matplotlib
 3. Run the simulation:
    ```bash
-   python evolution_sim.py
+   python run.py
    ```
 
 ## How to Test

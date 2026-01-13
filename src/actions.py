@@ -18,7 +18,10 @@ class Actions:
         # Choose scanning method depending on trait type
         target = None
         if isinstance(self.org.traits, HerbivoreTraits):
+            danger = self.scanForPredators()
             target = self.scanForFood()
+            if danger is not None:
+                return "Flee"
         elif isinstance(self.org.traits, CarnivoreTraits):
             target = self.scanForPrey()
 
@@ -31,7 +34,7 @@ class Actions:
     #Looks for food nearby
     def scanForFood(self):
         # Calculates the opposite and adjacent sides of the triangle (uses detection radius as hypotenuse)
-        oppositeAdjacent = int(self.org.traits.detectionRadius / math.sqrt(2)) 
+        oppositeAdjacent = int(self.org.traits.foodDetectionRadius / math.sqrt(2)) 
 
         xMin = max(self.org.position.x - oppositeAdjacent, 0)
         xMax = min(self.org.position.x + oppositeAdjacent + 1, self.org.simulation.worldSize)
@@ -94,7 +97,19 @@ class Actions:
         return bestPrey
         
 
-    
+    # Looks for predators nearby for herbivores
+    def scanForPredators(self):
+        for other in self.org.simulation.organismList:
+            if other is self.org:
+                continue
+            if other.species == self.org.species:
+                continue
+
+            distance = self.org.position.distanceTo(other.position)
+            if distance <= self.org.traits.predatorDetectionRadius:
+                return other.position.asTuple()
+        return None 
+
 
     #moves an organism towards a location
     def moveTowards(self, target):
@@ -127,6 +142,40 @@ class Actions:
                 self.org.position.y -= speed
 
         self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
+
+
+    #moves an organism away from a location
+    def moveAwayFrom(self, threatPosition):
+        threatX, threatY = threatPosition
+        selfX, selfY = self.org.position.x, self.org.position.y
+        speed = self.org.traits.speed
+
+        if selfX < threatX:
+            if(selfX - speed < 0): #if this step would overshoot
+                self.org.position.x = 0               #then just go to edge
+            else:
+                self.org.position.x -= speed
+
+        elif selfX > threatX:
+            if(selfX + speed > self.org.simulation.worldSize - 1):
+                self.org.position.x = self.org.simulation.worldSize - 1
+            else:
+                self.org.position.x += speed
+
+        if selfY < threatY:
+            if(selfY - speed < 0):
+                self.org.position.y = 0
+            else:
+                self.org.position.y -= speed
+
+        elif selfY > threatY:
+            if(selfY + speed > self.org.simulation.worldSize - 1):
+                self.org.position.y = self.org.simulation.worldSize - 1
+            else:
+                self.org.position.y += speed
+
+        self.org.energy = max(self.org.energy - self.org.traits.energyConsumption, 0)
+
 
 
     #Eats food at a location
