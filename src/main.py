@@ -19,6 +19,12 @@ def main():
         simulation.createInitialCarnivores(i)
 
     simulation.run(ticks = 50000)
+    # Print average lifespan summary once at end of run (covers timeout or all-dead)
+    totalAverageLifeSpan = sum(simulation.statistics.lifeSpan) / len(simulation.statistics.lifeSpan)
+    herbivoreAverageLifeSpan = sum(simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1])) / len(simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1]))
+    carnivoreAverageLifeSpan = sum(simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1])) / len(simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1]))
+    print(f"Simulation finished. Overall avg lifespan: {totalAverageLifeSpan:.4f}; Herbivore avg: {herbivoreAverageLifeSpan:.4f}; Carnivore avg: {carnivoreAverageLifeSpan:.4f}")
+
     simulation.statistics.plotTraitEvolution("speed")
     simulation.statistics.plotTraitEvolution("energyCapacity")
     simulation.statistics.plotTraitEvolution("reproductionAge")
