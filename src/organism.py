@@ -45,11 +45,15 @@ class Organism:
             
             if self.energy <= 0:
                 #print(f"{self.name} has run out of energy and died at age {self.age}.")
-                self.simulation.statistics.logLifespan(self.age)
+                self.simulation.statistics.logLifespan(self.age, self.species)
                 self.simulation.organismList.remove(self)
                 
                 if len(self.simulation.organismList) == 0:
-                    print(f"All dead, Average Life Span: {sum(self.simulation.statistics.lifeSpan) / len(self.simulation.statistics.lifeSpan):.4f}")
+                    # Print average lifespan per species and overall
+                    totalAaverageLifeSpan = sum(self.simulation.statistics.lifeSpan) / len(self.simulation.statistics.lifeSpan)
+                    herbivoreAverageLifeSpan = sum(self.simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1])) / len(self.simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1]))
+                    carnivoreAverageLifeSpan = sum(self.simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1])) / len(self.simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1]))
+                    print(f"All dead. Overall avg lifespan: {totalAaverageLifeSpan:.4f}; Herbivore avg: {herbivoreAverageLifeSpan:.4f}; Carnivore avg: {carnivoreAverageLifeSpan:.4f}")
                     if not self.simulation.stopEvent.triggered:
                         self.simulation.stopEvent.succeed()
 

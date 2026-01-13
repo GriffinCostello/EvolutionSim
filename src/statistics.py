@@ -5,15 +5,18 @@ from collections import defaultdict
 class Statistics:
     def __init__(self):
         self.traitLog = defaultdict(lambda: defaultdict(list))
-        self.lifeSpan = [1] #list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
+        self.lifeSpan = [1] # list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
+        self.lifeSpanBySpecies = defaultdict(lambda: [1])
         
 
     def logTraits(self, traitName, generation, value):
         self.traitLog[traitName][generation].append(value)
 
 
-    def logLifespan(self, lifespan):
+    def logLifespan(self, lifespan, species=None):
         self.lifeSpan.append(lifespan)
+        if species is not None:
+            self.lifeSpanBySpecies[species].append(lifespan)
 
 
     #Prints graph for average speed per generation
