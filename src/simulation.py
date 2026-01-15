@@ -24,14 +24,13 @@ class Simulation:
         self.organismChildCounter = {}
         self.stopEvent = self.env.event()
 
-        self.env.process(self.systemTick())
-
         numFood = (self.worldSize*self.worldSize) // 300 #one food every 300 places
         self.world.placeInitialFood(numFood)
 
 
     def run(self, ticks):
         self.ticks = ticks
+        self.env.process(self.systemTick())
         self.env.run(
             until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
         )
