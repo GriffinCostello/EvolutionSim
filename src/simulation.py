@@ -1,5 +1,6 @@
 import simpy
 import random
+import time
 
 from collections import defaultdict
 from .organism import Organism
@@ -10,9 +11,11 @@ from .world import World
 from .statistics import Statistics
 
 class Simulation:
-    def __init__(self, worldsize):
+    def __init__(self, worldsize, startTime = time.time()):
         self.env = simpy.Environment()
         self.worldSize = worldsize
+        self.startTime = startTime
+
         self.world = World(worldsize, self)
         self.statistics = Statistics()
 
@@ -28,13 +31,24 @@ class Simulation:
 
 
     def run(self, ticks):
+        self.ticks = ticks
         self.env.run(
             until=simpy.events.AnyOf(self.env, [self.stopEvent, self.env.timeout(ticks)])
         )
 
 
     def systemTick(self):
+        remaining = self.ticks
         while True:
+            if self.env.now % 1000 == 0:
+                if remaining < 0:
+                    pass
+                else:
+                    elapsed = time.time()-self.startTime
+                    minutes = int(elapsed // 60)
+                    seconds = elapsed % 60
+                    print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Ticks Remaining: {remaining} | Number of Organisms: {len(self.organismList)}", end = "", flush = True)
+                remaining = remaining -1000
             yield self.env.timeout(1)
 
     #Create the child object

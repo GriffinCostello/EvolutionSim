@@ -1,4 +1,4 @@
-import random
+import time
 
 from .simulation import Simulation
 from .traits import *
@@ -8,7 +8,8 @@ from .organism import Organism
 
 
 def main():
-    simulation = Simulation(worldsize=1000)
+    start = time.time()
+    simulation = Simulation(worldsize=1000, startTime = start)
 
     #Add initial herbivores
     for i in range(1000):
@@ -23,7 +24,7 @@ def main():
     totalAverageLifeSpan = sum(simulation.statistics.lifeSpan) / len(simulation.statistics.lifeSpan)
     herbivoreAverageLifeSpan = sum(simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1])) / len(simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1]))
     carnivoreAverageLifeSpan = sum(simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1])) / len(simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1]))
-    print(f"Simulation finished. Overall avg lifespan: {totalAverageLifeSpan:.4f}; Herbivore avg: {herbivoreAverageLifeSpan:.4f}; Carnivore avg: {carnivoreAverageLifeSpan:.4f}")
+    print(f"\nSimulation finished. Overall avg lifespan: {totalAverageLifeSpan:.4f}; Herbivore avg: {herbivoreAverageLifeSpan:.4f}; Carnivore avg: {carnivoreAverageLifeSpan:.4f}")
 
     simulation.statistics.plotTraitEvolution("speed")
     simulation.statistics.plotTraitEvolution("energyCapacity")
