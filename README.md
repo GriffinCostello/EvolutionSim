@@ -30,6 +30,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
    ```bash
    python run.py
    ```
+4. Wait (for a few minutes) for the simulation to complete and view the results through Matplotlib visualizations
 
 ## How to Test
 1. Install pytest:
