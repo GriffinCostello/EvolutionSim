@@ -33,6 +33,9 @@ class Organism:
         self.age += 1
         if self.age == self.nextSlowDownAge:
             self.traits.speed = max(self.traits.speed - 1, 1)
+            self.traits.energyCapacity = max(self.traits.energyCapacity - 30, 100)
+            if isinstance(self.traits, HerbivoreTraits):
+                self.traits.foodDetectionRadius = max(self.traits.foodDetectionRadius -3, 1)
             self.nextSlowDownAge += (self.nextSlowDownAge // 2)
     
         self.energy = max(self.energy - self.traits.energyConsumption, 0)  # Decrease energy each tick
