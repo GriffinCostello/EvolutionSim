@@ -10,25 +10,26 @@ class Actions:
 
 
     #Choose the next action for what to do
+    # Returns (action, target) where target can be threat position, food position, prey, or None
     def decideNextAction(self):
         if self.org.energy > self.org.traits.energyCapacity * 0.7:
             if(self.org.age >= self.org.traits.reproductionAge):
-                return "Mate"
+                return ("Mate", None)
 
         # Choose scanning method depending on trait type
         target = None
         if isinstance(self.org.traits, HerbivoreTraits):
             danger = self.scanForPredators()
-            target = self.scanForFood()
             if danger is not None:
-                return "Flee"
+                return ("Flee", danger)
+            target = self.scanForFood()
         elif isinstance(self.org.traits, CarnivoreTraits):
             target = self.scanForPrey()
 
         if target:
-            return "LookForFood"
+            return ("LookForFood", target)
         else:
-            return "Wander"
+            return ("Wander", None)
 
 
     #Looks for food nearby

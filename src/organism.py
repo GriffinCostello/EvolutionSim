@@ -57,12 +57,11 @@ class Organism:
 
                 break
 
-            nextAction = self.actions.decideNextAction()
+            nextAction, target = self.actions.decideNextAction()
             match nextAction:
                 case "Flee":
-                    threatPosition = self.actions.scanForPredators()
-                    if threatPosition:
-                        self.actions.moveAwayFrom(threatPosition)
+                    if target:
+                        self.actions.moveAwayFrom(target)
                         self.status = "Fleeing"
                 case "Mate":
                     self.actions.matingCall()
@@ -70,18 +69,16 @@ class Organism:
 
                 case "LookForFood":
                     if isinstance(self.traits, HerbivoreTraits):
-                        bestFood = self.actions.scanForFood()
-                        if bestFood:
-                            self.actions.moveTowards(bestFood)
-                            if (self.position.x, self.position.y) == bestFood:
-                                self.actions.eatFood(bestFood)
+                        if target:
+                            self.actions.moveTowards(target)
+                            if (self.position.x, self.position.y) == target:
+                                self.actions.eatFood(target)
                         self.status = "Hunting"
 
                     elif isinstance(self.traits, CarnivoreTraits):
-                        prey = self.actions.scanForPrey()
-                        if prey:
-                            self.actions.moveTowards(prey.position.asTuple())
-                            self.actions.eatPrey(prey)
+                        if target:
+                            self.actions.moveTowards(target.position.asTuple())
+                            self.actions.eatPrey(target)
                         self.status = "Hunting"
 
                 case "Wander":
