@@ -39,15 +39,15 @@ class Simulation:
     def systemTick(self):
         remaining = self.ticks
         while True:
-            if self.env.now % 1000 == 0:
+            if self.env.now % 100 == 0:
                 if remaining < 0:
                     pass
                 else:
                     elapsed = time.time()-self.startTime
                     minutes = int(elapsed // 60)
                     seconds = elapsed % 60
-                    print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Ticks Remaining: {remaining} | Number of Organisms: {len(self.organismList)}", end = "", flush = True)
-                remaining = remaining -1000
+                    print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Organisms: {len(self.organismList):>10}", end = "", flush = True)
+                remaining = remaining -100
             yield self.env.timeout(1)
 
     #Create the child object
