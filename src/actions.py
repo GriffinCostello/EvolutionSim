@@ -9,14 +9,12 @@ class Actions:
         self.org = organism
 
 
-    #Choose the next action for what to do
-    # Returns (action, target) where target can be threat position, food position, prey, or None
+    # Returns the next action and target for the organism(action, target)
     def decideNextAction(self):
         if self.org.energy > self.org.traits.energyCapacity * 0.7:
             if(self.org.age >= self.org.traits.reproductionAge):
                 return ("Mate", None)
 
-        # Choose scanning method depending on trait type
         target = None
         if isinstance(self.org.traits, HerbivoreTraits):
             danger = self.scanForPredators()

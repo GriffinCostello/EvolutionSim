@@ -62,10 +62,8 @@ class Organism:
                 case "Flee":
                     if target:
                         self.actions.moveAwayFrom(target)
-                        self.status = "Fleeing"
                 case "Mate":
                     self.actions.matingCall()
-                    self.status = "Mating"
 
                 case "LookForFood":
                     if isinstance(self.traits, HerbivoreTraits):
@@ -73,18 +71,15 @@ class Organism:
                             self.actions.moveTowards(target)
                             if (self.position.x, self.position.y) == target:
                                 self.actions.eatFood(target)
-                        self.status = "Hunting"
 
                     elif isinstance(self.traits, CarnivoreTraits):
                         if target:
                             self.actions.moveTowards(target.position.asTuple())
                             self.actions.eatPrey(target)
-                        self.status = "Hunting"
 
                 case "Wander":
                     dx, dy = random.choice([(self.traits.speed,0),(-self.traits.speed,0),(0,self.traits.speed),(0,-self.traits.speed)])
                     self.position.x = (self.position.x + dx) % self.simulation.worldSize
                     self.position.y = (self.position.y + dy) % self.simulation.worldSize
-                    self.status = "Wandering"
             
             yield self.simulation.env.timeout(1)
