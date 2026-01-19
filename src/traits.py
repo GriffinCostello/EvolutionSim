@@ -23,7 +23,6 @@ class OrganismTraits(Traits):
         self.slowDownAge = slowDownAge
         self.matingCallRadius = matingCallRadius
         self.digestionTime = digestionTime
-        self.status = "Idle"
 
     
     #This calculates the traits of the parents plus slight variation for evolution to occur

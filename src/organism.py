@@ -57,37 +57,29 @@ class Organism:
 
                 break
 
-            nextAction = self.actions.decideNextAction()
+            nextAction, target = self.actions.decideNextAction()
             match nextAction:
                 case "Flee":
-                    threatPosition = self.actions.scanForPredators()
-                    if threatPosition:
-                        self.actions.moveAwayFrom(threatPosition)
-                        self.status = "Fleeing"
+                    if target:
+                        self.actions.moveAwayFrom(target)
                 case "Mate":
                     self.actions.matingCall()
-                    self.status = "Mating"
 
                 case "LookForFood":
                     if isinstance(self.traits, HerbivoreTraits):
-                        bestFood = self.actions.scanForFood()
-                        if bestFood:
-                            self.actions.moveTowards(bestFood)
-                            if (self.position.x, self.position.y) == bestFood:
-                                self.actions.eatFood(bestFood)
-                        self.status = "Hunting"
+                        if target:
+                            self.actions.moveTowards(target)
+                            if (self.position.x, self.position.y) == target:
+                                self.actions.eatFood(target)
 
                     elif isinstance(self.traits, CarnivoreTraits):
-                        prey = self.actions.scanForPrey()
-                        if prey:
-                            self.actions.moveTowards(prey.position.asTuple())
-                            self.actions.eatPrey(prey)
-                        self.status = "Hunting"
+                        if target:
+                            self.actions.moveTowards(target.position.asTuple())
+                            self.actions.eatPrey(target)
 
                 case "Wander":
                     dx, dy = random.choice([(self.traits.speed,0),(-self.traits.speed,0),(0,self.traits.speed),(0,-self.traits.speed)])
                     self.position.x = (self.position.x + dx) % self.simulation.worldSize
                     self.position.y = (self.position.y + dy) % self.simulation.worldSize
-                    self.status = "Wandering"
             
             yield self.simulation.env.timeout(1)

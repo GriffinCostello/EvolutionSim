@@ -13,6 +13,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Added reproduction functionality where organisms can create offspring with inherited traits.
 - Food is regrown by animals eating and spreading seeds
 - Carnivores can now be spawned in the simulation and carnivores can hunt herbivores for food.
+- Herbivores attempt to escape Carnivores
 
 ## Future Plans
 - Evolutionary dynamics and population growth.
