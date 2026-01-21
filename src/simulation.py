@@ -9,6 +9,7 @@ from .position import Position
 from .food import Food
 from .world import World
 from .statistics import Statistics
+from .genetics import *
 
 class Simulation:
     def __init__(self, worldsize, startTime = time.time()):
@@ -49,9 +50,22 @@ class Simulation:
                     print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Organisms: {len(self.organismList):>10}", end = "", flush = True)
                 remaining = remaining -100
             yield self.env.timeout(1)
+            
 
     #Create the child object
     def createInitialHerbivores(self, i):
+        genetics = HerbivoreGenetics(
+            foodDetectionRadius = 30,
+            predatorDetectionRadius = 10,
+            speed = 6,
+            energyCapacity = 500,
+            birthEnergy = 80,
+            slowDownAge = 60,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 5,
+            generation = 1
+        )
         org = Organism(
             name = "Herbivore_Gen1_" + str(i), 
             species = "Herbivore",
@@ -61,27 +75,27 @@ class Simulation:
                 x=random.randint(0, self.worldSize-1),
                 y=random.randint(0, self.worldSize-1)
             ),
-            traits = HerbivoreTraits(
-                foodDetectionRadius = 30,
-                predatorDetectionRadius = 10,
-                speed = 6,
-                energyCapacity = 500,
-                birthEnergy = 80,
-                slowDownAge = 60,
-                reproductionAge = 20,
-                matingCallRadius = 200,
-                digestionTime = 5,
-                generation = 1
-            ),
+            genetics = genetics,
             simulation = self
         )
         self.organismList.append(org)
-        for traitName, value in vars(org.traits).items():
-            if traitName != "generation":
-                self.statistics.logTraits(traitName, org.traits.generation, value)
+        for geneticsName, value in vars(org.genetics).items():
+            if geneticsName != "generation":
+                self.statistics.logGenetics(geneticsName, org.genetics.generation, value)
 
 
     def createInitialCarnivores(self, i):
+        genetics = CarnivoreGenetics(
+            huntingRadius = 30,
+            speed = 8,
+            energyCapacity = 500,
+            birthEnergy = 80,
+            slowDownAge = 60,
+            reproductionAge = 20,
+            matingCallRadius = 200,
+            digestionTime = 5,
+            generation = 1
+        )
         org = Organism(
             name = "Carnivore_Gen1_" + str(i), 
             species = "Carnivore",
@@ -91,17 +105,7 @@ class Simulation:
                 x=random.randint(0, self.worldSize-1),
                 y=random.randint(0, self.worldSize-1)
             ),
-            traits = CarnivoreTraits(
-                huntingRadius = 30,
-                speed = 8,
-                energyCapacity = 500,
-                birthEnergy = 80,
-                slowDownAge = 60,
-                reproductionAge = 20,
-                matingCallRadius = 200,
-                digestionTime = 5,
-                generation = 1
-            ),
+            genetics = genetics,
             simulation = self
         )
         self.organismList.append(org)
@@ -110,7 +114,8 @@ class Simulation:
     
     #Create the child object
     def createChild(self, parent1, parent2):
-        generation = max(parent1.traits.generation, parent2.traits.generation) + 1
+        generation = max(parent1.genetics.generation, parent2.genetics.generation) + 1
+        childGenetics = parent1.genetics.inheritOrganismGenetics(parent1.genetics, parent2.genetics, generation)
         childName = self.findChildName(parent1, parent2, generation)
         child = Organism(
             name = childName, 
@@ -121,14 +126,14 @@ class Simulation:
                 x = (parent1.position.x + parent2.position.x) // 2,
                 y = (parent1.position.y + parent2.position.y) // 2
             ),
-            traits = parent1.traits.inheritOrganismTraits(parent1.traits, parent2.traits, generation),
+            genetics = childGenetics,
             simulation = parent1.simulation
         )
-        if isinstance(child.traits, HerbivoreTraits):
-            for traitName, value in vars(child.traits).items():
-                if traitName != "generation":
-                    self.statistics.logTraits(traitName, child.traits.generation, value)
-        #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.traits.generation})")
+        if isinstance(child.genetics, HerbivoreGenetics):
+            for geneticName, value in vars(child.genetics).items():
+                if geneticName != "generation":
+                    self.statistics.logGenetics(geneticName, child.genetics.generation, value)
+        #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.genetics.generation})")
         return child
 
     

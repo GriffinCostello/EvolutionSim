@@ -6,6 +6,7 @@ import pytest
 
 from src.simulation import Simulation
 from src.traits import *
+from src.genetics import *
 from src.position import Position
 from src.organism import Organism
 from src.food import Food, FoodStage
@@ -20,7 +21,7 @@ def test_organism_same_spawn():
         age = 5,
         energy = 100,
         position = Position(x=0, y=0),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 0,
@@ -42,7 +43,7 @@ def test_organism_same_spawn():
         age = 5,
         energy = 100,
         position = Position(x=0, y=0),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 0,
@@ -128,7 +129,7 @@ def test_organism_out_of_bounds():
             age = 5,
             energy = 100,
             position = Position(x=4, y=4), #Out of bounds
-            traits = HerbivoreTraits(
+            genetics = HerbivoreGenetics(
                 foodDetectionRadius = 5,
                 predatorDetectionRadius = 2,
                 speed = 0,
@@ -152,7 +153,7 @@ def test_organism_out_of_bounds():
             age = 5,
             energy = 100,
             position = Position(x=-1, y=-1), #Out of bounds
-            traits = HerbivoreTraits(
+            genetics = HerbivoreGenetics(
                 foodDetectionRadius = 5,
                 predatorDetectionRadius = 2,
                 speed = 0,
@@ -234,7 +235,7 @@ def test_carnivore_reproduction():
         age = 25,
         energy = 200,
         position = Position(x=3, y=3),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 2,
             speed = 1,
             energyCapacity = 250,
@@ -255,7 +256,7 @@ def test_carnivore_reproduction():
         age = 25,
         energy = 200,
         position = Position(x=3, y=3),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 2,
             speed = 1,
             energyCapacity = 250,
@@ -291,7 +292,7 @@ def test_herbivore_reproduction():
         age = 25,
         energy = 200,
         position = Position(x=2, y=2),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 4,
@@ -313,7 +314,7 @@ def test_herbivore_reproduction():
         age = 25,
         energy = 200,
         position = Position(x=2, y=2),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 4,

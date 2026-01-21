@@ -4,9 +4,10 @@ from .actions import Actions
 from .reproduction import Reproduction
 from .position import Position
 from .traits import *
+from .genetics import *
 
 class Organism:
-    def __init__(self, name, species, age, energy, position: Position, traits: OrganismTraits, simulation: "Simulation"):
+    def __init__(self, name, species, age, energy, position: Position, genetics: "OrganismGenetics", simulation: "Simulation", traits: OrganismTraits = None):
         self.name = name
         self.species = species
         self.age = age
@@ -14,8 +15,11 @@ class Organism:
         
         self.position = position
         
+        self.genetics = genetics
+        
+        #Creates traits from genetics when organism is created
+        self.traits = genetics.toTraits()
 
-        self.traits = traits
 
         # Per-organism state for when they will next slow down during their lifetime.
         self.nextSlowDownAge = self.traits.slowDownAge

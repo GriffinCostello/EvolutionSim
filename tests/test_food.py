@@ -6,6 +6,7 @@ import pytest
 
 from src.simulation import Simulation
 from src.traits import *
+from src.genetics import *
 from src.position import Position
 from src.organism import Organism
 from src.food import Food, FoodStage
@@ -20,7 +21,7 @@ def test_herbivore_eats_food():
         age = 5,
         energy = 100,
         position = Position(x=1, y=1),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 5,
@@ -127,7 +128,7 @@ def test_food_placement_after_poop():
         position = Position(
             x=1, y=1
         ),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 0,

@@ -4,12 +4,6 @@ import random
 class Traits:
     def __init__(self, generation):
         self.generation = generation
-    
-
-    #Helper function for finding variance levels, static since used by whole class, not object instances 
-    @staticmethod
-    def mutate(value, variance, minimum):
-        return max(value + variance*random.randint(-1,1), minimum)
         
 
 class OrganismTraits(Traits):
@@ -23,36 +17,6 @@ class OrganismTraits(Traits):
         self.slowDownAge = slowDownAge
         self.matingCallRadius = matingCallRadius
         self.digestionTime = digestionTime
-
-    
-    #This calculates the traits of the parents plus slight variation for evolution to occur
-    def inheritOrganismTraits(self, traits1, traits2, generation):
-        if isinstance(traits1, HerbivoreTraits):
-            return HerbivoreTraits(
-                foodDetectionRadius = self.mutate((traits1.foodDetectionRadius + traits2.foodDetectionRadius) // 2, 2, 1),
-                predatorDetectionRadius = self.mutate((traits1.predatorDetectionRadius + traits2.predatorDetectionRadius) // 2, 1, 1),
-                speed = self.mutate((traits1.speed + traits2.speed) //2, 1, 1),
-                energyCapacity = self.mutate((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
-                birthEnergy = self.mutate((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
-                slowDownAge = self.mutate((traits1.slowDownAge + traits2.slowDownAge) // 2 , 3, 1),
-                reproductionAge = self.mutate((traits1.reproductionAge + traits2.reproductionAge) // 2 , 1, 2),
-                matingCallRadius = self.mutate((traits1.matingCallRadius + traits2.matingCallRadius) // 2 , 10, 1),
-                digestionTime = self.mutate((traits1.digestionTime + traits2.digestionTime) // 2 , 1, 1),
-                generation = generation
-            )
-
-        elif isinstance(traits1, CarnivoreTraits):
-            return CarnivoreTraits(
-                huntingRadius = self.mutate((traits1.huntingRadius + traits2.huntingRadius) // 2, 2, 1),
-                speed = self.mutate((traits1.speed + traits2.speed) //2, 1, 1),
-                energyCapacity = self.mutate((traits1.energyCapacity + traits2.energyCapacity) // 2 , 10, 1),
-                birthEnergy = self.mutate((traits1.birthEnergy + traits2.birthEnergy) // 2 , 5, 1),
-                slowDownAge = self.mutate((traits1.slowDownAge + traits2.slowDownAge) // 2 , 3, 1),
-                reproductionAge = self.mutate((traits1.reproductionAge + traits2.reproductionAge) // 2 , 1, 2),
-                matingCallRadius = self.mutate((traits1.matingCallRadius + traits2.matingCallRadius) // 2 , 10, 1),
-                digestionTime = self.mutate((traits1.digestionTime + traits2.digestionTime) // 2 , 1, 1),
-                generation = generation
-            )
 
 
 class HerbivoreTraits(OrganismTraits):

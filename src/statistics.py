@@ -9,7 +9,7 @@ class Statistics:
         self.lifeSpanBySpecies = defaultdict(lambda: [1])
         
 
-    def logTraits(self, traitName, generation, value):
+    def logGenetics(self, traitName, generation, value):
         self.traitLog[traitName][generation].append(value)
 
 
@@ -20,7 +20,7 @@ class Statistics:
 
 
     #Prints graph for average speed per generation
-    def plotTraitEvolution(self, traitName):
+    def plotGeneticsEvolution(self, traitName):
         if traitName not in self.traitLog:
             print(f"No trait: '{traitName}'")
             return
