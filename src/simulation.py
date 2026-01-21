@@ -81,7 +81,7 @@ class Simulation:
         self.organismList.append(org)
         for geneticsName, value in vars(org.genetics).items():
             if geneticsName != "generation":
-                self.statistics.logTraits(geneticsName, org.genetics.generation, value)
+                self.statistics.logGenetics(geneticsName, org.genetics.generation, value)
 
 
     def createInitialCarnivores(self, i):
@@ -132,7 +132,7 @@ class Simulation:
         if isinstance(child.genetics, HerbivoreGenetics):
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
-                    self.statistics.logTraits(geneticName, child.genetics.generation, value)
+                    self.statistics.logGenetics(geneticName, child.genetics.generation, value)
         #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.genetics.generation})")
         return child
 
