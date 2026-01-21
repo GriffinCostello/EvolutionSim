@@ -5,6 +5,7 @@ import math
 
 from src.simulation import Simulation
 from src.traits import *
+from src.genetics import *
 from src.position import Position
 from src.organism import Organism
 from src.food import Food, FoodStage
@@ -19,7 +20,7 @@ def test_best_food():
         position = Position(
             x=0, y=0
         ),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 1,
@@ -114,7 +115,7 @@ def test_best_Prey():
             x=0, 
             y=0
         ),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 4,
             speed = 4,
             energyCapacity = 250,
@@ -138,7 +139,7 @@ def test_best_Prey():
             x=2, 
             y=1
         ),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 0,
@@ -163,7 +164,7 @@ def test_best_Prey():
             x=1, 
             y=2
         ),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 0,
@@ -188,7 +189,7 @@ def test_best_Prey():
             x=0, 
             y=1
         ),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 0,

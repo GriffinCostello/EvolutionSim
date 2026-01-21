@@ -3,6 +3,7 @@ from src.simulation import Simulation
 from src.position import Position
 from src.organism import Organism
 from src.traits import HerbivoreTraits
+from src.genetics import HerbivoreGenetics
 import pytest
 
 def test_world_size_zero():
@@ -16,7 +17,7 @@ def test_world_size_zero():
             age = 5,
             energy = 100,
             position = Position(x=0, y=0),
-            traits = HerbivoreTraits(
+            genetics = HerbivoreGenetics(
                 foodDetectionRadius = 5,
                 predatorDetectionRadius = 2,
                 speed = 5,

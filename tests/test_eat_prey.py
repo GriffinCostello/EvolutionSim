@@ -5,6 +5,7 @@ import math
 
 from src.simulation import Simulation
 from src.traits import *
+from src.genetics import *
 from src.position import Position
 from src.organism import Organism
 
@@ -16,7 +17,7 @@ def test_carnivore_eats_herbivore():
         age = 5,
         energy = 100,
         position = Position(x=1, y=1),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 1,
@@ -37,7 +38,7 @@ def test_carnivore_eats_herbivore():
         age = 5,
         energy = 90,
         position = Position(x=2, y=2),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 5,
             speed = 4,
             energyCapacity = 250,
@@ -69,7 +70,7 @@ def test_carnivore_no_prey():
         age = 5,
         energy = 90,
         position = Position(x=1, y=1),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 2,
             speed = 4,
             energyCapacity = 250,
@@ -90,7 +91,7 @@ def test_carnivore_no_prey():
         age = 5,
         energy = 90,
         position = Position(x=3, y=3),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 2,
             speed = 4,
             energyCapacity = 250,
@@ -122,7 +123,7 @@ def test_herbivore_flee():
         age = 5,
         energy = 100,
         position = Position(x=1, y=1),
-        traits = HerbivoreTraits(
+        genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
             predatorDetectionRadius = 2,
             speed = 1,
@@ -144,7 +145,7 @@ def test_herbivore_flee():
         age = 5,
         energy = 90,
         position = Position(x=2, y=2),
-        traits = CarnivoreTraits(
+        genetics = CarnivoreGenetics(
             huntingRadius = 5,
             speed = 0,
             energyCapacity = 250,
