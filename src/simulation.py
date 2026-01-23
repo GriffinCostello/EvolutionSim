@@ -22,6 +22,8 @@ class Simulation:
 
         #Global variables 
         self.organismList = []
+        self.carnivoreList = []
+        self.herbivoreList = []
         self.organismChildCounter = {}
         self.stopEvent = self.env.event()
 
@@ -79,6 +81,8 @@ class Simulation:
             simulation = self
         )
         self.organismList.append(org)
+        self.herbivoreList.append(org)
+
         for geneticsName, value in vars(org.genetics).items():
             if geneticsName != "generation":
                 self.statistics.logGenetics(geneticsName, org.genetics.generation, value)
@@ -109,6 +113,7 @@ class Simulation:
             simulation = self
         )
         self.organismList.append(org)
+        self.carnivoreList.append(org)
         
 
     
@@ -130,10 +135,14 @@ class Simulation:
             simulation = parent1.simulation
         )
         if isinstance(child.genetics, HerbivoreGenetics):
+            self.herbivoreList.append(child)
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
                     self.statistics.logGenetics(geneticName, child.genetics.generation, value)
-        #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.genetics.generation})")
+        elif isinstance(child.genetics, CarnivoreGenetics):
+            self.carnivoreList.append(child)
+        
+        self.organismList.append(child)
         return child
 
     

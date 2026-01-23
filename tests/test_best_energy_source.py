@@ -35,6 +35,7 @@ def test_best_food():
         simulation = simulation
     )
     herbivore.simulation.organismList.append(herbivore)
+    herbivore.simulation.herbivoreList.append(herbivore)
     
     food1 = Food(
         age = 20,
@@ -129,6 +130,7 @@ def test_best_Prey():
         simulation = simulation
     )
     carnivore.simulation.organismList.append(carnivore)
+    carnivore.simulation.carnivoreList.append(carnivore)
 
     herbivore1 = Organism(
         name = "Herbivore_Test", 
@@ -154,6 +156,7 @@ def test_best_Prey():
         simulation = simulation
     )
     herbivore1.simulation.organismList.append(herbivore1)
+    herbivore1.simulation.herbivoreList.append(herbivore1)
 
     herbivore2 = Organism(
         name = "Herbivore_Test", 
@@ -179,6 +182,7 @@ def test_best_Prey():
         simulation = simulation
     )
     herbivore2.simulation.organismList.append(herbivore2)
+    herbivore2.simulation.herbivoreList.append(herbivore2)
 
     herbivore3 = Organism(
         name = "Herbivore_Test", 
@@ -204,6 +208,7 @@ def test_best_Prey():
         simulation = simulation
     )
     herbivore3.simulation.organismList.append(herbivore3)
+    herbivore3.simulation.herbivoreList.append(herbivore3)
     
     simulation.run(ticks = 1)
 

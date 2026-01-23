@@ -3,6 +3,7 @@ import math
 from .position import Position
 from .food import Food
 from .traits import *
+from .genetics import *
 
 class Actions:
     def __init__(self, organism: "Organism"):
@@ -78,7 +79,7 @@ class Actions:
     def scanForPrey(self):
         bestPrey = None
         bestScore = 0
-        for other in self.org.simulation.organismList:
+        for other in self.org.simulation.herbivoreList:
             if other is self.org:
                 continue
             if other.species == self.org.species:
@@ -98,7 +99,7 @@ class Actions:
 
     # Looks for predators nearby for herbivores
     def scanForPredators(self):
-        for other in self.org.simulation.organismList:
+        for other in self.org.simulation.carnivoreList:
             if other is self.org:
                 continue
             if other.species == self.org.species:
@@ -208,7 +209,7 @@ class Actions:
     
     #Eats food at a location
     def eatPrey(self, prey):
-        if prey in self.org.simulation.organismList:
+        if prey in self.org.simulation.herbivoreList:
             gainedEnergy = prey.energy
             prey.energy = -(1000000)  # Ensure prey dies, lets the live() method handle removal
         else:
@@ -229,8 +230,12 @@ class Actions:
         orgBirthEnergy = org.traits.birthEnergy
 
         matingRadiusSquared = org.traits.matingCallRadius * org.traits.matingCallRadius
+        if isinstance(self.org.genetics, HerbivoreGenetics):
+            options = org.simulation.herbivoreList
+        elif isinstance(self.org.genetics, CarnivoreGenetics):
+            options = org.simulation.carnivoreList
 
-        for otherOrganism in org.simulation.organismList:
+        for otherOrganism in options:
             if otherOrganism is org:
                 continue
             if otherOrganism.age < otherOrganism.traits.reproductionAge:
@@ -257,18 +262,18 @@ class Actions:
             # stage-specific variation ranges
             if stage == FoodStage.SEED:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 1, 1)),
-                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 1, 1)),
+                    "duration": max(1, org.genetics.mutate(dictionary["duration"] , 1, 1)),
+                    "nutrition": max(0, org.genetics.mutate(dictionary["nutrition"] , 1, 1)),
                 }
             elif stage == FoodStage.RIPE:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 3, 1)),
-                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 5, 1)),
+                    "duration": max(1, org.genetics.mutate(dictionary["duration"] , 3, 1)),
+                    "nutrition": max(0, org.genetics.mutate(dictionary["nutrition"] , 5, 1)),
                 }
             else:
                 stageConfigurationCopy[stage] = {
-                    "duration": max(1, org.traits.mutate(dictionary["duration"] , 2, 1)),
-                    "nutrition": max(0, org.traits.mutate(dictionary["nutrition"] , 2, 1)),
+                    "duration": max(1, org.genetics.mutate(dictionary["duration"] , 2, 1)),
+                    "nutrition": max(0, org.genetics.mutate(dictionary["nutrition"] , 2, 1)),
                 }
         
         food = Food(

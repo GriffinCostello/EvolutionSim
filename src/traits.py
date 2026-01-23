@@ -1,10 +1,11 @@
 from enum import Enum, auto
+from .genetics import Genetics
 import random
 
 class Traits:
     def __init__(self, generation):
         self.generation = generation
-        
+
 
 class OrganismTraits(Traits):
     def __init__(self, speed, energyCapacity, birthEnergy, slowDownAge, reproductionAge, matingCallRadius, digestionTime, generation):
