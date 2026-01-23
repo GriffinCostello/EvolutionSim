@@ -23,6 +23,7 @@ class Simulation:
         #Global variables 
         self.organismList = []
         self.carnivoreList = []
+        self.herbivoreList = []
         self.organismChildCounter = {}
         self.stopEvent = self.env.event()
 
@@ -80,6 +81,7 @@ class Simulation:
             simulation = self
         )
         self.organismList.append(org)
+        self.herbivoreList.append(org)
 
         for geneticsName, value in vars(org.genetics).items():
             if geneticsName != "generation":
@@ -133,6 +135,7 @@ class Simulation:
             simulation = parent1.simulation
         )
         if isinstance(child.genetics, HerbivoreGenetics):
+            self.herbivoreList.append(child)
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
                     self.statistics.logGenetics(geneticName, child.genetics.generation, value)
