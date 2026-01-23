@@ -54,6 +54,10 @@ class Organism:
                 #print(f"{self.name} has run out of energy and died at age {self.age}.")
                 self.simulation.statistics.logLifespan(self.age, self.species)
                 self.simulation.organismList.remove(self)
+                if isinstance(self.genetics, HerbivoreGenetics):
+                    self.simulation.herbivoreList.remove(self)
+                elif isinstance(self.genetics, CarnivoreGenetics):
+                    self.simulation.carnivoreList.remove(self)
                 
                 if len(self.simulation.organismList) == 0:
                     if not self.simulation.stopEvent.triggered:

@@ -139,7 +139,7 @@ class Simulation:
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
                     self.statistics.logGenetics(geneticName, child.genetics.generation, value)
-        else:
+        elif isinstance(child.genetics, CarnivoreGenetics):
             self.carnivoreList.append(child)
         
         self.organismList.append(child)

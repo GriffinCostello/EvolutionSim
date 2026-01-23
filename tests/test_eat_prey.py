@@ -32,6 +32,7 @@ def test_carnivore_eats_herbivore():
         simulation = simulation
     )
     herbivore.simulation.organismList.append(herbivore)
+    herbivore.simulation.herbivoreList.append(herbivore)
     carnivore = Organism(
         name = "Carnivore_Test", 
         species = "Carnivore",
@@ -52,6 +53,7 @@ def test_carnivore_eats_herbivore():
         simulation = simulation
     )
     carnivore.simulation.organismList.append(carnivore)
+    carnivore.simulation.carnivoreList.append(carnivore)
     simulation.run(ticks = 1)
     print(carnivore.position.asTuple())
     assert carnivore.energy > 100, "Carnivore did not gain energy after eating prey."
@@ -84,6 +86,7 @@ def test_carnivore_no_prey():
         simulation = simulation
     )
     carnivore1.simulation.organismList.append(carnivore1)
+    carnivore1.simulation.carnivoreList.append(carnivore1)
 
     carnivore2 = Organism(
         name = "Carnivore_NoPrey", 
@@ -105,6 +108,7 @@ def test_carnivore_no_prey():
         simulation = simulation
     )
     carnivore2.simulation.organismList.append(carnivore2)
+    carnivore2.simulation.carnivoreList.append(carnivore2)
 
     initial_energy = carnivore1.energy
     simulation.run(ticks = 5)
@@ -138,6 +142,7 @@ def test_herbivore_flee():
         simulation = simulation
     )
     herbivore.simulation.organismList.append(herbivore)
+    herbivore.simulation.herbivoreList.append(herbivore)
 
     carnivore = Organism(
         name = "Carnivore_Test", 
@@ -159,6 +164,7 @@ def test_herbivore_flee():
         simulation = simulation
     )
     carnivore.simulation.organismList.append(carnivore)
+    carnivore.simulation.carnivoreList.append(carnivore)
 
     simulation.run(ticks = 1)
     assert herbivore.position.asTuple() == (0, 0), "Herbivore did not flee from the carnivore."
