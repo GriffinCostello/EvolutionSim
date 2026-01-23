@@ -22,6 +22,7 @@ class Simulation:
 
         #Global variables 
         self.organismList = []
+        self.carnivoreList = []
         self.organismChildCounter = {}
         self.stopEvent = self.env.event()
 
@@ -79,6 +80,7 @@ class Simulation:
             simulation = self
         )
         self.organismList.append(org)
+
         for geneticsName, value in vars(org.genetics).items():
             if geneticsName != "generation":
                 self.statistics.logGenetics(geneticsName, org.genetics.generation, value)
@@ -109,6 +111,7 @@ class Simulation:
             simulation = self
         )
         self.organismList.append(org)
+        self.carnivoreList.append(org)
         
 
     
@@ -133,7 +136,10 @@ class Simulation:
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
                     self.statistics.logGenetics(geneticName, child.genetics.generation, value)
-        #print(f"{parent1.name} and {parent2.name} have mated to produce {child.name} (Gen {child.genetics.generation})")
+        else:
+            self.carnivoreList.append(child)
+        
+        self.organismList.append(child)
         return child
 
     

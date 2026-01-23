@@ -24,4 +24,3 @@ class Reproduction:
         parent2.energy = max(parent2.energy - parent2.genetics.birthEnergy//3, 0)
 
         child = self.org.simulation.createChild(parent1, parent2)
-        parent1.simulation.organismList.append(child)
