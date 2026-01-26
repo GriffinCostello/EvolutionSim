@@ -1,9 +1,8 @@
-import pytest
 import random
-from src.genetics import Genetics, OrganismGenetics, HerbivoreGenetics, CarnivoreGenetics
+from src.genetics import *
 
 
-def test_mutate_increases_value(self):
+def test_mutate_increases_value():
     random.seed(42)
     base_value = 10
     variance = 2
@@ -17,7 +16,7 @@ def test_mutate_increases_value(self):
     assert max(results) > base_value, "Mutation should be able to increase values"
     
 
-def test_mutate_decreases_value(self):
+def test_mutate_decreases_value():
     random.seed(42)
     base_value = 10
     variance = 2
@@ -31,7 +30,7 @@ def test_mutate_decreases_value(self):
     assert min(results) < base_value, "Mutation should be able to decrease values"
     
 
-def test_mutate_respects_minimum(self):
+def test_mutate_respects_minimum():
     minimum = 5
     base_value = 6
     variance = 100
