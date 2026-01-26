@@ -12,7 +12,7 @@ class Actions:
 
     # Returns the next action and target for the organism(action, target)
     def decideNextAction(self):
-        if self.org.energy > self.org.traits.energyCapacity * 0.7:
+        if self.org.energy > self.org.traits.birthEnergy * 2 and self.org.age >= self.org.traits.reproductionAge:
             if(self.org.age >= self.org.traits.reproductionAge):
                 return ("Mate", None)
 

@@ -12,10 +12,10 @@ from .statistics import Statistics
 from .genetics import *
 
 class Simulation:
-    def __init__(self, worldsize, startTime = time.time()):
+    def __init__(self, worldsize):
         self.env = simpy.Environment()
         self.worldSize = worldsize
-        self.startTime = startTime
+        self.startTime = time.time()
 
         self.world = World(worldsize, self)
         self.statistics = Statistics()
@@ -41,18 +41,23 @@ class Simulation:
 
     def systemTick(self):
         remaining = self.ticks
+        self.startTime = time.time()
         while True:
-            if self.env.now % 100 == 0:
+            if self.env.now % 100 == 0 and self.env.now != 0:
                 if remaining < 0:
                     pass
                 else:
-                    elapsed = time.time()-self.startTime
-                    minutes = int(elapsed // 60)
-                    seconds = elapsed % 60
-                    print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Organisms: {len(self.organismList):>10} | Herbivores: {len(self.herbivoreList):>10} | Carnivores: {len(self.carnivoreList):>10}", end = "", flush = True)
+                    self.printTime()
                 remaining = remaining -100
             yield self.env.timeout(1)
+
             
+    def printTime(self):
+        elapsed = time.time()-self.startTime
+        minutes = int(elapsed // 60)
+        seconds = elapsed % 60
+        print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Organisms: {len(self.organismList):>10} | Herbivores: {len(self.herbivoreList):>10} | Carnivores: {len(self.carnivoreList):>10}", end = "", flush = True)
+
 
     #Create the child object
     def createInitialHerbivores(self, i):
@@ -60,7 +65,7 @@ class Simulation:
             foodDetectionRadius = 30,
             predatorDetectionRadius = 10,
             speed = 6,
-            energyCapacity = 500,
+            energyCapacity = 700,
             birthEnergy = 80,
             slowDownAge = 60,
             reproductionAge = 20,
@@ -71,8 +76,8 @@ class Simulation:
         org = Organism(
             name = "Herbivore_Gen1_" + str(i), 
             species = "Herbivore",
-            age = random.randint(1, 20),
-            energy = random.randint(150,200),
+            age = random.randint(10, 30),
+            energy = random.randint(450,550),
             position = Position(
                 x=random.randint(0, self.worldSize-1),
                 y=random.randint(0, self.worldSize-1)
@@ -90,7 +95,7 @@ class Simulation:
 
     def createInitialCarnivores(self, i):
         genetics = CarnivoreGenetics(
-            huntingRadius = 30,
+            huntingRadius = 50,
             speed = 8,
             energyCapacity = 500,
             birthEnergy = 80,
@@ -103,8 +108,8 @@ class Simulation:
         org = Organism(
             name = "Carnivore_Gen1_" + str(i), 
             species = "Carnivore",
-            age = random.randint(1, 20),
-            energy = random.randint(150,200),
+            age = random.randint(10, 30),
+            energy = random.randint(350,400),
             position = Position(
                 x=random.randint(0, self.worldSize-1),
                 y=random.randint(0, self.worldSize-1)
