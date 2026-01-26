@@ -95,9 +95,9 @@ class Simulation:
 
     def createInitialCarnivores(self, i):
         genetics = CarnivoreGenetics(
-            huntingRadius = 50,
+            huntingRadius = 60,  # Increased from 50 to help find prey
             speed = 8,
-            energyCapacity = 500,
+            energyCapacity = 700,  # Increased from 500 to match herbivores
             birthEnergy = 80,
             slowDownAge = 60,
             reproductionAge = 20,
@@ -109,7 +109,7 @@ class Simulation:
             name = "Carnivore_Gen1_" + str(i), 
             species = "Carnivore",
             age = random.randint(10, 30),
-            energy = random.randint(350,400),
+            energy = random.randint(500,600),  # Increased from 350-400 to 500-600 (higher relative to capacity)
             position = Position(
                 x=random.randint(0, self.worldSize-1),
                 y=random.randint(0, self.worldSize-1)
