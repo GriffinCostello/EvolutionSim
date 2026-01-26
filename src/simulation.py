@@ -49,7 +49,7 @@ class Simulation:
                     elapsed = time.time()-self.startTime
                     minutes = int(elapsed // 60)
                     seconds = elapsed % 60
-                    print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Organisms: {len(self.organismList):>10}", end = "", flush = True)
+                    print(f"\rElapsed Time: {minutes:02d}:{seconds:05.2f} | Organisms: {len(self.organismList):>10} | Herbivores: {len(self.herbivoreList):>10} | Carnivores: {len(self.carnivoreList):>10}", end = "", flush = True)
                 remaining = remaining -100
             yield self.env.timeout(1)
             
