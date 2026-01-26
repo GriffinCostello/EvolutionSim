@@ -38,7 +38,7 @@ class Organism:
         if self.age == self.nextSlowDownAge:
             self.traits.speed = max(self.traits.speed - 1, 1)
             self.traits.energyCapacity = max(self.traits.energyCapacity - 30, 100)
-            if isinstance(self.traits, HerbivoreTraits):
+            if isinstance(self.genetics, HerbivoreGenetics):
                 self.traits.foodDetectionRadius = max(self.traits.foodDetectionRadius -3, 1)
             self.nextSlowDownAge += (self.nextSlowDownAge // 2)
     
@@ -74,13 +74,13 @@ class Organism:
                     self.actions.matingCall()
 
                 case "LookForFood":
-                    if isinstance(self.traits, HerbivoreTraits):
+                    if isinstance(self.genetics, HerbivoreGenetics):
                         if target:
                             self.actions.moveTowards(target)
                             if (self.position.x, self.position.y) == target:
                                 self.actions.eatFood(target)
 
-                    elif isinstance(self.traits, CarnivoreTraits):
+                    elif isinstance(self.genetics, CarnivoreGenetics):
                         if target:
                             self.actions.moveTowards(target.position.asTuple())
                             self.actions.eatPrey(target)

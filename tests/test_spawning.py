@@ -279,7 +279,7 @@ def test_carnivore_reproduction():
     assert len(simulation.organismList) == 3, "No offspring was produced after carnivores mated or too many organisms present."
     for x in simulation.organismList:
         if x not in [carnivore1, carnivore2]:
-            assert isinstance(x.traits, CarnivoreTraits), "Offspring does not have CarnivoreTraits."
+            assert isinstance(x.genetics, CarnivoreGenetics), "Offspring does not have Carnivore Genetics."
             assert x.traits.generation == 2, "Offspring generation is not correct."
             assert x.traits.energyCapacity <= (carnivore1.traits.energyCapacity + carnivore2.traits.energyCapacity)//2 + 10, "Offspring energy capacity is too high."
             assert x.traits.energyCapacity >= (carnivore1.traits.energyCapacity + carnivore2.traits.energyCapacity)//2 - 10, "Offspring energy capacity is too low."
@@ -340,7 +340,7 @@ def test_herbivore_reproduction():
     assert len(simulation.organismList) == 3, "No offspring was produced after herbivores mated or too many organisms present."
     for x in simulation.organismList:
         if x not in [herbivore1, herbivore2]:
-            assert isinstance(x.traits, HerbivoreTraits), "Offspring does not have HerbivoreTraits."
+            assert isinstance(x.genetics, HerbivoreGenetics), "Offspring does not have Herbivore Genetics."
             assert x.traits.generation == 2, "Offspring generation is not correct."
             assert x.traits.energyCapacity <= (herbivore1.traits.energyCapacity + herbivore2.traits.energyCapacity)//2 + 10, "Offspring energy capacity is too high."
             assert x.traits.energyCapacity >= (herbivore1.traits.energyCapacity + herbivore2.traits.energyCapacity)//2 - 10, "Offspring energy capacity is too low."

@@ -17,12 +17,12 @@ class Actions:
                 return ("Mate", None)
 
         target = None
-        if isinstance(self.org.traits, HerbivoreTraits):
+        if isinstance(self.org.genetics, HerbivoreGenetics):
             danger = self.scanForPredators()
             if danger is not None:
                 return ("Flee", danger)
             target = self.scanForFood()
-        elif isinstance(self.org.traits, CarnivoreTraits):
+        elif isinstance(self.org.genetics, CarnivoreGenetics):
             target = self.scanForPrey()
 
         if target:
