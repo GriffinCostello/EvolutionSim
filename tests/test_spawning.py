@@ -260,7 +260,7 @@ def test_carnivore_reproduction():
         genetics = CarnivoreGenetics(
             huntingRadius = 2,
             speed = 1,
-            energyCapacity = 250,
+            energyCapacity = 300,
             birthEnergy = 80,
             slowDownAge = 30,
             reproductionAge = 20,
