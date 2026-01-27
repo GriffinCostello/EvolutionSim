@@ -255,7 +255,7 @@ def test_carnivore_reproduction():
         name = "Carnivore_NoPrey", 
         species = "Carnivore1",
         age = 25,
-        energy = 200,
+        energy = 100,
         position = Position(x=3, y=3),
         genetics = CarnivoreGenetics(
             huntingRadius = 2,
