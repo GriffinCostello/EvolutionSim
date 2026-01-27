@@ -8,18 +8,19 @@ from .organism import Organism
 
 
 def main():
-    start = time.time()
-    simulation = Simulation(worldsize=1000, startTime = start)
+    simulation = Simulation(worldsize=1000)
 
     #Add initial herbivores
-    for i in range(1000):
+    for i in range(1300):
         simulation.createInitialHerbivores(i)
 
     #Add initial carnivores
     for i in range(100):
         simulation.createInitialCarnivores(i)
 
+    simulation.printTime()
     simulation.run(ticks = 50000)
+    
     # Print average lifespan summary once at end of run (covers timeout or all-dead)
     totalAverageLifeSpan = sum(simulation.statistics.lifeSpan) / len(simulation.statistics.lifeSpan)
     herbivoreAverageLifeSpan = sum(simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1])) / len(simulation.statistics.lifeSpanBySpecies.get("Herbivore", [1]))

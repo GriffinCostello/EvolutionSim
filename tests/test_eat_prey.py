@@ -129,7 +129,7 @@ def test_herbivore_flee():
         position = Position(x=1, y=1),
         genetics = HerbivoreGenetics(
             foodDetectionRadius = 5,
-            predatorDetectionRadius = 2,
+            predatorDetectionRadius = 5,
             speed = 1,
             energyCapacity = 250,
             birthEnergy = 80,

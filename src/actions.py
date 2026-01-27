@@ -12,17 +12,18 @@ class Actions:
 
     # Returns the next action and target for the organism(action, target)
     def decideNextAction(self):
-        if self.org.energy > self.org.traits.energyCapacity * 0.7:
+        reproductionThreshold = 0.6 if isinstance(self.org.genetics, CarnivoreGenetics) else 0.7
+        if self.org.energy > self.org.traits.energyCapacity * reproductionThreshold:
             if(self.org.age >= self.org.traits.reproductionAge):
                 return ("Mate", None)
 
         target = None
-        if isinstance(self.org.traits, HerbivoreTraits):
+        if isinstance(self.org.genetics, HerbivoreGenetics):
             danger = self.scanForPredators()
             if danger is not None:
                 return ("Flee", danger)
             target = self.scanForFood()
-        elif isinstance(self.org.traits, CarnivoreTraits):
+        elif isinstance(self.org.genetics, CarnivoreGenetics):
             target = self.scanForPrey()
 
         if target:
@@ -79,6 +80,7 @@ class Actions:
     def scanForPrey(self):
         bestPrey = None
         bestScore = 0
+        
         for other in self.org.simulation.herbivoreList:
             if other is self.org:
                 continue
@@ -86,7 +88,14 @@ class Actions:
                 continue
 
             distance = self.org.position.distanceTo(other.position)
+
+            # Check if prey is too far to catch
             if distance > self.org.traits.huntingRadius:
+                continue
+
+            # Allow targeting prey within 3x speed for better hunting range
+            # (they still need to get within 2 units to actually eat)
+            if distance > self.org.traits.speed * 3:
                 continue
 
             score = other.energy / (distance + 1)
@@ -209,6 +218,11 @@ class Actions:
     
     #Eats food at a location
     def eatPrey(self, prey):
+        # Check if prey is close enough to catch (within 2 units)
+        distance = self.org.position.distanceTo(prey.position)
+        if distance > self.org.traits.speed*1.5:
+            return  
+        
         if prey in self.org.simulation.herbivoreList:
             gainedEnergy = prey.energy
             prey.energy = -(1000000)  # Ensure prey dies, lets the live() method handle removal
