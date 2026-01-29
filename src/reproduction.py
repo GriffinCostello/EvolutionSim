@@ -4,6 +4,7 @@ import random
 from .position import Position
 from .food import Food
 from .genetics import *
+from .organism import *
 
 class Reproduction:
     def __init__(self, organism: "Organism"):
