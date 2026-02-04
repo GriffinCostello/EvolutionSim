@@ -7,7 +7,7 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Organisms move randomly or toward the nearest food within their detection radius.
 - Energy management: moving and actions consume energy; eating food restores energy.
 - Organisms age over time and may slow down based on age.
-- Food is randomly distributed in the world.
+- Food is randomly distributed in the world and has varying nutrition levels based on time.
 - Mating calls: organisms can detect nearby potential mates within a radius.
 - Shared 2D world environment for all organisms using SimPy for concurrent simulation.
 - Added reproduction functionality where organisms can create offspring with inherited traits.
@@ -19,7 +19,6 @@ This is an agent-based simulation of organisms in a 2D world. Organisms have ind
 - Evolutionary dynamics and population growth.
 - More complex behaviors: group hunting, competition, or territory defense.
 - Environmental effects: seasonal food availability, hazards, or migration.
-- Visualization of the simulation using graphical libraries.
 - Add third plane of space for height
 
 ## How to Run
