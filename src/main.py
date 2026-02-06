@@ -27,11 +27,12 @@ def main():
     carnivoreAverageLifeSpan = sum(simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1])) / len(simulation.statistics.lifeSpanBySpecies.get("Carnivore", [1]))
     print(f"\nSimulation finished. Overall avg lifespan: {totalAverageLifeSpan:.4f}; Herbivore avg: {herbivoreAverageLifeSpan:.4f}; Carnivore avg: {carnivoreAverageLifeSpan:.4f}")
 
-    simulation.statistics.plotGeneticsEvolution("speed")
-    simulation.statistics.plotGeneticsEvolution("energyCapacity")
-    simulation.statistics.plotGeneticsEvolution("reproductionAge")
-    simulation.statistics.plotGeneticsEvolution("foodDetectionRadius")
-    simulation.statistics.plotGeneticsEvolution("predatorDetectionRadius")
+    simulation.statistics.plotGeneticsEvolution("speed", "Herbivore")
+    simulation.statistics.plotGeneticsEvolution("speed", "Carnivore")
+    simulation.statistics.plotGeneticsEvolution("energyCapacity", "Herbivore")
+    simulation.statistics.plotGeneticsEvolution("reproductionAge", "Herbivore")
+    simulation.statistics.plotGeneticsEvolution("foodDetectionRadius", "Herbivore")
+    simulation.statistics.plotGeneticsEvolution("predatorDetectionRadius", "Herbivore")
 
 if __name__ == "__main__":
     main()
