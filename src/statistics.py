@@ -4,13 +4,18 @@ from collections import defaultdict
 
 class Statistics:
     def __init__(self):
-        self.traitLog = defaultdict(lambda: defaultdict(list))
+        self.traitLog = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+        self.traitLogHerbivore = self.traitLog['Herbivore']
+        self.traitLogCarnivore = self.traitLog['Carnivore']
         self.lifeSpan = [1] # list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.lifeSpanBySpecies = defaultdict(lambda: [1])
         
 
-    def logGenetics(self, traitName, generation, value):
-        self.traitLog[traitName][generation].append(value)
+    def logGeneticsHerbivore(self, traitName, generation, value):
+        self.traitLogHerbivore[traitName][generation].append(value)
+
+    def logGeneticsCarnivore(self, traitName, generation, value):
+        self.traitLogCarnivore[traitName][generation].append(value)
 
 
     def logLifespan(self, lifespan, species=None):
@@ -20,14 +25,19 @@ class Statistics:
 
 
     #Prints graph for average speed per generation
-    def plotGeneticsEvolution(self, traitName):
-        if traitName not in self.traitLog:
+    def plotGeneticsEvolution(self, traitName, species):
+        if species == "Herbivore":
+            traitLog = self.traitLogHerbivore
+        elif species == "Carnivore":
+            traitLog = self.traitLogCarnivore
+            
+        if traitName not in traitLog:
             print(f"No trait: '{traitName}'")
             return
 
-        generations = sorted(self.traitLog[traitName].keys())
+        generations = sorted(traitLog[traitName].keys())
         medians = [
-            np.median(self.traitLog[traitName][g])
+            np.median(traitLog[traitName][g])
             for g in generations
         ]
 
@@ -35,6 +45,6 @@ class Statistics:
         plt.plot(generations, medians, marker='o')
         plt.xlabel("Generation")
         plt.ylabel(f"Median {traitName}")
-        plt.title(f"Herbivore {traitName} Evolution")
+        plt.title(f"{species} {traitName} Evolution")
         plt.show()
         

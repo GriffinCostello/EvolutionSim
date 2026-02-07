@@ -90,7 +90,7 @@ class Simulation:
 
         for geneticsName, value in vars(org.genetics).items():
             if geneticsName != "generation":
-                self.statistics.logGenetics(geneticsName, org.genetics.generation, value)
+                self.statistics.logGeneticsHerbivore(geneticsName, org.genetics.generation, value)
 
 
     def createInitialCarnivores(self, i):
@@ -119,6 +119,9 @@ class Simulation:
         )
         self.organismList.append(org)
         self.carnivoreList.append(org)
+        for geneticsName, value in vars(org.genetics).items():
+            if geneticsName != "generation":
+                self.statistics.logGeneticsCarnivore(geneticsName, org.genetics.generation, value)
         
 
     
@@ -143,9 +146,12 @@ class Simulation:
             self.herbivoreList.append(child)
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
-                    self.statistics.logGenetics(geneticName, child.genetics.generation, value)
+                    self.statistics.logGeneticsHerbivore(geneticName, child.genetics.generation, value)
         elif isinstance(child.genetics, CarnivoreGenetics):
             self.carnivoreList.append(child)
+            for geneticsName, value in vars(child.genetics).items():
+                if geneticsName != "generation":
+                    self.statistics.logGeneticsCarnivore(geneticsName, child.genetics.generation, value)
         
         self.organismList.append(child)
         return child
