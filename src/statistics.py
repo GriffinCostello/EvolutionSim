@@ -4,18 +4,18 @@ from collections import defaultdict
 
 class Statistics:
     def __init__(self):
-        self.traitLog = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-        self.traitLogHerbivore = self.traitLog['Herbivore']
-        self.traitLogCarnivore = self.traitLog['Carnivore']
+        self.geneticLog = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+        self.geneticLogHerbivore = self.geneticLog['Herbivore']
+        self.geneticLogCarnivore = self.geneticLog['Carnivore']
         self.lifeSpan = [1] # list to keep track of lifespans of dead organisms, base value 1 to prevent division by zero
         self.lifeSpanBySpecies = defaultdict(lambda: [1])
         
 
     def logGeneticsHerbivore(self, traitName, generation, value):
-        self.traitLogHerbivore[traitName][generation].append(value)
+        self.geneticLogHerbivore[traitName][generation].append(value)
 
     def logGeneticsCarnivore(self, traitName, generation, value):
-        self.traitLogCarnivore[traitName][generation].append(value)
+        self.geneticLogCarnivore[traitName][generation].append(value)
 
 
     def logLifespan(self, lifespan, species=None):
@@ -25,26 +25,26 @@ class Statistics:
 
 
     #Prints graph for average speed per generation
-    def plotGeneticsEvolution(self, traitName, species):
+    def plotGeneticsEvolution(self, geneticName, species):
         if species == "Herbivore":
-            traitLog = self.traitLogHerbivore
+            geneticLog = self.geneticLogHerbivore
         elif species == "Carnivore":
-            traitLog = self.traitLogCarnivore
+            geneticLog = self.geneticLogCarnivore
             
-        if traitName not in traitLog:
-            print(f"No trait: '{traitName}'")
+        if geneticName not in geneticLog:
+            print(f"No trait: '{geneticName}'")
             return
 
-        generations = sorted(traitLog[traitName].keys())
+        generations = sorted(geneticLog[geneticName].keys())
         medians = [
-            np.median(traitLog[traitName][g])
+            np.median(geneticLog[geneticName][g])
             for g in generations
         ]
 
         plt.figure()
         plt.plot(generations, medians, marker='o')
         plt.xlabel("Generation")
-        plt.ylabel(f"Median {traitName}")
-        plt.title(f"{species} {traitName} Evolution")
+        plt.ylabel(f"Median {geneticName}")
+        plt.title(f"{species} {geneticName} Evolution")
         plt.show()
         

@@ -35,8 +35,8 @@ class Organism:
         #Adds the organism to respective lists
         self.appendLists()
 
-        #Logs Traits 
-        self.logTraits()
+        #Logs genetics 
+        self.logGenetics()
 
 
     def tick(self):
@@ -106,7 +106,7 @@ class Organism:
             self.simulation.carnivoreList.append(self)
 
 
-    def logTraits(self):
+    def logGenetics(self):
         if isinstance(self.genetics, HerbivoreGenetics):
             for geneticsName, value in vars(self.genetics).items():
                 if geneticsName != "generation":

@@ -33,5 +33,5 @@ def test_printing_herbivores():
 
     simulation.statistics.plotGeneticsEvolution("speed", "Herbivore")
     stats = simulation.statistics
-    assert "speed" in stats.traitLogHerbivore
-    assert len(stats.traitLogHerbivore["speed"]) == 100
+    assert "speed" in stats.geneticLogHerbivore
+    assert len(stats.geneticLogHerbivore["speed"]) == 100
