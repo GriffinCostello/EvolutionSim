@@ -35,6 +35,9 @@ class Organism:
         #Adds the organism to respective lists
         self.appendLists()
 
+        #Logs Traits 
+        self.logTraits()
+
 
     def tick(self):
         self.age += 1
@@ -46,14 +49,6 @@ class Organism:
             self.nextSlowDownAge += (self.nextSlowDownAge // 2)
     
         self.energy = max(self.energy - self.traits.energyConsumption, 0)  # Decrease energy each tick
-
-
-    def appendLists(self):
-        self.simulation.organismList.append(self)
-        if isinstance(self.genetics, HerbivoreGenetics):
-            self.simulation.herbivoreList.append(self)
-        elif isinstance(self.genetics, CarnivoreGenetics):
-            self.simulation.carnivoreList.append(self)
 
 
     def live(self):
@@ -102,3 +97,21 @@ class Organism:
                     self.position.y = (self.position.y + dy) % self.simulation.worldSize
             
             yield self.simulation.env.timeout(1)
+
+    def appendLists(self):
+        self.simulation.organismList.append(self)
+        if isinstance(self.genetics, HerbivoreGenetics):
+            self.simulation.herbivoreList.append(self)
+        elif isinstance(self.genetics, CarnivoreGenetics):
+            self.simulation.carnivoreList.append(self)
+
+
+    def logTraits(self):
+        if isinstance(self.genetics, HerbivoreGenetics):
+            for geneticsName, value in vars(self.genetics).items():
+                if geneticsName != "generation":
+                    self.simulation.statistics.logGeneticsHerbivore(geneticsName, self.genetics.generation, value)
+        if isinstance(self.genetics, CarnivoreGenetics):
+            for geneticsName, value in vars(self.genetics).items():
+                if geneticsName != "generation":
+                    self.simulation.statistics.logGeneticsCarnivore(geneticsName, self.genetics.generation, value)

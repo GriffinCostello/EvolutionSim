@@ -86,10 +86,6 @@ class Simulation:
             simulation = self
         )
 
-        for geneticsName, value in vars(org.genetics).items():
-            if geneticsName != "generation":
-                self.statistics.logGeneticsHerbivore(geneticsName, org.genetics.generation, value)
-
 
     def createInitialCarnivores(self, i):
         genetics = CarnivoreGenetics(
@@ -115,10 +111,6 @@ class Simulation:
             genetics = genetics,
             simulation = self
         )
-        for geneticsName, value in vars(org.genetics).items():
-            if geneticsName != "generation":
-                self.statistics.logGeneticsCarnivore(geneticsName, org.genetics.generation, value)
-        
 
     
     #Create the child object
