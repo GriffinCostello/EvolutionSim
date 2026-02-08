@@ -30,8 +30,7 @@ def test_printing_herbivores():
             ),
             simulation = simulation
         )
-        herbivore.simulation.organismList.append(herbivore)
-        herbivore.simulation.herbivoreList.append(herbivore)
+
         for geneticName, value in vars(herbivore.genetics).items():
                 if geneticName != "generation":
                     simulation.statistics.logGeneticsHerbivore(geneticName, herbivore.genetics.generation, value)

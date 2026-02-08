@@ -34,8 +34,6 @@ def test_herbivore_added_and_removed():
         ),
         simulation = simulation
     )
-    herbivore.simulation.organismList.append(herbivore)
-    herbivore.simulation.herbivoreList.append(herbivore)
 
     assert herbivore in herbivore.simulation.organismList, "Herbivore was not added to organism list"
     assert herbivore in herbivore.simulation.herbivoreList, "Herbivore was not added to herbivore list"
@@ -67,8 +65,6 @@ def test_carnivore_added_and_removed():
         ),
         simulation = simulation
     )
-    carnivore.simulation.organismList.append(carnivore)
-    carnivore.simulation.carnivoreList.append(carnivore)
 
     assert carnivore in carnivore.simulation.organismList, "carnivore was not added to organism list"
     assert carnivore in carnivore.simulation.carnivoreList, "carnivore was not added to carnivore list"

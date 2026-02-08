@@ -35,7 +35,6 @@ def test_organism_same_spawn():
         ),
         simulation = simulation
     )
-    herbivore1.simulation.organismList.append(herbivore1)
 
     herbivore2 = Organism(
         name = "Herbivore_Test2",
@@ -57,7 +56,6 @@ def test_organism_same_spawn():
         ),
         simulation = simulation
     )
-    herbivore2.simulation.organismList.append(herbivore2)
 
     assert herbivore1.position.asTuple() == herbivore2.position.asTuple(), "Organisms spawned at different position."
     assert len(simulation.organismList) == 2, "Herbivore1 or Herbivore2 not correctly added to simulation."
@@ -143,7 +141,6 @@ def test_organism_out_of_bounds():
             ),
             simulation = simulation
         )
-        herbivore1.simulation.organismList.append(herbivore1)
     assert len(simulation.organismList) == 0, "Organism out of bounds was added to the simulation."
 
     with pytest.raises(ValueError):
@@ -167,7 +164,7 @@ def test_organism_out_of_bounds():
             ),
             simulation = simulation
         )
-        herbivore2.simulation.organismList.append(herbivore2)
+
     assert len(simulation.organismList) == 0, "Organism out of bounds was added to the simulation."
 
 
@@ -248,8 +245,6 @@ def test_carnivore_reproduction():
         ),
         simulation = simulation
     )
-    carnivore1.simulation.organismList.append(carnivore1)
-    carnivore1.simulation.carnivoreList.append(carnivore1)
 
     carnivore2 = Organism(
         name = "Carnivore_NoPrey", 
@@ -270,8 +265,6 @@ def test_carnivore_reproduction():
         ),
         simulation = simulation
     )
-    carnivore2.simulation.organismList.append(carnivore2)
-    carnivore2.simulation.carnivoreList.append(carnivore2)
 
     simulation.run(ticks = 1)
     assert carnivore1 in simulation.organismList, "Carnivore was incorrectly removed from the simulation."
@@ -308,8 +301,6 @@ def test_herbivore_reproduction():
         ),
         simulation = simulation
     )
-    herbivore1.simulation.organismList.append(herbivore1)
-    herbivore1.simulation.herbivoreList.append(herbivore1)
 
     herbivore2 = Organism(
         name = "Herbivore_NoPrey", 
@@ -331,8 +322,6 @@ def test_herbivore_reproduction():
         ),
         simulation = simulation
     )
-    herbivore2.simulation.organismList.append(herbivore2)
-    herbivore2.simulation.herbivoreList.append(herbivore2)
 
     simulation.run(ticks = 2)
     assert herbivore1 in simulation.organismList, "Herbivore was incorrectly removed from the simulation."

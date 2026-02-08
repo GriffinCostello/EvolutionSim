@@ -31,6 +31,5 @@ def test_world_size_zero():
             ),
             simulation = simulation
         )
-        simulation.organismList.append(herbivore)
 
     assert simulation.world.worldSize == 0, "World size should be zero."

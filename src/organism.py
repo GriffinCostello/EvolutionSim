@@ -32,6 +32,9 @@ class Organism:
 
         self.live = self.simulation.env.process(self.live())
 
+        #Adds the organism to respective lists
+        self.appendLists()
+
 
     def tick(self):
         self.age += 1
@@ -43,6 +46,14 @@ class Organism:
             self.nextSlowDownAge += (self.nextSlowDownAge // 2)
     
         self.energy = max(self.energy - self.traits.energyConsumption, 0)  # Decrease energy each tick
+
+
+    def appendLists(self):
+        self.simulation.organismList.append(self)
+        if isinstance(self.genetics, HerbivoreGenetics):
+            self.simulation.herbivoreList.append(self)
+        elif isinstance(self.genetics, CarnivoreGenetics):
+            self.simulation.carnivoreList.append(self)
 
 
     def live(self):
