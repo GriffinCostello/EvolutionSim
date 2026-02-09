@@ -4,7 +4,6 @@ import random
 from .food import Food
 from .traits import *
 from .position import Position
-from .simulation import Simulation
 
 class World:
     def __init__(self, worldsize, simulation: "Simulation"):
