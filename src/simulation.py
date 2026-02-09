@@ -70,7 +70,7 @@ class Simulation:
             slowDownAge = 60,
             reproductionAge = 20,
             matingCallRadius = 200,
-            digestionTime = 5,
+            digestionTime = 8,
             generation = 1
         )
         org = Organism(
