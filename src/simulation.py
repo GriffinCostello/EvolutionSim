@@ -70,7 +70,7 @@ class Simulation:
             slowDownAge = 60,
             reproductionAge = 20,
             matingCallRadius = 200,
-            digestionTime = 5,
+            digestionTime = 8,
             generation = 1
         )
         org = Organism(
@@ -85,12 +85,6 @@ class Simulation:
             genetics = genetics,
             simulation = self
         )
-        self.organismList.append(org)
-        self.herbivoreList.append(org)
-
-        for geneticsName, value in vars(org.genetics).items():
-            if geneticsName != "generation":
-                self.statistics.logGeneticsHerbivore(geneticsName, org.genetics.generation, value)
 
 
     def createInitialCarnivores(self, i):
@@ -117,12 +111,6 @@ class Simulation:
             genetics = genetics,
             simulation = self
         )
-        self.organismList.append(org)
-        self.carnivoreList.append(org)
-        for geneticsName, value in vars(org.genetics).items():
-            if geneticsName != "generation":
-                self.statistics.logGeneticsCarnivore(geneticsName, org.genetics.generation, value)
-        
 
     
     #Create the child object
@@ -143,17 +131,14 @@ class Simulation:
             simulation = parent1.simulation
         )
         if isinstance(child.genetics, HerbivoreGenetics):
-            self.herbivoreList.append(child)
             for geneticName, value in vars(child.genetics).items():
                 if geneticName != "generation":
                     self.statistics.logGeneticsHerbivore(geneticName, child.genetics.generation, value)
         elif isinstance(child.genetics, CarnivoreGenetics):
-            self.carnivoreList.append(child)
             for geneticsName, value in vars(child.genetics).items():
                 if geneticsName != "generation":
                     self.statistics.logGeneticsCarnivore(geneticsName, child.genetics.generation, value)
         
-        self.organismList.append(child)
         return child
 
     

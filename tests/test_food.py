@@ -35,7 +35,6 @@ def test_herbivore_eats_food():
         ),
         simulation = simulation
     )
-    simulation.organismList.append(herbivore)
 
     food = Food(
         age = random.randint(20, 25),
@@ -142,7 +141,6 @@ def test_food_placement_after_poop():
         ),
         simulation = simulation
     )
-    herbivore.simulation.organismList.append(herbivore)
 
     simulation.run(ticks = 5)
     

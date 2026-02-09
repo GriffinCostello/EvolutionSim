@@ -30,12 +30,8 @@ def test_printing_herbivores():
             ),
             simulation = simulation
         )
-        herbivore.simulation.organismList.append(herbivore)
-        herbivore.simulation.herbivoreList.append(herbivore)
-        for geneticName, value in vars(herbivore.genetics).items():
-                if geneticName != "generation":
-                    simulation.statistics.logGeneticsHerbivore(geneticName, herbivore.genetics.generation, value)
+
     simulation.statistics.plotGeneticsEvolution("speed", "Herbivore")
     stats = simulation.statistics
-    assert "speed" in stats.traitLogHerbivore
-    assert len(stats.traitLogHerbivore["speed"]) == 100
+    assert "speed" in stats.geneticLogHerbivore
+    assert len(stats.geneticLogHerbivore["speed"]) == 100

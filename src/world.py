@@ -62,7 +62,7 @@ class World:
                 traits = FoodTraits(
                     generation = 1,
                     stageConfiguration = {
-                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(50, 80)},
+                        FoodStage.SEED: {"duration": random.randint(7, 10), "nutrition": random.randint(5, 20)},
                         FoodStage.RIPENING: {"duration": random.randint(8, 15), "nutrition": random.randint(130, 150)},
                         FoodStage.RIPE: {"duration": random.randint(18, 25), "nutrition": random.randint(250, 300)},
                         FoodStage.ROTTING: {"duration": random.randint(8, 15), "nutrition": random.randint(200, 250)},
